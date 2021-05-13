@@ -4,14 +4,14 @@ class Vtk < Formula
   url "https://www.vtk.org/files/release/9.0/VTK-9.0.1.tar.gz"
   sha256 "1b39a5e191c282861e7af4101eaa8585969a2de05f5646c9199a161213a622c7"
   license "BSD-3-Clause"
-  revision 6
+  revision 9
   head "https://github.com/Kitware/VTK.git"
 
   bottle do
-    sha256 arm64_big_sur: "d1c560768281726c996c3a2dd76202f6b196af6d0631f87d484e2e6e12ae56e1"
-    sha256 big_sur:       "44a9497ff797186c2eb8f5291fed5973bf53a3ba918a019e35979ffb55670863"
-    sha256 catalina:      "739839d52d811ca3d6c7b604ca7d915071d3d60a1bd3093f8d6a17ea6d1a6939"
-    sha256 mojave:        "23078179981c75dee132e37e2fabafd7bc7a073d0e88f202045127bbdb8df9d3"
+    sha256 arm64_big_sur: "825c6b028057f775e3d8d413beadf0602ca165c67571b4d94fef4a653cb648a3"
+    sha256 big_sur:       "c209c5736a3dfad2543a13c7d96519504bf054126199f5e35cb291a6b451e1fb"
+    sha256 catalina:      "078997976ae896300e412516abc10951b2544d8741d8303ba445617b4a8712c3"
+    sha256 mojave:        "05b67385f9bc735ad59c311c1007815db1a7cb443ad82bf7e94a421f0b40c18d"
   end
 
   depends_on "cmake" => [:build, :test]
@@ -52,7 +52,6 @@ class Vtk < Formula
       -DCMAKE_INSTALL_RPATH:STRING=#{lib}
       -DVTK_WRAP_PYTHON:BOOL=ON
       -DVTK_PYTHON_VERSION:STRING=3
-      -DVTK_USE_COCOA:BOOL=ON
       -DVTK_LEGACY_REMOVE:BOOL=ON
       -DVTK_MODULE_ENABLE_VTK_InfovisBoost:STRING=YES
       -DVTK_MODULE_ENABLE_VTK_InfovisBoostGraphAlgorithms:STRING=YES
@@ -80,6 +79,10 @@ class Vtk < Formula
       -DPython3_EXECUTABLE:FILEPATH=#{Formula["python@3.9"].opt_bin}/python3
       -DVTK_GROUP_ENABLE_Qt:STRING=YES
     ]
+
+    on_macos do
+      args << "-DVTK_USE_COCOA:BOOL=ON"
+    end
 
     mkdir "build" do
       system "cmake", "..", *args

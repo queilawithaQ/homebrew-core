@@ -1,8 +1,8 @@
 class Fastlane < Formula
   desc "Easiest way to build and release mobile apps"
   homepage "https://fastlane.tools"
-  url "https://github.com/fastlane/fastlane/archive/2.178.0.tar.gz"
-  sha256 "050afeea60f292d3bb83c56089f97d130ca0283fe87a7defb31595d9344557c6"
+  url "https://github.com/fastlane/fastlane/archive/2.182.0.tar.gz"
+  sha256 "8c91b6d03e1898f7664376e10a3401c39c5b280f7d0d3e2f4b6a742564f0005a"
   license "MIT"
   head "https://github.com/fastlane/fastlane.git"
 
@@ -12,10 +12,10 @@ class Fastlane < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "1a643aa7391ff8c1d9fa6b97bf545ff05af193c38a1b183626e44ca4ae9b5623"
-    sha256 cellar: :any, big_sur:       "124a505b804339f84a36ed6719055e0d44f00640f127dfca741dd1f264a8e0e1"
-    sha256 cellar: :any, catalina:      "f91683672542fc19c0942e64115380437232333a3473f77638941f6b20c24ec0"
-    sha256 cellar: :any, mojave:        "8ee527f7f51693df5312c93aebff9d63531b1a17be755a0012b9ea22fdd33cf0"
+    sha256 cellar: :any, arm64_big_sur: "1ecf271a771195c05ac549d1474b6fb3d1f5329ffc5d53699fe2e3ff3e054096"
+    sha256 cellar: :any, big_sur:       "14ee1e65ea26c44f8cf9d0c918a7b97b153e0efa4f150d53f053112a98475c0a"
+    sha256 cellar: :any, catalina:      "ee3d299173558daa567f3cdabe0ffd4341db9f4763890c7d44395c9c7d2570a5"
+    sha256 cellar: :any, mojave:        "8c309a19cb14cef2168e843c24041810d018feb01c3d43fea3b5bc9d2b057616"
   end
 
   depends_on "ruby@2.7"

@@ -1,8 +1,8 @@
 class Jenkins < Formula
   desc "Extendable open source continuous integration server"
   homepage "https://jenkins.io/"
-  url "http://mirrors.jenkins.io/war/2.285/jenkins.war"
-  sha256 "667765e2b4d1f69a238a3da59d0ae9eb4968d041a62d61da5a45cd39ab123eab"
+  url "http://mirrors.jenkins.io/war/2.293/jenkins.war"
+  sha256 "bd2e70b6dbec1f5c8b5ed75b9b4e0af10bf9e716e24bd54a05ef436cc857139c"
   license "MIT"
 
   livecheck do
@@ -10,12 +10,14 @@ class Jenkins < Formula
     regex(%r{href=.*?/war/v?(\d+(?:\.\d+)+)/jenkins\.war}i)
   end
 
+  bottle do
+    sha256 cellar: :any_skip_relocation, all: "43f03a16784b2e3ea341af9dba1661b79a84a234163b74290b9579cead1b3a2f"
+  end
+
   head do
     url "https://github.com/jenkinsci/jenkins.git"
     depends_on "maven" => :build
   end
-
-  bottle :unneeded
 
   depends_on "openjdk@11"
 

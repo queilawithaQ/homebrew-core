@@ -1,10 +1,9 @@
 class Libepoxy < Formula
   desc "Library for handling OpenGL function pointer management"
   homepage "https://github.com/anholt/libepoxy"
-  url "https://download.gnome.org/sources/libepoxy/1.5/libepoxy-1.5.5.tar.xz"
-  sha256 "261663db21bcc1cc232b07ea683252ee6992982276536924271535875f5b0556"
+  url "https://download.gnome.org/sources/libepoxy/1.5/libepoxy-1.5.7.tar.xz"
+  sha256 "9479cc0146ffb395fdecf9bd2a5930834fd0bce490cbcc4681ffd716bb3a0763"
   license "MIT"
-  revision 1
 
   # We use a common regex because libepoxy doesn't use GNOME's "even-numbered
   # minor is stable" version scheme.
@@ -14,10 +13,10 @@ class Libepoxy < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "f4b0803937d1fa962e698890caa1ec96d7ba1847a4df990ad07db5ed480d8821"
-    sha256 cellar: :any, big_sur:       "70c98f994735bd0cd3c23286460c06fcbe324294f97b61ea91dc72303132c64d"
-    sha256 cellar: :any, catalina:      "f410ca0d9f4d101901beec178b22f4e65facdad58d496c7b2b5f9a56ec241852"
-    sha256 cellar: :any, mojave:        "4ca20871fe9fd9bf37cebd4dc3b7f081406dc08d60c404d970132cb48f26900b"
+    sha256 cellar: :any, arm64_big_sur: "a6ceb2c71ddc503492f9992a236e82282108968708c59c115b2070ccc090b9fa"
+    sha256 cellar: :any, big_sur:       "db75486d4407ac6ad7555b4aa0ce475b7c6308514142df8345a27e1e6a0095e0"
+    sha256 cellar: :any, catalina:      "bbd5b5e7a51dc98b8309500469e1ba56c0bbfb9804eb8c041d2f994a93830346"
+    sha256 cellar: :any, mojave:        "1e6e1e73f88f5a4e3ffc7b2667994cffdb29a27c2d1ce9014dbb42e61e617d89"
   end
 
   depends_on "meson" => :build

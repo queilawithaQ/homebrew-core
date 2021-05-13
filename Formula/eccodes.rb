@@ -4,6 +4,7 @@ class Eccodes < Formula
   url "https://software.ecmwf.int/wiki/download/attachments/45757960/eccodes-2.21.0-Source.tar.gz"
   sha256 "da0a0bf184bb436052e3eae582defafecdb7c08cdaab7216780476e49b509755"
   license "Apache-2.0"
+  revision 3
 
   livecheck do
     url "https://software.ecmwf.int/wiki/display/ECC/Releases"
@@ -11,10 +12,10 @@ class Eccodes < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "f74b5bb384bce5589fd3af3146782b4a0fb4698c3b5e12d29a349ea2b73262e7"
-    sha256 big_sur:       "791862aed908852b7588bd8c0cf33bd38f9eda6491e14f0fde72c768f7cc1240"
-    sha256 catalina:      "de0339d06a0774e858a76ecfd2a156e69d056e9e181862bf6ca621a397bff466"
-    sha256 mojave:        "15be2853b5d08d8e6e8a6bc091299c21eac59762985aa3fed39071aa975c6d3f"
+    sha256 arm64_big_sur: "1e5abc64db5fee39068c13ba7f3c793fa85455374418537dff65b95a1d3ac2c7"
+    sha256 big_sur:       "3e5ea15804e66d04fd04974eae397cca9b84348c8a45c206f8f421145e98637d"
+    sha256 catalina:      "f9d24402dd6f55cc7709bb4b80e858826b8ffd2d7571a8832642b959c6dcccbd"
+    sha256 mojave:        "d3132e4511814160ef3e9df97609339d2445eb09b2edbb97eafd8422ecbb18e6"
   end
 
   depends_on "cmake" => :build

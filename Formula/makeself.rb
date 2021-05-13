@@ -6,9 +6,13 @@ class Makeself < Formula
   license "GPL-2.0-or-later"
   head "https://github.com/megastep/makeself.git"
 
-  bottle :unneeded
+  bottle do
+    sha256 cellar: :any_skip_relocation, all: "620fe1bac044be0d0cc0c37bd3683151f90ce479fcd2736bf27fcf59b0da2edc"
+  end
 
   def install
+    # Replace `/usr/local` references to make bottles uniform
+    inreplace ["makeself-header.sh", "makeself.sh"], "/usr/local", HOMEBREW_PREFIX
     libexec.install "makeself-header.sh"
     # install makeself-header.sh to libexec so change its location in makeself.sh
     inreplace "makeself.sh", '`dirname "$0"`', libexec

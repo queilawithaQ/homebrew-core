@@ -4,40 +4,40 @@ class Gcc < Formula
   if Hardware::CPU.arm?
     # Branch from the Darwin maintainer of GCC with Apple Silicon support,
     # located at https://github.com/iains/gcc-darwin-arm64 and
-    # backported with his help to gcc-10 branch. Too big for a patch.
-    url "https://github.com/fxcoudert/gcc/archive/gcc-10-arm-20210220.tar.gz"
-    sha256 "53beed690e4e0355d972ad58917a11e01af1cfe67b2e7602ca1ef89c98417a67"
-    version "10.2.0"
+    # backported with his help to gcc-11 branch. Too big for a patch.
+    url "https://github.com/fxcoudert/gcc/archive/refs/tags/gcc-11.1.0-arm-20210504.tar.gz"
+    sha256 "ce862b4a4bdc8f36c9240736d23cd625a48af82c2332d2915df0e16e1609a74c"
+    version "11.1.0"
   else
-    url "https://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz"
-    mirror "https://ftpmirror.gnu.org/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz"
-    sha256 "b8dd4368bb9c7f0b98188317ee0254dd8cc99d1e3a18d0ff146c855fe16c1d8c"
+    url "https://ftp.gnu.org/gnu/gcc/gcc-11.1.0/gcc-11.1.0.tar.xz"
+    mirror "https://ftpmirror.gnu.org/gcc/gcc-11.1.0/gcc-11.1.0.tar.xz"
+    sha256 "4c4a6fb8a8396059241c2e674b85b351c26a5d678274007f076957afa1cc9ddf"
   end
   license "GPL-3.0-or-later" => { with: "GCC-exception-3.1" }
-  revision 4
   head "https://gcc.gnu.org/git/gcc.git"
 
   livecheck do
     # Should be
     # url :stable
     # but that does not work with the ARM-specific branch above
-    url "https://ftp.gnu.org/gnu/gcc/gcc-10.2.0"
+    url "https://ftp.gnu.org/gnu/gcc/gcc-11.1.0"
     regex(%r{href=.*?gcc[._-]v?(\d+(?:\.\d+)+)(?:/?["' >]|\.t)}i)
   end
 
   bottle do
-    rebuild 1
-    sha256 arm64_big_sur: "26e823464b7a0c4b854d95ec1bbed3caa4875ab552ce76792f0a9084ee085d96"
-    sha256 big_sur:       "9c412d919eb6808625ac69fe8ff882e06a82700c28c7e650defe5748930be87e"
-    sha256 catalina:      "9e8ebd91740ea2113601ee4ba2adec48ecd580c1fbe66998e93cdc44fc92ebff"
-    sha256 mojave:        "930750d0fd5abd916a7fd4346d5a01affb38929eec02824351cd599ecba6a943"
+    sha256 arm64_big_sur: "0b2cefe66734ad3735ab68ee3a37f35e8a6ac973c65123c26c57e4cdba77b770"
+    sha256 big_sur:       "0de7e36bd2fb710bcb25ba27581784570c55a3e2ec652ecdd3a5cf1b6105a9e3"
+    sha256 catalina:      "f3e0b6948b4c1cd454f3b8a020929381b559662b92eccc080b2f9a52683f3743"
+    sha256 mojave:        "57d923640559ee09ad782e6dd5035613772ca9f63c660b28e3b16a7e2f767962"
   end
 
   # The bottles are built on systems with the CLT installed, and do not work
   # out of the box on Xcode-only systems due to an incorrect sysroot.
   pour_bottle? do
-    reason "The bottle needs the Xcode CLT to be installed."
-    satisfy { MacOS::CLT.installed? }
+    on_macos do
+      reason "The bottle needs the Xcode CLT to be installed."
+      satisfy { MacOS::CLT.installed? }
+    end
   end
 
   depends_on "gmp"
@@ -47,17 +47,12 @@ class Gcc < Formula
 
   uses_from_macos "zlib"
 
+  on_linux do
+    depends_on "binutils"
+  end
+
   # GCC bootstraps itself, so it is OK to have an incompatible C++ stdlib
   cxxstdlib_check :skip
-
-  if Hardware::CPU.intel?
-    # Patch for Big Sur, remove with GCC 10.3
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98805
-    patch do
-      url "https://raw.githubusercontent.com/Homebrew/formula-patches/6a83f36d/gcc/bigsur_2.patch"
-      sha256 "347a358b60518e1e0fe3c8e712f52bdac1241e44e6c7738549d969c24095f65b"
-    end
-  end
 
   def version_suffix
     if build.head?
@@ -81,7 +76,6 @@ class Gcc < Formula
     cpu = Hardware::CPU.arm? ? "aarch64" : "x86_64"
 
     args = %W[
-      --build=#{cpu}-apple-darwin#{OS.kernel_version.major}
       --prefix=#{prefix}
       --libdir=#{lib}/gcc/#{version_suffix}
       --disable-nls
@@ -92,27 +86,28 @@ class Gcc < Formula
       --with-mpfr=#{Formula["mpfr"].opt_prefix}
       --with-mpc=#{Formula["libmpc"].opt_prefix}
       --with-isl=#{Formula["isl"].opt_prefix}
-      --with-system-zlib
       --with-pkgversion=#{pkgversion}
       --with-bugurl=#{tap.issues_url}
     ]
 
-    # Xcode 10 dropped 32-bit support
-    args << "--disable-multilib" if DevelopmentTools.clang_build_version >= 1000
+    on_macos do
+      args << "--build=#{cpu}-apple-darwin#{OS.kernel_version.major}"
+      args << "--with-system-zlib"
 
-    # System headers may not be in /usr/include
-    sdk = MacOS.sdk_path_if_needed
-    if sdk
-      args << "--with-native-system-header-dir=/usr/include"
-      args << "--with-sysroot=#{sdk}"
+      # Xcode 10 dropped 32-bit support
+      args << "--disable-multilib" if DevelopmentTools.clang_build_version >= 1000
+
+      # System headers may not be in /usr/include
+      sdk = MacOS.sdk_path_if_needed
+      if sdk
+        args << "--with-native-system-header-dir=/usr/include"
+        args << "--with-sysroot=#{sdk}"
+      end
+
+      # Ensure correct install names when linking against libgcc_s;
+      # see discussion in https://github.com/Homebrew/legacy-homebrew/pull/34303
+      inreplace "libgcc/config/t-slibgcc-darwin", "@shlib_slibdir@", "#{HOMEBREW_PREFIX}/lib/gcc/#{version_suffix}"
     end
-
-    # Avoid reference to sed shim
-    args << "SED=/usr/bin/sed"
-
-    # Ensure correct install names when linking against libgcc_s;
-    # see discussion in https://github.com/Homebrew/legacy-homebrew/pull/34303
-    inreplace "libgcc/config/t-slibgcc-darwin", "@shlib_slibdir@", "#{HOMEBREW_PREFIX}/lib/gcc/#{version_suffix}"
 
     mkdir "build" do
       system "../configure", *args

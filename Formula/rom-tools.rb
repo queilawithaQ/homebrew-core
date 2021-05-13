@@ -2,9 +2,9 @@ class RomTools < Formula
   desc "Tools for Multiple Arcade Machine Emulator"
   homepage "https://mamedev.org/"
   # NOTE: Please keep these values in sync with mame.rb when updating.
-  url "https://github.com/mamedev/mame/archive/mame0229.tar.gz"
-  version "0.229"
-  sha256 "414921771ada0804a8c7f3540e33338e8495e16a3bca78a5a2b355abafa51e6a"
+  url "https://github.com/mamedev/mame/archive/mame0231.tar.gz"
+  version "0.231"
+  sha256 "36b7ff5865dfa4765dc5dff70484d3f9fcacf8e8771e14c692ec76b845f7da53"
   license "GPL-2.0-or-later"
   head "https://github.com/mamedev/mame.git"
 
@@ -19,10 +19,10 @@ class RomTools < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "c5f28651dc57cb59edb9c676454e2da56f645c86af93a38142abf1c3aafa1b9f"
-    sha256 cellar: :any, big_sur:       "1db31d340cd27fd37dc2cdf9357a30e7e43309e2a1e23b227916f495fb686fec"
-    sha256 cellar: :any, catalina:      "b8568dae7da9d8757a2090977e3a0de54b2af9e2789f9c037a6f82ff58b93950"
-    sha256 cellar: :any, mojave:        "f142061a46b8dee3bc77d4afb1984a1b9bee119f71acf40dee50b61f8af079a8"
+    sha256 cellar: :any, arm64_big_sur: "5eefd6fa82e5c2ad203ad86d194d325342a11b5f9971fa7f76551dd3ad6d3f20"
+    sha256 cellar: :any, big_sur:       "416221d48640d519c0aefe559815db9f12f6b307d7790cbf2e4ccb72a82ce041"
+    sha256 cellar: :any, catalina:      "6d59dd6613c8dc95f54e9992cecd411d5538617a65947b119921790a9038bc7e"
+    sha256 cellar: :any, mojave:        "108e2a5b1f08a075f8999bc1cc9510769c3b0efc413379ad662e8e25a8ee0f5b"
   end
 
   depends_on "pkg-config" => :build

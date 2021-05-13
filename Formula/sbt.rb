@@ -1,9 +1,9 @@
 class Sbt < Formula
   desc "Build tool for Scala projects"
   homepage "https://www.scala-sbt.org/"
-  url "https://github.com/sbt/sbt/releases/download/v1.4.9/sbt-1.4.9.tgz"
-  mirror "https://sbt-downloads.cdnedge.bluemix.net/releases/v1.4.9/sbt-1.4.9.tgz"
-  sha256 "95468119f7641499367330a60a4b8a6211e6ea7f8bde7d647c67b19dd8fddb6e"
+  url "https://github.com/sbt/sbt/releases/download/v1.5.2/sbt-1.5.2.tgz"
+  mirror "https://sbt-downloads.cdnedge.bluemix.net/releases/v1.5.2/sbt-1.5.2.tgz"
+  sha256 "9d01f7eb1a3830190d53ed4d8b8b9a6380f013ad30573a04e330d1de42ff0212"
   license "Apache-2.0"
 
   livecheck do
@@ -11,8 +11,11 @@ class Sbt < Formula
     regex(/^v?(\d+(?:\.\d+)+)$/i)
   end
 
-  bottle :unneeded
+  bottle do
+    sha256 cellar: :any_skip_relocation, all: "97d2ea0187ad1c17d6c6e0978b9deb31787e71bb391dc8b60ec4e487a2faf774"
+  end
 
+  depends_on arch: :x86_64
   depends_on "openjdk"
 
   def install

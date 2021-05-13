@@ -1,19 +1,27 @@
 class Zig < Formula
   desc "Programming language designed for robustness, optimality, and clarity"
   homepage "https://ziglang.org/"
-  url "https://ziglang.org/download/0.7.1/zig-0.7.1.tar.xz"
-  sha256 "2db3b944ab368d955b48743d9f7c963b8f96de1a441ba5a35e197237cc6dae44"
   license "MIT"
-  head "https://github.com/ziglang/zig.git"
+  revision 1
+
+  stable do
+    url "https://ziglang.org/download/0.7.1/zig-0.7.1.tar.xz"
+    sha256 "2db3b944ab368d955b48743d9f7c963b8f96de1a441ba5a35e197237cc6dae44"
+    depends_on "llvm@11"
+  end
 
   bottle do
-    sha256 cellar: :any, big_sur:  "f088607533abf8e77c38ad57b5c068b7c975d31d3558eda5ff9ef23221278650"
-    sha256 cellar: :any, catalina: "f1168c13a73d6677a8d6eb04ecd0d67e93038bd33218bafadd9aac9a23045e7d"
-    sha256 cellar: :any, mojave:   "eb2e0de16f666b740fb67529910712c517fed8ae3fd6e14d27acbbf19a41018a"
+    sha256 cellar: :any, big_sur:  "36024d6e9270699221abc2fe0d49b9f16e9bfc62636b33750f94d89a07e0e308"
+    sha256 cellar: :any, catalina: "167c21243552b1b309c4cf83bfb8e678a14b5a3e3adf66e7f2501b36d027d693"
+    sha256 cellar: :any, mojave:   "63643cea7d45ce511f4cd0a4e7089a64e2dedecc9cd900eaff805c011b299cda"
+  end
+
+  head do
+    url "https://github.com/ziglang/zig.git"
+    depends_on "llvm"
   end
 
   depends_on "cmake" => :build
-  depends_on "llvm"
 
   def install
     system "cmake", ".", *std_cmake_args

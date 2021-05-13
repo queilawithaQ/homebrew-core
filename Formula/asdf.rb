@@ -7,7 +7,9 @@ class Asdf < Formula
   revision 1
   head "https://github.com/asdf-vm/asdf.git"
 
-  bottle :unneeded
+  bottle do
+    sha256 cellar: :any_skip_relocation, all: "24d40cb939c41de5c2ee5f7e52aa631884d56a0566cfc65a63bf3ddb42344d24"
+  end
 
   depends_on "autoconf"
   depends_on "automake"

@@ -1,8 +1,8 @@
 class Grokj2k < Formula
   desc "JPEG 2000 Library"
   homepage "https://github.com/GrokImageCompression/grok"
-  url "https://github.com/GrokImageCompression/grok/archive/v8.0.2.tar.gz"
-  sha256 "ab16fee0d804fc0bf8e18d36a6ba6564d95881c5cc1d7139f9860a54f260f4d8"
+  url "https://github.com/GrokImageCompression/grok/archive/v9.1.0.tar.gz"
+  sha256 "57d95ade7994fa95f06c0ca677bb708bd2c30bcbad1ccd81f99410c912d84e57"
   license "AGPL-3.0-or-later"
   head "https://github.com/GrokImageCompression/grok.git"
 
@@ -12,10 +12,10 @@ class Grokj2k < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "c38f27380e8633dc06af79e97869771152befe679a03395d2eeb0f9f1f6d6f32"
-    sha256 cellar: :any, big_sur:       "c207b015fa51aae98409aec36e87722f6af84976d165c68104d4acbe5158aaee"
-    sha256 cellar: :any, catalina:      "d5035f0235962c3a19752cecc43f512b10fc765094eb09892cf8697e0d469295"
-    sha256 cellar: :any, mojave:        "90d1fb0fb139c7cb29f702fdc8b0dddaba3d989b44e9266e88f3569c0e495168"
+    sha256 cellar: :any, arm64_big_sur: "57cf9f32210c7e91ca190e4bbda85f414b418c4147cd91efed489d3cda3b9c20"
+    sha256 cellar: :any, big_sur:       "54f0c28f937ee113ada68f1994b9ab045807b696691f613d4df12e82b574885b"
+    sha256 cellar: :any, catalina:      "d6e29cc564dc39d7f78e63607573e3917e6b7d68e244c7aacdabd71267c21ede"
+    sha256 cellar: :any, mojave:        "c69e43ac9946e7e0655a80183fe73c0c6236f9b196a6894e9bb28e61f6cce2f5"
   end
 
   depends_on "cmake" => :build
@@ -29,11 +29,12 @@ class Grokj2k < Formula
   def install
     system "cmake", ".", *std_cmake_args, "-DBUILD_DOC=ON"
     system "make", "install"
+    include.install_symlink "grok-#{version.major_minor}" => "grok"
   end
 
   test do
     (testpath/"test.c").write <<~EOS
-      #include <grok.h>
+      #include <grok/grok.h>
 
       int main () {
         grk_image_cmptparm cmptparm;
@@ -46,7 +47,7 @@ class Grokj2k < Formula
         return 0;
       }
     EOS
-    system ENV.cc, "-I#{include.children.first}", "-L#{lib}", "-lgrokj2k", "test.c", "-o", "test"
+    system ENV.cc, "-I#{opt_include}", "-L#{opt_lib}", "-lgrokj2k", "test.c", "-o", "test"
     # Linux test
     # system ENV.cc, "test.c", "-I#{include.children.first}", "-L#{lib}", "-lgrokj2k", "-o", "test"
     system "./test"

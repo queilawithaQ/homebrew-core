@@ -3,15 +3,15 @@ class Diffoscope < Formula
 
   desc "In-depth comparison of files, archives, and directories"
   homepage "https://diffoscope.org"
-  url "https://files.pythonhosted.org/packages/f7/ee/082dd7b41b08e086d077299ffddbf3323de03b31ff11012334d41c7ad6e5/diffoscope-170.tar.gz"
-  sha256 "c3aa11ffcbfee59fc27ad46d1deed4340ecc5478511be2e9649b4fa2ca6f44ec"
+  url "https://files.pythonhosted.org/packages/15/38/99f8164287635e037450626730345828806f6da12247f1501a2ad91a013a/diffoscope-174.tar.gz"
+  sha256 "9ad686855df2e71f9436c8f1e653282bbe74017c578bbd68c5dc19e0de12ba3c"
   license "GPL-3.0-or-later"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "4cf836a443512133736c77cecff6bcadc30c2c1484f15ad759bd9d9760efb301"
-    sha256 cellar: :any_skip_relocation, big_sur:       "0bddfa07d5bba5832bac28a9915405927367637931cdc6adcb4a3b2b708ea52f"
-    sha256 cellar: :any_skip_relocation, catalina:      "18fe7ac1a4ee4be224b5d6b3401b63c874945b4114df6408200c590973654d2d"
-    sha256 cellar: :any_skip_relocation, mojave:        "b1994e81d06fa853355c14f18f9195607f507146070c9bdaabb19cea50350f00"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "f3d48fb19545db1672ba8eed24d4e1dab9f7d704458622d41a96446d74c78a34"
+    sha256 cellar: :any_skip_relocation, big_sur:       "833219f8d41ee46482918ebf1b5d5163ff0aef364c76c4b32a6ed7f9010c0d3d"
+    sha256 cellar: :any_skip_relocation, catalina:      "a7c771835293a7f19b5a9583b4dfd6fd9732a8a335f298ba7fd4cbde58ecf41e"
+    sha256 cellar: :any_skip_relocation, mojave:        "21e40526823004fd5400bee823ab5def83bbc343d26f4fe6d605230d7d71633a"
   end
 
   depends_on "libarchive"
@@ -20,8 +20,8 @@ class Diffoscope < Formula
 
   # Use resources from diffoscope[cmdline]
   resource "argcomplete" do
-    url "https://files.pythonhosted.org/packages/cb/53/d2e3d11726367351b00c8f078a96dacb7f57aef2aca0d3b6c437afc56b55/argcomplete-1.12.2.tar.gz"
-    sha256 "de0e1282330940d52ea92a80fea2e4b9e0da1932aaa570f84d268939d1897b04"
+    url "https://files.pythonhosted.org/packages/6a/b4/3b1d48b61be122c95f4a770b2f42fc2552857616feba4d51f34611bd1352/argcomplete-1.12.3.tar.gz"
+    sha256 "2c7dbffd8c045ea534921e63b0be6fe65e88599990d8dc408ac8c542b72a5445"
   end
 
   resource "libarchive-c" do

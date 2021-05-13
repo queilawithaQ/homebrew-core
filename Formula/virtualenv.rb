@@ -3,16 +3,16 @@ class Virtualenv < Formula
 
   desc "Tool for creating isolated virtual python environments"
   homepage "https://virtualenv.pypa.io/"
-  url "https://files.pythonhosted.org/packages/f4/6d/bfcfff1709d05143e71337db4800b30dd9abf0c41972960c9e8984ab96f7/virtualenv-20.4.3.tar.gz"
-  sha256 "49ec4eb4c224c6f7dd81bb6d0a28a09ecae5894f4e593c89b0db0885f565a107"
+  url "https://files.pythonhosted.org/packages/e0/75/9310506a1b9f93016cdf4e34dd802521477508abc6626b93129d412fe187/virtualenv-20.4.6.tar.gz"
+  sha256 "72cf267afc04bf9c86ec932329b7e94db6a0331ae9847576daaa7ca3c86b29a4"
   license "MIT"
   head "https://github.com/pypa/virtualenv.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "00881fbdbea68d16f933d16665258d98de7794fea4b78335219bcd3fc1a8f4fc"
-    sha256 cellar: :any_skip_relocation, big_sur:       "7d5a8e93ed2690dcda326480d52565a603b2b3ece9bc39c705edfbaf69cb842b"
-    sha256 cellar: :any_skip_relocation, catalina:      "1b2314e8b79c6b760377d2c374d5e6e9c9a4bd907c019874bb90134943b97880"
-    sha256 cellar: :any_skip_relocation, mojave:        "ff6dac3b56950648b93a27642f6f551afd645c93ec737081e77b2a79d5d74b94"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "a4579d2d2860d9918f094264785221bb8752328b87e631735ac3b7457d326bd1"
+    sha256 cellar: :any_skip_relocation, big_sur:       "264df06ecfef5fcbd2e7dac6b164a1193c147931113985a9c9069d71878c6eff"
+    sha256 cellar: :any_skip_relocation, catalina:      "9f3f5cd5cc3e7a3ecc8941a4b036cbb50b3f8b3561807a25e694a8ca9da5c907"
+    sha256 cellar: :any_skip_relocation, mojave:        "efd230ea97e150e7a55a8086e96c1ddf86dab38271ad6ee6f5ee34d4dc8d2d78"
   end
 
   depends_on "python@3.9"
@@ -33,8 +33,8 @@ class Virtualenv < Formula
   end
 
   resource "six" do
-    url "https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426/six-1.15.0.tar.gz"
-    sha256 "30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"
+    url "https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e/six-1.16.0.tar.gz"
+    sha256 "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"
   end
 
   def install

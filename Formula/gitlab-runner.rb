@@ -2,8 +2,8 @@ class GitlabRunner < Formula
   desc "Official GitLab CI runner"
   homepage "https://gitlab.com/gitlab-org/gitlab-runner"
   url "https://gitlab.com/gitlab-org/gitlab-runner.git",
-      tag:      "v13.10.0",
-      revision: "54944146cb597a1c37a7bb22303d872942d2c378"
+      tag:      "v13.11.0",
+      revision: "7f7a4bb064e847bbd2196438d70fe82634141a00"
   license "MIT"
   head "https://gitlab.com/gitlab-org/gitlab-runner.git"
 
@@ -13,10 +13,11 @@ class GitlabRunner < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "c1c60ea33e2b486866cb7591f2ae4b15d0ef6ebd1cb1a239a124ed3ac3e94532"
-    sha256 cellar: :any_skip_relocation, big_sur:       "9f645b7fbd51417e06443d5da6f99c4cfe897f4e9ea347f2bc7e8e3ad872cb9b"
-    sha256 cellar: :any_skip_relocation, catalina:      "cfab6975ef1a7ef651da510514a2843b9853803faf5907e79afd997120ff86c9"
-    sha256 cellar: :any_skip_relocation, mojave:        "0cf543e2ec7d4df594472f3dd0b4a9730468414f2a6fcc48628354c8dcff2c2e"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "06a0c36e21fe7890a6db42248340f76d69866cee75fc5c256b75709f91b39a68"
+    sha256 cellar: :any_skip_relocation, big_sur:       "4692746389a5a21651a2c38f35e1fcbd184a5528620cd46eac53d13c0fc669ab"
+    sha256 cellar: :any_skip_relocation, catalina:      "294f72df991ce1480295b4cc62a9c747d0d24e2608ee54bc83a375042788dbff"
+    sha256 cellar: :any_skip_relocation, mojave:        "a4963e7cd773241ddcb59da7ba4430d6a1b6551bef0d48d724922fa707a0e7b1"
   end
 
   depends_on "go" => :build
@@ -51,6 +52,9 @@ class GitlabRunner < Formula
           <key>KeepAlive</key><true/>
           <key>RunAtLoad</key><true/>
           <key>Disabled</key><false/>
+          <key>LegacyTimers</key><true/>
+          <key>ProcessType</key>
+          <string>Interactive</string>
           <key>Label</key>
           <string>#{plist_name}</string>
           <key>ProgramArguments</key>

@@ -1,16 +1,16 @@
 class Libpulsar < Formula
   desc "Apache Pulsar C++ library"
   homepage "https://pulsar.apache.org/"
-  url "https://www.apache.org/dyn/closer.lua?path=pulsar/pulsar-2.7.1/apache-pulsar-2.7.1-src.tar.gz"
-  mirror "https://archive.apache.org/dist/pulsar/pulsar-2.7.1/apache-pulsar-2.7.1-src.tar.gz"
-  sha256 "99c57e23ee6b9621b97439684e141dce467a138356b058918bcd9be032cf8822"
+  url "https://www.apache.org/dyn/closer.lua?path=pulsar/pulsar-2.7.2/apache-pulsar-2.7.2-src.tar.gz"
+  mirror "https://archive.apache.org/dist/pulsar/pulsar-2.7.2/apache-pulsar-2.7.2-src.tar.gz"
+  sha256 "2e125df2ccf374e237676fb036ca00cb4d076d1683b86c672161888f5a5ef32f"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "8ea4f7e297ce392a28856902abf356c7d934e9bf9ed1c2bd03bc66d8a370a789"
-    sha256 cellar: :any, big_sur:       "fb909cb58681fc6cf2586691d0987c55f3dcbb3076cfc2412bc5b3302b1199af"
-    sha256 cellar: :any, catalina:      "e1a138a25c00222b18500a5a23ba67cb759fcce7fe2c6693209b19b8cb101e6a"
-    sha256 cellar: :any, mojave:        "cfef2ac5b8552ec1ab8322b01e039a782b331ed404be5f46c251c77aea96cddc"
+    sha256 cellar: :any, arm64_big_sur: "4d1c159326f854f9b4797e0c7011bff9938c9cf78af82c0a91bed364f8ca8a52"
+    sha256 cellar: :any, big_sur:       "bfb533888df0fdc8249c5893c4ec02702135ed0ecfe8ef55333107cdb998b46c"
+    sha256 cellar: :any, catalina:      "2d3c809a9dc969a98512444f1dab6afae08690c8d765ef420b86ea5d97552755"
+    sha256 cellar: :any, mojave:        "ca26d267f9306739aa6df240903b430262513ae359dfcc68b41e90b9a65a501e"
   end
 
   depends_on "cmake" => :build
@@ -20,6 +20,8 @@ class Libpulsar < Formula
   depends_on "protobuf"
   depends_on "snappy"
   depends_on "zstd"
+
+  uses_from_macos "curl"
 
   def install
     cd "pulsar-client-cpp" do
@@ -43,7 +45,8 @@ class Libpulsar < Formula
         return 0;
       }
     EOS
-    system ENV.cxx, "test.cc", "-L#{lib}", "-lpulsar", "-o", "test"
+
+    system ENV.cxx, "-std=gnu++11", "test.cc", "-L#{lib}", "-lpulsar", "-o", "test"
     system "./test"
   end
 end

@@ -1,15 +1,15 @@
 class Topgrade < Formula
   desc "Upgrade all the things"
   homepage "https://github.com/r-darwish/topgrade"
-  url "https://github.com/r-darwish/topgrade/archive/v6.7.0.tar.gz"
-  sha256 "490cc78234ebb69a986223eb25c6ed4aceb9a09024497857eb6f1960a62f880f"
+  url "https://github.com/r-darwish/topgrade/archive/v6.9.0.tar.gz"
+  sha256 "6de7a3a79716d0b7626b4c8c76590a4e3ed0bd3e06c9a5ca7191bdca7d0f582b"
   license "GPL-3.0-or-later"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "061c52b048813a8f4b3c0bcc01fdb31478686f0737610632e87f6601e3cb1d22"
-    sha256 cellar: :any_skip_relocation, big_sur:       "67fda3bf11f78464e1ae1fa27178f6d5d2e7eebc4b9140f194d63fd1a13b6118"
-    sha256 cellar: :any_skip_relocation, catalina:      "b950918acc6d82018d02335a0d555a41c107a4c61ed225a64cc6c582d3fb94c8"
-    sha256 cellar: :any_skip_relocation, mojave:        "45fc83e550bc71c90e6a99354def4731134671e0dafc7f14364a5d6800245dad"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "3da7cf504c7a57aea479491572c6ad96d51277726a8974846998d5e25858cd6b"
+    sha256 cellar: :any_skip_relocation, big_sur:       "8fb57953c72284b268d9978c685a2529ae60b67e9f3b10b516a24605a27d9da6"
+    sha256 cellar: :any_skip_relocation, catalina:      "74ef76681d766111efa2cc6320aa1ccf98a40fe74b923349a78449c6ef532e9c"
+    sha256 cellar: :any_skip_relocation, mojave:        "3a0ca99c149b1a0f63f5f748564633673a58154e8e947fd8ac208baa24d38446"
   end
 
   depends_on "rust" => :build
@@ -34,6 +34,6 @@ class Topgrade < Formula
 
     output = shell_output("#{bin}/topgrade -n --only brew_formula")
     assert_match "Dry running: #{HOMEBREW_PREFIX}/bin/brew upgrade", output
-    assert_not_match(/\sSelf update\s/, output)
+    refute_match(/\sSelf update\s/, output)
   end
 end

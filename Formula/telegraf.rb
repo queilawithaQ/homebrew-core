@@ -1,8 +1,8 @@
 class Telegraf < Formula
   desc "Server-level metric gathering agent for InfluxDB"
   homepage "https://www.influxdata.com/"
-  url "https://github.com/influxdata/telegraf/archive/v1.18.0.tar.gz"
-  sha256 "e4805ecad6e4f1cfc7781c8bd1a39ee3e3ddf8bd68dd26530e0810af73013ec3"
+  url "https://github.com/influxdata/telegraf/archive/v1.18.2.tar.gz"
+  sha256 "e83eb358416322a0e434381e6a54e4b497b49583092ab3fa41597cde16ef8f69"
   license "MIT"
   head "https://github.com/influxdata/telegraf.git"
 
@@ -12,10 +12,10 @@ class Telegraf < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "e0782b87c04d3474e56130d3c3a2abd550212a67009594d517c0b13e9e377f1e"
-    sha256 cellar: :any_skip_relocation, big_sur:       "39e24702d24f060c4f60f38e74927fee31100db102a9ff79906f742871cfc33b"
-    sha256 cellar: :any_skip_relocation, catalina:      "f6db80359b136bdd5c232e342f66791b1554cce85132e817f5646e2d93839a23"
-    sha256 cellar: :any_skip_relocation, mojave:        "183346639a7cc8d3c264d86e267d8748f90cde49ac0bf5181fc32daac69e3da6"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "59d7e2767ffe1310673093779697348bda5b428361786fbb78145cf40a4c89d0"
+    sha256 cellar: :any_skip_relocation, big_sur:       "9075962e4ec27502f63439d6ae87135a297dc0b84b2d1f8180e64b0a3daa0be5"
+    sha256 cellar: :any_skip_relocation, catalina:      "cfcb179222baa785e799055027f7e23271961560d9d1cb70a7642bcfe619027d"
+    sha256 cellar: :any_skip_relocation, mojave:        "b233e500fc5a9d827315fb42e221c54f3ebd6a158f569b200212acde6803d76c"
   end
 
   depends_on "go" => :build

@@ -1,10 +1,9 @@
 class Notmuch < Formula
   desc "Thread-based email index, search, and tagging"
   homepage "https://notmuchmail.org/"
-  url "https://notmuchmail.org/releases/notmuch-0.31.4.tar.xz"
-  sha256 "8661b66567660fd630af10c4647c30327fdd1b34a988cab80d614328a5b74f55"
+  url "https://notmuchmail.org/releases/notmuch-0.32.tar.xz"
+  sha256 "e91e5706ffb615d5ebc5a47ce197d4ec2efca06eea77a0ddcb7af2e4c2543646"
   license "GPL-3.0-or-later"
-  revision 1
   head "https://git.notmuchmail.org/git/notmuch", using: :git
 
   livecheck do
@@ -13,10 +12,10 @@ class Notmuch < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "c042906e75dcade6c9e501bf603bf60847a90bd3535497c3b3259d03932ddf9b"
-    sha256 cellar: :any, big_sur:       "5d5781026437ce04c590ae46dab93e1adecff5fcd6a40f821fe7119de69f14d0"
-    sha256 cellar: :any, catalina:      "223395abe26a26918e7f8b1893fa666e417b20d30ba3c8e4035755d0ce870754"
-    sha256 cellar: :any, mojave:        "be5af71fc297f08ada237d27f4bbb60c5ace573e6656a1f64c603839301caf72"
+    sha256 cellar: :any, arm64_big_sur: "93c6a602428df755145f1ac1830ba8991390af976dfd2b76889011a530602e2d"
+    sha256 cellar: :any, big_sur:       "3a419b3c9233084d44e5a7f18c164e696f9fb8520cea64e7fadcd25c0ffd3a9a"
+    sha256 cellar: :any, catalina:      "44858e39a6d51bf229e7e7ae6b2ca09b631be98a3706c56bf81fb77d1cdd6db9"
+    sha256 cellar: :any, mojave:        "a2835bdcb32a8d376cb4c03735c429e9d584776c23f06913ec625d9480d4b0b7"
   end
 
   depends_on "doxygen" => :build
@@ -56,6 +55,20 @@ class Notmuch < Formula
     cd "bindings/python" do
       system Formula["python@3.9"].opt_bin/"python3", *Language::Python.setup_install_args(prefix)
     end
+
+    # If installed in non-standard prefixes, such as is the default with
+    # Homebrew on Apple Silicon machines, other formulae can fail to locate
+    # libnotmuch.dylib due to not checking locations like /opt/homebrew for
+    # libraries. This is a bug in notmuch rather than Homebrew; globals.py
+    # uses a vanilla CDLL instead of CDLL wrapped with `find_library`
+    # which effectively causes the issue.
+    #
+    # CDLL("libnotmuch.dylib") = OSError: dlopen(libnotmuch.dylib, 6): image not found
+    # find_library("libnotmuch") = '/opt/homebrew/lib/libnotmuch.dylib'
+    # http://notmuch.198994.n3.nabble.com/macOS-globals-py-issue-td4044216.html
+    inreplace lib/"python3.9/site-packages/notmuch/globals.py",
+               "libnotmuch.{0:s}.dylib",
+               opt_lib/"libnotmuch.{0:s}.dylib"
   end
 
   test do

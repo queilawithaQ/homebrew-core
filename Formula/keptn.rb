@@ -1,14 +1,14 @@
 class Keptn < Formula
   desc "Is the CLI for keptn.sh a message-driven control-plane for application delivery"
   homepage "https://keptn.sh"
-  url "https://github.com/keptn/keptn/archive/0.8.0.tar.gz"
-  sha256 "91fb9dee635f446c8a3adf8cb1cf1a3c80ade96230a4e994247aed42f176f489"
+  url "https://github.com/keptn/keptn/archive/0.8.2.tar.gz"
+  sha256 "eb20175aa8e2a56bc4c7311e34fd2d4046382111048f5fdae46a0d3488b13e01"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:  "5a6cff0dfb605514ab2530bf6b1e95ecfbfc598ce3a843263e75bb33df806346"
-    sha256 cellar: :any_skip_relocation, catalina: "5093a00ef3fb4ef279966d85a52e1640392c228332429e6169cdd0e7adf76342"
-    sha256 cellar: :any_skip_relocation, mojave:   "6c8bdf7816c311f7170d901c7e52a286ec9cc25047749cc93fde21777d4bfb9b"
+    sha256 cellar: :any_skip_relocation, big_sur:  "ca106c9f94dccb75e2bb6eab13c465fec3db695ad16dbf3ea7bc190bb067af4b"
+    sha256 cellar: :any_skip_relocation, catalina: "df772fbde810b557ecf3d2a8378f7a0290454575fd6bf3838e9157d07e56c6fc"
+    sha256 cellar: :any_skip_relocation, mojave:   "90b8a010292b55c76c07b86073065a333f9b0101a71c755db177d668db0d342a"
   end
 
   depends_on "go" => :build
@@ -37,7 +37,7 @@ class Keptn < Formula
       Timeout.timeout(5) do
         assert_match "Warning: could not open KUBECONFIG file", r.gets.chomp
         Process.wait pid
-        assert_equal 0, $CHILD_STATUS.exitstatus
+        assert_equal 1, $CHILD_STATUS.exitstatus
       end
     rescue Timeout::Error
       puts "process not finished in time, killing it"

@@ -2,27 +2,26 @@ class Calicoctl < Formula
   desc "Calico CLI tool"
   homepage "https://www.projectcalico.org"
   url "https://github.com/projectcalico/calicoctl.git",
-      tag:      "v3.18.1",
-      revision: "911f383f027510c74dbab168c767844d2854a814"
+      tag:      "v3.18.3",
+      revision: "528c58600dcb1ab40eaf99135c8113fc049514dd"
   license "Apache-2.0"
   head "https://github.com/projectcalico/calicoctl.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "21df2aba4df956bd81718b6fe7b4abb29be68e84687693b4a81238673e35c9ef"
-    sha256 cellar: :any_skip_relocation, big_sur:       "6cab42414ed377f942ed61ee213b7005808d908acdf92fa5f596bf8a56712f31"
-    sha256 cellar: :any_skip_relocation, catalina:      "8761c4225d2b4684f5365d7170b5b90a63eb9947f82116fac05355edf4b5cfb4"
-    sha256 cellar: :any_skip_relocation, mojave:        "a96d26426d7e69d7f505b150116667bb274037baad63b97a302699f00b4dc35f"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "622d966ce5503d359a68fb9095840e193e46157d518916fd00e7fe352872edd8"
+    sha256 cellar: :any_skip_relocation, big_sur:       "e89e80c43a6f743530c42bb6b5e371bb449f64dda3bc1671f01f464905be9c18"
+    sha256 cellar: :any_skip_relocation, catalina:      "2f76e3802048775984e9cdd7db889130d158a983d6b52543f22ee58de6b7ea34"
+    sha256 cellar: :any_skip_relocation, mojave:        "53465951c381d8fadcf36894e78dbd92f300785f6562b98bbf519efabcd47aae"
   end
 
   depends_on "go" => :build
 
   def install
     commands = "github.com/projectcalico/calicoctl/v3/calicoctl/commands"
-    system "go", "build", *std_go_args,
-                          "-ldflags", "-X #{commands}.VERSION=#{version} " \
-                                      "-X #{commands}.GIT_REVISION=#{Utils.git_short_head} " \
-                                      "-s -w",
-                          "calicoctl/calicoctl.go"
+    ldflags = "-X #{commands}.VERSION=#{version} " \
+              "-X #{commands}.GIT_REVISION=#{Utils.git_short_head} " \
+              "-s -w"
+    system "go", "build", *std_go_args(ldflags: ldflags), "calicoctl/calicoctl.go"
   end
 
   test do

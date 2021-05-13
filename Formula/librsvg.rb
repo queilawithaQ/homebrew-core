@@ -1,15 +1,15 @@
 class Librsvg < Formula
   desc "Library to render SVG files using Cairo"
   homepage "https://wiki.gnome.org/Projects/LibRsvg"
-  url "https://download.gnome.org/sources/librsvg/2.50/librsvg-2.50.3.tar.xz"
-  sha256 "a4298a98e3a95fdd73c858c17d4dd018525fb09dbb13bbd668a0c2243989e958"
+  url "https://download.gnome.org/sources/librsvg/2.50/librsvg-2.50.5.tar.xz"
+  sha256 "32701574c234fed352520c6d0bd5081f728184bc1a9b9c87d423dd27c32b9272"
   license "LGPL-2.1-or-later"
 
   bottle do
-    sha256 arm64_big_sur: "ec04591468e4039417ec57a979dc79c6c41bdb707d02dc512aa87e25715b2fe6"
-    sha256 big_sur:       "2160f03918ae945c4d741faba6a5389c3a7c1566aa53f33a37baf6675abbd5df"
-    sha256 catalina:      "215a03b5e14c336df9ffd3be938477783e65cc36a72853a897144a72f1563417"
-    sha256 mojave:        "ea9a4821c81d04b7d21ed59515e83f6715ecb4d7f38145e7c7901e9d7129d1e0"
+    sha256 arm64_big_sur: "d209ae8305c7af054f7fe9f48ec827f135a64642df62a681a2227b68e68c3326"
+    sha256 big_sur:       "a02de59a2d3b1369e1f3a83b3d05bf8d763d71f14670ef51c3f58a3d7458dac5"
+    sha256 catalina:      "54db75851eb2523c82562f0ebacffa39af6af165852123d0f5762eb33fae115c"
+    sha256 mojave:        "705d5f03c930fe44151880da19f6b903af852625732eb03aa9ff5d4f85726331"
   end
 
   depends_on "gobject-introspection" => :build

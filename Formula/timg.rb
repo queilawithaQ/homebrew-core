@@ -1,16 +1,16 @@
 class Timg < Formula
   desc "Terminal image and video viewer"
   homepage "https://timg.sh/"
-  url "https://github.com/hzeller/timg/archive/refs/tags/v1.2.1.tar.gz"
-  sha256 "2ef2e1b79c3bf82e951ad35628bc0387fe8260052614a213385de82fcfa901ec"
+  url "https://github.com/hzeller/timg/archive/refs/tags/v1.4.2.tar.gz"
+  sha256 "7607efaffbed0b65b3c824956de421b155a4f14243e7a752b19454f88bf9d563"
   license "GPL-2.0-only"
   head "https://github.com/hzeller/timg.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "01c5028b5b8342cf87366b90bef3b9d24485e09014e0c77350ac54012620804c"
-    sha256 cellar: :any, big_sur:       "ece0ca4585f66286c254d61192c1cedb8e0627fdc6c784115bea1eb4e1bf1ce5"
-    sha256 cellar: :any, catalina:      "918cb24b877c141e37813aa406d0fdc82f0d031a98966f880f9fa5948bfe73e2"
-    sha256 cellar: :any, mojave:        "417fb0934de8ff856fcf9b0f70b360734c874ef6ebb921fff283e76622ce5f68"
+    sha256 cellar: :any, arm64_big_sur: "9efb49bbad5a1d202cc8c41bfdff21d65e9eda416fe9cf439c4d3c10692d6d85"
+    sha256 cellar: :any, big_sur:       "09fe7cbf66f51101c316ecc33291e3c98636d59ccfd069e77894056dec8c6bd4"
+    sha256 cellar: :any, catalina:      "67cfebef4731e03d201ee578cdf1aff72a1dca4248a56381be57bd2124520f72"
+    sha256 cellar: :any, mojave:        "bf8067d82e2306a521b21021469c30114c24d1d7fa04f806cfe1c4e5e908b69a"
   end
 
   depends_on "cmake" => :build
@@ -19,6 +19,7 @@ class Timg < Formula
   depends_on "jpeg-turbo"
   depends_on "libexif"
   depends_on "libpng"
+  depends_on "openslide"
   depends_on "webp"
 
   def install

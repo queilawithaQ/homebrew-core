@@ -2,16 +2,16 @@ class PhpAT74 < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
   # Should only be updated if the new version is announced on the homepage, https://www.php.net/
-  url "https://www.php.net/distributions/php-7.4.16.tar.xz"
-  mirror "https://fossies.org/linux/www/php-7.4.16.tar.xz"
-  sha256 "1c16cefaf88ded4c92eed6a8a41eb682bb2ef42429deb55f1c4ba159053fb98b"
+  url "https://www.php.net/distributions/php-7.4.19.tar.xz"
+  mirror "https://fossies.org/linux/www/php-7.4.19.tar.xz"
+  sha256 "6c17172c4a411ccb694d9752de899bb63c72a0a3ebe5089116bc13658a1467b2"
   license "PHP-3.01"
 
   bottle do
-    sha256 arm64_big_sur: "3d8f32719809271463e0fa2a6df17cf0f7366fad12a872a9f85e74e29a71470d"
-    sha256 big_sur:       "9fe2442ca2be2fd0b4af1876dc83176fe9b575dbf66528fa9fdbbd57bfeb38d3"
-    sha256 catalina:      "96b0767f4d6c2c4757d1d2fa47d42009be1664d0d2df3c38bbbc0132790eb97c"
-    sha256 mojave:        "e17c40aa2b61bf892245cdb6db158be9bd151cef06d86c44b75bb9159b597662"
+    sha256 arm64_big_sur: "5133e091bffa311ffe767b4acd3c34b34e9feade1a45a217c8e5d8aeecb57973"
+    sha256 big_sur:       "9987fc7fee5d8f3bdbe123ea08c22464d525aba3662a462c5a2948601067d593"
+    sha256 catalina:      "db9b74ba8128d1f2edc71ff916e761305eb3ae1590138828c2ef577ef3d4cd9e"
+    sha256 mojave:        "294f9650000083dda8a977ab5ddbfc1750e968f4f66c7ea1b1231e9a69e4579b"
   end
 
   keg_only :versioned_formula
@@ -358,7 +358,7 @@ class PhpAT74 < Formula
     system "#{bin}/phpdbg", "-V"
     system "#{bin}/php-cgi", "-m"
     # Prevent SNMP extension to be added
-    assert_no_match(/^snmp$/, shell_output("#{bin}/php -m"),
+    refute_match(/^snmp$/, shell_output("#{bin}/php -m"),
       "SNMP extension doesn't work reliably with Homebrew on High Sierra")
     begin
       port = free_port

@@ -1,17 +1,16 @@
 class Httpd < Formula
   desc "Apache HTTP server"
   homepage "https://httpd.apache.org/"
-  url "https://www.apache.org/dyn/closer.lua?path=httpd/httpd-2.4.46.tar.bz2"
-  mirror "https://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2"
-  sha256 "740eddf6e1c641992b22359cabc66e6325868c3c5e2e3f98faf349b61ecf41ea"
+  url "https://www.apache.org/dyn/closer.lua?path=httpd/httpd-2.4.47.tar.bz2"
+  mirror "https://archive.apache.org/dist/httpd/httpd-2.4.47.tar.bz2"
+  sha256 "23d006dbc8e578116a1138fa457eea824048458e89c84087219f0372880c03ca"
   license "Apache-2.0"
-  revision 2
 
   bottle do
-    sha256 arm64_big_sur: "35357c35f6be07c0f3e60d64c88eae200158dca6e390a341569a9f0296ed33fb"
-    sha256 big_sur:       "5a979ae3affd408b4ab51f917ef34e662a9cb85eb3918e56e05e1bcfac1aedac"
-    sha256 catalina:      "c540cd4ba596ff6f0df9d772c41487c26201f548a3756ee7a02108c70fee147e"
-    sha256 mojave:        "b88153894953fa0c976f0f74bec8abf2646b320424cc92a5cbdebb6a493ab729"
+    sha256 arm64_big_sur: "c920b68cd1d5fc3f190a0736ee6690992c2fa77600f7b0bbcb8249c50fb1f62a"
+    sha256 big_sur:       "5f7ac3264c609c72a563ce7112bf0347e229f1cbfd717b3884c3e77139c8b296"
+    sha256 catalina:      "f5efc2eb76845fb30b15dca64bf090fedfde3a85ce553deab906493cdf0527d2"
+    sha256 mojave:        "5182142b3d05791a094cfe92c0f053114cf15f4fea8a07f90c3867d4d4a16434"
   end
 
   depends_on "apr"
@@ -106,6 +105,8 @@ class Httpd < Formula
       s.gsub! pcre.prefix.realpath, pcre.opt_prefix
       s.gsub! "${prefix}/lib/httpd/modules",
               "#{HOMEBREW_PREFIX}/lib/httpd/modules"
+      s.gsub! "#{HOMEBREW_SHIMS_PATH}/mac/super",
+              "#{HOMEBREW_PREFIX}/bin"
     end
   end
 
@@ -125,30 +126,10 @@ class Httpd < Formula
 
   plist_options manual: "apachectl start"
 
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_bin}/httpd</string>
-          <string>-D</string>
-          <string>FOREGROUND</string>
-        </array>
-        <key>EnvironmentVariables</key>
-        <dict>
-          <key>PATH</key>
-          <string>#{HOMEBREW_PREFIX}/bin:#{HOMEBREW_PREFIX}/sbin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-        </dict>
-        <key>RunAtLoad</key>
-        <true/>
-      </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"httpd", "-D", "FOREGROUND"]
+    environment_variables PATH: std_service_path_env
+    run_type :immediate
   end
 
   test do

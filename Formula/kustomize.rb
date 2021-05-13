@@ -2,8 +2,8 @@ class Kustomize < Formula
   desc "Template-free customization of Kubernetes YAML manifests"
   homepage "https://github.com/kubernetes-sigs/kustomize"
   url "https://github.com/kubernetes-sigs/kustomize.git",
-      tag:      "kustomize/v4.0.5",
-      revision: "9e8e7a7fe99ec9fbf801463e8607928322fc5245"
+      tag:      "kustomize/v4.1.2",
+      revision: "a5914abad89e0b18129eaf1acc784f9fe7d21439"
   license "Apache-2.0"
   head "https://github.com/kubernetes-sigs/kustomize.git"
 
@@ -13,22 +13,22 @@ class Kustomize < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "350e7316e722e71ec14164e37518836d8894dc145300ab1f7a16c7e6be11ff26"
-    sha256 cellar: :any_skip_relocation, big_sur:       "0f9593449e5ad9416c98048c19ae23cfa0e47c31a4a6a894ac08934c8c72adaf"
-    sha256 cellar: :any_skip_relocation, catalina:      "721180bb3af5da9429e586e775deb2bc9880e6482db64782185e25d683206f71"
-    sha256 cellar: :any_skip_relocation, mojave:        "7082426de27c2f8a4e740c31ee312255cdb318a1932168ce77e186594e6f1e92"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "ae14da636d61ec922730218fb4674d1f69b8f4c4e29b3aaea4f845173ab6723f"
+    sha256 cellar: :any_skip_relocation, big_sur:       "a6589eddff020f4c94bb1649750d9c82971d510e2fac70597dfd3bb8e5e236ea"
+    sha256 cellar: :any_skip_relocation, catalina:      "d5582d70c031d76643a1711536e64f0e1c38784090b21d5c24bd383c7e809dc2"
+    sha256 cellar: :any_skip_relocation, mojave:        "dd31681f5009b345f9390a9c0601f3af3d0bb21684f750e372a28e5e5cfe1a09"
   end
 
   depends_on "go" => :build
 
   def install
     commit = Utils.git_head
-    tag = Utils.safe_popen_read("git", "tag", "--contains", "HEAD").strip
 
     cd "kustomize" do
       ldflags = %W[
         -s
-        -X sigs.k8s.io/kustomize/api/provenance.version=#{tag}
+        -X sigs.k8s.io/kustomize/api/provenance.version=#{name}/v#{version}
         -X sigs.k8s.io/kustomize/api/provenance.gitCommit=#{commit}
         -X sigs.k8s.io/kustomize/api/provenance.buildDate=#{Time.now.iso8601}
       ]

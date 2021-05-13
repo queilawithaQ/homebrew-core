@@ -1,10 +1,11 @@
 class Mavsdk < Formula
-  desc "API and library for MAVLink compatible systems written in C++11"
+  desc "API and library for MAVLink compatible systems written in C++17"
   homepage "https://mavsdk.mavlink.io"
   url "https://github.com/mavlink/MAVSDK.git",
-      tag:      "v0.35.0",
-      revision: "0a556e5bf418937dceef9c45a2ba75f2d36f62fe"
+      tag:      "v0.39.0",
+      revision: "988a10244856324a622007546d3231b5dfe1d475"
   license "BSD-3-Clause"
+  revision 2
 
   livecheck do
     url :stable
@@ -12,18 +13,37 @@ class Mavsdk < Formula
   end
 
   bottle do
-    sha256 cellar: :any, big_sur:  "16e3e80a65b84f409ee3631881277e8a5a471a114b3d678a57cb54dcf1d94e0e"
-    sha256 cellar: :any, catalina: "d5da90b3f15d68022aa5e2b10f834017691cee5670da5bdd70d9a8d8bbb26423"
-    sha256 cellar: :any, mojave:   "6ba8c322043d8c6110b85f7b98bc5f9dcbc48e7e1796ff0640f37c667d700036"
+    sha256 cellar: :any, arm64_big_sur: "b7897da5e0d7e95b3b74d3466a1d2b67e532ae85598dd947d1cefb3dc211edbc"
+    sha256 cellar: :any, big_sur:       "babef9ee39b12150d5d808cf40966f6afa356b32f6c761fc4741e178e4afae2a"
+    sha256 cellar: :any, catalina:      "c26417cb8e345a2011de9df9b187c87fc2d2de99ab792759ec33df5807e89121"
   end
 
   depends_on "cmake" => :build
+  depends_on "abseil"
+  depends_on "c-ares"
+  depends_on "curl"
+  depends_on "grpc"
+  depends_on "jsoncpp"
+  depends_on macos: :catalina # Mojave libc++ is too old
+  depends_on "openssl@1.1"
+  depends_on "protobuf"
+  depends_on "re2"
+  depends_on "tinyxml2"
+
+  uses_from_macos "zlib"
 
   def install
+    # Source build adapted from
+    # https://mavsdk.mavlink.io/develop/en/contributing/build.html
     system "cmake", *std_cmake_args,
                     "-Bbuild/default",
-                    "-DBUILD_BACKEND=ON",
+                    "-DSUPERBUILD=OFF",
+                    "-DBUILD_SHARED_LIBS=ON",
+                    "-DBUILD_MAVSDK_SERVER=ON",
+                    "-DBUILD_TESTS=OFF",
+                    "-DCMAKE_INSTALL_RPATH=#{rpath}",
                     "-H."
+    system "cmake", "--build", "build/default"
     system "cmake", "--build", "build/default", "--target", "install"
   end
 
@@ -39,14 +59,14 @@ class Mavsdk < Formula
           return 0;
       }
     EOS
-    system ENV.cxx, "-std=c++11", testpath/"test.cpp", "-o", "test",
+    system ENV.cxx, "-std=c++17", testpath/"test.cpp", "-o", "test",
                   "-I#{include}/mavsdk",
                   "-L#{lib}",
                   "-lmavsdk",
                   "-lmavsdk_info"
     system "./test"
 
-    assert_equal "Usage: backend_bin [-h | --help]",
+    assert_equal "Usage: #{bin}/mavsdk_server [-h | --help]",
                  shell_output("#{bin}/mavsdk_server --help").split("\n").first
   end
 end

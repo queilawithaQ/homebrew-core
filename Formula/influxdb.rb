@@ -1,8 +1,8 @@
 class Influxdb < Formula
   desc "Time series, events, and metrics database"
   homepage "https://influxdata.com/time-series-platform/influxdb/"
-  url "https://github.com/influxdata/influxdb/archive/v2.0.4.tar.gz"
-  sha256 "73ebee977b8f2235eea5d280d7d9fcff8e29cf1e61c5c370ae9939d92f085c6d"
+  url "https://github.com/influxdata/influxdb/archive/v2.0.6.tar.gz"
+  sha256 "b8f019cfb85f7fdcdd5399dc2418cdc1ac302f99da0d031c2e307ecb62e129cd"
   license "MIT"
   head "https://github.com/influxdata/influxdb.git"
 
@@ -13,10 +13,10 @@ class Influxdb < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "14dc698d715665247ef547cc346583e430f49f4e3db08cbfdcd212e33cce98fd"
-    sha256 cellar: :any_skip_relocation, big_sur:       "3773ee758a006c963e19a05ef6c3c2f643a91e67a08fb4e3b66ff2b2ef331226"
-    sha256 cellar: :any_skip_relocation, catalina:      "b771d55808f9486f6a39fab1435fcbf92741b3290bc8aebe4b40984b9164f741"
-    sha256 cellar: :any_skip_relocation, mojave:        "d18787b5d6650636ce16440dd49d80703b1d7e29f5379e513788448f1466650a"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "26064c6e61a5f3f21ae929f426f24bc5074821798ddc10a236d5bbec013aea0e"
+    sha256 cellar: :any_skip_relocation, big_sur:       "473f7fe873207d149a17358ccb0ae34a6db380884d569f5eefa4c9434d0df87b"
+    sha256 cellar: :any_skip_relocation, catalina:      "b239400cc02c0d4b3bbd227bd813b0fee68a9608c5ff0b895a2b8789a287304e"
+    sha256 cellar: :any_skip_relocation, mojave:        "6bea10702c042ecc7dffc3c9daf0370846a28d4974b981a25cf0654247ab0de1"
   end
 
   depends_on "bazaar" => :build

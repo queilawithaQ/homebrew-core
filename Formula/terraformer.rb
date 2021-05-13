@@ -1,25 +1,19 @@
 class Terraformer < Formula
   desc "CLI tool to generate terraform files from existing infrastructure"
   homepage "https://github.com/GoogleCloudPlatform/terraformer"
-  url "https://github.com/GoogleCloudPlatform/terraformer/archive/0.8.11.tar.gz"
-  sha256 "d3f3710d15fcb75cda82d1c3d51e7ce37eeb059bc22351449d84f3b6d3fa2e43"
+  url "https://github.com/GoogleCloudPlatform/terraformer/archive/0.8.13.tar.gz"
+  sha256 "5e7519aecb2cb6a9f1644e1c4ad977299f5878521f46074c77191cb59241696c"
   license "Apache-2.0"
   head "https://github.com/GoogleCloudPlatform/terraformer.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "6aec1b6c2f23f3995540e6b5197326ff358c160c82fc68d633ae83d48085faec"
-    sha256 cellar: :any_skip_relocation, big_sur:       "52b907bef8df487d250ba1b697ec6098820df904287987f521bf24ad38bd98e5"
-    sha256 cellar: :any_skip_relocation, catalina:      "9defda3f8ceeea4e50757a3c4aea1d1f0108152adace35a892c02b018fb247b3"
-    sha256 cellar: :any_skip_relocation, mojave:        "2aeb38b63b0c934830b01529c480d8981746ca35c6a7be0a9f5cc5928107f77f"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "bfa97578206fab28fb072f7615dcd391c4ba69e3e9b902cb490199d999f8f44e"
+    sha256 cellar: :any_skip_relocation, big_sur:       "b15c9ce44c82d5d018991adc1e9a2c068cd2dd68ba45ff4551b2e0c31e318792"
+    sha256 cellar: :any_skip_relocation, catalina:      "44f560666545dcb9d8ad4bf516a726cd0ac847a9884451ab8890d80bdd2a71bd"
+    sha256 cellar: :any_skip_relocation, mojave:        "98701030b0679953f1f053b6ddd4bad6ddb72d1cd2e0895cdfacbe67a586d314"
   end
 
   depends_on "go" => :build
-
-  # remove in next release
-  patch do
-    url "https://github.com/chenrui333/terraformer/commit/106ab51.patch?full_index=1"
-    sha256 "a222bcee9f1532f6adc75715f83baa9cc4a032cfbc258afca953dfede4ee8649"
-  end
 
   def install
     system "go", "build", *std_go_args, "-ldflags", "-s -w"

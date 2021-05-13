@@ -4,7 +4,7 @@ class IncludeWhatYouUse < Formula
   url "https://include-what-you-use.org/downloads/include-what-you-use-0.15.src.tar.gz"
   sha256 "2bd6f2ae0d76e4a9412f468a5fa1af93d5f20bb66b9e7bf73479c31d789ac2e2"
   license "NCSA"
-  revision 2
+  revision 4
 
   # This omits the 3.3, 3.4, and 3.5 versions, which come from the older
   # version scheme like `Clang+LLVM 3.5` (25 November 2014). The current
@@ -16,26 +16,28 @@ class IncludeWhatYouUse < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "fc7068fdbc7a9e0bbf2100e5e1dc94ed3bb64a24b4d81386d04ee26639d2a5a0"
-    sha256 big_sur:       "e6df8a20b09f7477fb736af76854189bd98ac7191847d133b1bf63d227897337"
-    sha256 catalina:      "7d8ba990e1bc2ddc345b603bcc7000c5267896bfd16266d1f84633b5bd3a77bf"
-    sha256 mojave:        "8b36ee59b687530695baf9c766010b1356b3f09b6caba4a6750cf8ecd328b36e"
+    sha256 arm64_big_sur: "921f11702bc6b7f053aa9ce19e0c67231736dc70a57a300c6386f982086cbe00"
+    sha256 big_sur:       "2b01505cfa7e2328ba69bb201900bd405092d0cfcd0fbbed935bc105872e79a4"
+    sha256 catalina:      "27c7be4910d197d0670a2f20f980f691576894165726d972421f55c5dec1ae12"
+    sha256 mojave:        "4add4a025d4634dd620f9f6eb61e59084f3d8841ee2ea44e9b37a9f39832269a"
   end
 
   depends_on "cmake" => :build
-  depends_on "llvm" # include-what-you-use 0.15 is compatible with llvm 11.0
+  depends_on "llvm@11" # include-what-you-use 0.15 is compatible with llvm 11.0
 
   uses_from_macos "ncurses"
   uses_from_macos "zlib"
 
   def install
+    llvm = Formula["llvm@11"]
+
     # We do not want to symlink clang or libc++ headers into HOMEBREW_PREFIX,
     # so install to libexec to ensure that the resource path, which is always
     # computed relative to the location of the include-what-you-use executable
     # and is not configurable, is also located under libexec.
     args = std_cmake_args + %W[
       -DCMAKE_INSTALL_PREFIX=#{libexec}
-      -DCMAKE_PREFIX_PATH=#{Formula["llvm"].opt_lib}
+      -DCMAKE_PREFIX_PATH=#{llvm.opt_lib}
       -DCMAKE_CXX_FLAGS=-std=gnu++14
     ]
 
@@ -54,11 +56,8 @@ class IncludeWhatYouUse < Formula
     # formula. This would be indicated by include-what-you-use failing to
     # locate stddef.h and/or stdlib.h when running the test block below.
     # https://clang.llvm.org/docs/LibTooling.html#libtooling-builtin-includes
-    mkdir_p libexec/"lib/clang/#{Formula["llvm"].version}"
-    cp_r Formula["llvm"].opt_lib/"clang/#{Formula["llvm"].version}/include",
-      libexec/"lib/clang/#{Formula["llvm"].version}"
-    mkdir_p libexec/"include"
-    cp_r Formula["llvm"].opt_include/"c++", libexec/"include"
+    (libexec/"lib").install_symlink llvm.opt_lib/"clang"
+    (libexec/"include").install_symlink llvm.opt_include/"c++"
   end
 
   test do

@@ -1,12 +1,14 @@
 class Sbtenv < Formula
   desc "Command-line tool for managing sbt environments"
   homepage "https://github.com/sbtenv/sbtenv"
-  url "https://github.com/sbtenv/sbtenv/archive/version/0.0.21.tar.gz"
-  sha256 "a322b8db197068c7c9889bb14eb0537b175c7095dcf6ae938289f1aa2e97768e"
+  url "https://github.com/sbtenv/sbtenv/archive/version/0.0.23.tar.gz"
+  sha256 "60207bf461c17edca5409c99e2b54c687ffe20bb28f0f7dbd1b6895ca34dbfee"
   license "MIT"
   head "https://github.com/sbtenv/sbtenv.git"
 
-  bottle :unneeded
+  bottle do
+    sha256 cellar: :any_skip_relocation, all: "5bedffe7fd9b6a87d22fbf83e5af740ef630058fececca93ddb9c35c27359e36"
+  end
 
   def install
     inreplace "libexec/sbtenv", "/usr/local", HOMEBREW_PREFIX

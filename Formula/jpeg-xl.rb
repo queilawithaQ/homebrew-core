@@ -1,15 +1,17 @@
 class JpegXl < Formula
   desc "New file format for still image compression"
   homepage "https://jpeg.org/jpegxl/index.html"
-  url "https://gitlab.com/wg1/jpeg-xl/-/archive/v0.3.5/jpeg-xl-v0.3.5.tar.bz2"
-  sha256 "cce8ed2cde3bb9743084546516f87a8df5850e8fe14a3e32b5dd08dd7c2496b4"
+  # Check whether this can be switched to `openexr` and `imath` at version bump
+  url "https://gitlab.com/wg1/jpeg-xl/-/archive/v0.3.7/jpeg-xl-v0.3.7.tar.bz2"
+  sha256 "32548f17c2a596e9963aa09934710f96dca6f78ec2337d7936dada89a6090b56"
   license "Apache-2.0"
+  revision 1
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "b10b1532d225476cd60335355b566d8f9a882b86c9054cc346ff8dc7538a395c"
-    sha256 cellar: :any, big_sur:       "2e24591110fb8b9018d591b1265b930a11feb5029b727a9a8bdadf38bc5042fc"
-    sha256 cellar: :any, catalina:      "5e51af4f608b8c38d0b59cda93cf8415b9684d1165a9f1aadc95b9f48ffff095"
-    sha256 cellar: :any, mojave:        "063e06aa630be9a7d03cfcb8c74a02192841c43449c6cc01e6e9c20126a620f8"
+    sha256 cellar: :any, arm64_big_sur: "e855720e77098e6cf1ada7dd53561e73f426d7b241512c209ef8b21b915cd3b1"
+    sha256 cellar: :any, big_sur:       "0abccbb80acb60e345bc1f338bb7647bb6fb946529343104c887b4dc02b685fb"
+    sha256 cellar: :any, catalina:      "432600f118932b15359629c9a94f5a8e017d9985ae888af21f5f605b2f886dbd"
+    sha256 cellar: :any, mojave:        "d2045261bd46e2deaf3f3c460cac89f3b1810da54379df93a5be1e4f82399244"
   end
 
   depends_on "cmake" => :build
@@ -19,7 +21,7 @@ class JpegXl < Formula
   depends_on "ilmbase"
   depends_on "jpeg"
   depends_on "libpng"
-  depends_on "openexr"
+  depends_on "openexr@2"
   depends_on "webp"
 
   # These resources are versioned according to the script supplied with jpeg-xl to download the dependencies:

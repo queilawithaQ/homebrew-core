@@ -1,42 +1,11 @@
 class Llvm < Formula
   desc "Next-gen compiler infrastructure"
   homepage "https://llvm.org/"
+  url "https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.0/llvm-project-12.0.0.src.tar.xz"
+  sha256 "9ed1688943a4402d7c904cc4515798cdb20080066efa010fe7e1f2551b423628"
   # The LLVM Project is under the Apache License v2.0 with LLVM Exceptions
   license "Apache-2.0" => { with: "LLVM-exception" }
   head "https://github.com/llvm/llvm-project.git", branch: "main"
-
-  stable do
-    url "https://github.com/llvm/llvm-project/releases/download/llvmorg-11.1.0/llvm-project-11.1.0.src.tar.xz"
-    sha256 "74d2529159fd118c3eac6f90107b5611bccc6f647fdea104024183e8d5e25831"
-
-    patch do
-      url "https://github.com/llvm/llvm-project/commit/c86f56e32e724c6018e579bb2bc11e667c96fc96.patch?full_index=1"
-      sha256 "6e13e01b4f9037bb6f43f96cb752d23b367fe7db4b66d9bf2a4aeab9234b740a"
-    end
-
-    patch do
-      url "https://github.com/llvm/llvm-project/commit/31e5f7120bdd2f76337686d9d169b1c00e6ee69c.patch?full_index=1"
-      sha256 "f025110aa6bf80bd46d64a0e2b1e2064d165353cd7893bef570b6afba7e90b4d"
-    end
-
-    patch do
-      url "https://github.com/llvm/llvm-project/commit/3c7bfbd6831b2144229734892182d403e46d7baf.patch?full_index=1"
-      sha256 "62014ddad6d5c485ecedafe3277fe7978f3f61c940976e3e642536726abaeb68"
-    end
-
-    patch do
-      url "https://github.com/llvm/llvm-project/commit/c4d7536136b331bada079b2afbb2bd09ad8296bf.patch?full_index=1"
-      sha256 "2b894cbaf990510969bf149697882c86a068a1d704e749afa5d7b71b6ee2eb9f"
-    end
-
-    # Upstream ARM patch for OpenMP runtime, remove in next version
-    # https://reviews.llvm.org/D91002
-    # https://bugs.llvm.org/show_bug.cgi?id=47609
-    patch do
-      url "https://raw.githubusercontent.com/Homebrew/formula-patches/6166a68c/llvm/openmp_arm.patch"
-      sha256 "70fe3836b423e593688cd1cc7a3d76ee6406e64b9909f1a2f780c6f018f89b1e"
-    end
-  end
 
   livecheck do
     url :homepage
@@ -44,10 +13,10 @@ class Llvm < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "6024181e8252d3300a44d989f0716cec5a6d92b66a439290232c7dbeed3a50dc"
-    sha256 cellar: :any, big_sur:       "0f26bad97402fd22555367e8d6f20511b24912dcc56d202b7960b41a8462d6b2"
-    sha256 cellar: :any, catalina:      "c1260c9b53f3bd098650f0bafea11d284b8c48c812dca34c50828239f559737b"
-    sha256 cellar: :any, mojave:        "2f9f6bb43e7743a71426358d2666647e6ff563c00cc14c1404ea43c3f504041d"
+    sha256 cellar: :any, arm64_big_sur: "bf7e6bdeb7f9eef8113dfe5e2ef410fa37881473811b31c8fd0038f3ded22b60"
+    sha256 cellar: :any, big_sur:       "275c72f9da27d13b2b1144629d8b8c6f425b672d1e716a81d0e0d8aed6eeb6b9"
+    sha256 cellar: :any, catalina:      "330381b5d4be23e5ec878ed13ba8f96f311078a8be8130fcc6f49e7ef31dc8d5"
+    sha256 cellar: :any, mojave:        "b7239f312db88db8f6795feac9bd2524df081408e071331bf1e4ceab8f6ba7fb"
   end
 
   # Clang cannot find system headers if Xcode CLT is not installed
@@ -64,13 +33,20 @@ class Llvm < Formula
   # We intentionally use Make instead of Ninja.
   # See: Homebrew/homebrew-core/issues/35513
   depends_on "cmake" => :build
-  depends_on "python@3.9" => :build
-  depends_on "libffi"
+  depends_on "swig" => :build
+  depends_on "python@3.9"
 
   uses_from_macos "libedit"
+  uses_from_macos "libffi", since: :catalina
   uses_from_macos "libxml2"
   uses_from_macos "ncurses"
   uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "pkg-config" => :build
+    depends_on "binutils" # needed for gold
+    depends_on "libelf" # openmp requires <gelf.h>
+  end
 
   def install
     projects = %w[
@@ -89,7 +65,8 @@ class Llvm < Formula
       libunwind
     ]
 
-    py_ver = "3.9"
+    py_ver = Language::Python.major_minor_version("python3")
+    site_packages = Language::Python.site_packages("python3").delete_prefix("lib/")
 
     # Apple's libstdc++ is too old to build LLVM
     ENV.libcxx if ENV.compiler == :clang
@@ -101,16 +78,17 @@ class Llvm < Formula
     # can almost be treated as an entirely different build from llvm.
     ENV.permit_arch_flags
 
+    # we install the lldb Python module into libexec to prevent users from
+    # accidentally importing it with a non-Homebrew Python or a Homebrew Python
+    # in a non-default prefix
     args = %W[
       -DLLVM_ENABLE_PROJECTS=#{projects.join(";")}
       -DLLVM_ENABLE_RUNTIMES=#{runtimes.join(";")}
       -DLLVM_POLLY_LINK_INTO_TOOLS=ON
       -DLLVM_BUILD_EXTERNAL_COMPILER_RT=ON
       -DLLVM_LINK_LLVM_DYLIB=ON
-      -DLLVM_BUILD_LLVM_C_DYLIB=ON
       -DLLVM_ENABLE_EH=ON
       -DLLVM_ENABLE_FFI=ON
-      -DLLVM_ENABLE_LIBCXX=ON
       -DLLVM_ENABLE_RTTI=ON
       -DLLVM_INCLUDE_DOCS=OFF
       -DLLVM_INCLUDE_TESTS=OFF
@@ -118,29 +96,46 @@ class Llvm < Formula
       -DLLVM_ENABLE_Z3_SOLVER=OFF
       -DLLVM_OPTIMIZED_TABLEGEN=ON
       -DLLVM_TARGETS_TO_BUILD=all
-      -DFFI_INCLUDE_DIR=#{Formula["libffi"].opt_lib}/libffi-#{Formula["libffi"].version}/include
-      -DFFI_LIBRARY_DIR=#{Formula["libffi"].opt_lib}
-      -DLLVM_CREATE_XCODE_TOOLCHAIN=#{MacOS::Xcode.installed? ? "ON" : "OFF"}
       -DLLDB_USE_SYSTEM_DEBUGSERVER=ON
-      -DLLDB_ENABLE_PYTHON=OFF
+      -DLLDB_ENABLE_PYTHON=ON
       -DLLDB_ENABLE_LUA=OFF
-      -DLLDB_ENABLE_LZMA=OFF
+      -DLLDB_ENABLE_LZMA=ON
+      -DLLDB_PYTHON_RELATIVE_PATH=libexec/#{site_packages}
       -DLIBOMP_INSTALL_ALIASES=OFF
       -DCLANG_PYTHON_BINDINGS_VERSIONS=#{py_ver}
     ]
 
-    sdk = MacOS.sdk_path_if_needed
-    args << "-DDEFAULT_SYSROOT=#{sdk}" if sdk
+    if MacOS.version >= :catalina
+      args << "-DFFI_INCLUDE_DIR=#{MacOS.sdk_path}/usr/include/ffi"
+      args << "-DFFI_LIBRARY_DIR=#{MacOS.sdk_path}/usr/lib"
+    else
+      args << "-DFFI_INCLUDE_DIR=#{Formula["libffi"].opt_include}"
+      args << "-DFFI_LIBRARY_DIR=#{Formula["libffi"].opt_lib}"
+    end
 
-    if MacOS.version == :mojave && MacOS::CLT.installed?
-      # Mojave CLT linker via software update is older than Xcode.
-      # Use it to retain compatibility.
-      args << "-DCMAKE_LINKER=/Library/Developer/CommandLineTools/usr/bin/ld"
+    on_macos do
+      args << "-DLLVM_BUILD_LLVM_C_DYLIB=ON"
+      args << "-DLLVM_ENABLE_LIBCXX=ON"
+      args << "-DLLVM_CREATE_XCODE_TOOLCHAIN=#{MacOS::Xcode.installed? ? "ON" : "OFF"}"
+      args << "-DRUNTIMES_CMAKE_ARGS=-DCMAKE_INSTALL_RPATH=@loader_path/../lib"
+
+      sdk = MacOS.sdk_path_if_needed
+      args << "-DDEFAULT_SYSROOT=#{sdk}" if sdk
+    end
+
+    on_linux do
+      args << "-DLLVM_ENABLE_LIBCXX=OFF"
+      args << "-DLLVM_CREATE_XCODE_TOOLCHAIN=OFF"
+      args << "-DCLANG_DEFAULT_CXX_STDLIB=libstdc++"
+      # Enable llvm gold plugin for LTO
+      args << "-DLLVM_BINUTILS_INCDIR=#{Formula["binutils"].opt_include}"
     end
 
     llvmpath = buildpath/"llvm"
     mkdir llvmpath/"build" do
       system "cmake", "-G", "Unix Makefiles", "..", *(std_cmake_args + args)
+      # Workaround for CMake Error: failed to create symbolic link
+      ENV.deparallelize if Hardware::CPU.arm?
       system "cmake", "--build", "."
       system "cmake", "--build", ".", "--target", "install"
       system "cmake", "--build", ".", "--target", "install-xcode-toolchain" if MacOS::Xcode.installed?
@@ -148,7 +143,7 @@ class Llvm < Formula
 
     # Install LLVM Python bindings
     # Clang Python bindings are installed by CMake
-    (lib/"python#{py_ver}/site-packages").install llvmpath/"bindings/python/llvm"
+    (lib/site_packages).install llvmpath/"bindings/python/llvm"
 
     # Install Emacs modes
     elisp.install Dir[llvmpath/"utils/emacs/*.el"] + Dir[share/"clang/*.el"]
@@ -211,19 +206,10 @@ class Llvm < Formula
       }
     EOS
 
-    # Testing mlir
-    (testpath/"test.mlir").write <<~EOS
-      func @bad_branch() {
-        br ^missing  // expected-error {{reference to an undefined block}}
-      }
-    EOS
-
-    system "#{bin}/mlir-opt", "--verify-diagnostics", "test.mlir"
-
     # Testing default toolchain and SDK location.
     system "#{bin}/clang++", "-v",
            "-std=c++11", "test.cpp", "-o", "test++"
-    assert_includes MachO::Tools.dylibs("test++"), "/usr/lib/libc++.1.dylib"
+    on_macos { assert_includes MachO::Tools.dylibs("test++"), "/usr/lib/libc++.1.dylib" }
     assert_equal "Hello World!", shell_output("./test++").chomp
     system "#{bin}/clang", "-v", "test.c", "-o", "test"
     assert_equal "Hello World!", shell_output("./test").chomp
@@ -265,8 +251,16 @@ class Llvm < Formula
            "-isystem", "#{opt_include}/c++/v1",
            "-std=c++11", "-stdlib=libc++", "test.cpp", "-o", "testlibc++",
            "-L#{opt_lib}", "-Wl,-rpath,#{opt_lib}"
-    assert_includes MachO::Tools.dylibs("testlibc++"), "#{opt_lib}/libc++.1.dylib"
+    on_macos { assert_includes MachO::Tools.dylibs("testlibc++"), "#{opt_lib}/libc++.1.dylib" }
     assert_equal "Hello World!", shell_output("./testlibc++").chomp
+
+    # Testing mlir
+    (testpath/"test.mlir").write <<~EOS
+      func @bad_branch() {
+        br ^missing  // expected-error {{reference to an undefined block}}
+      }
+    EOS
+    system "#{bin}/mlir-opt", "--verify-diagnostics", "test.mlir"
 
     (testpath/"scanbuildtest.cpp").write <<~EOS
       #include <iostream>

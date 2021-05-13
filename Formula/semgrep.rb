@@ -4,8 +4,8 @@ class Semgrep < Formula
   desc "Easily detect and prevent bugs and anti-patterns in your codebase"
   homepage "https://semgrep.dev"
   url "https://github.com/returntocorp/semgrep.git",
-      tag:      "v0.43.0",
-      revision: "a69a8f3bb13b53ca5874e41949c5d6426ee51d5b"
+      tag:      "v0.50.1",
+      revision: "e6522f0e753e39d2b256b42a45c2dc09d55d3b43"
   license "LGPL-2.1-only"
   head "https://github.com/returntocorp/semgrep.git", branch: "develop"
 
@@ -15,10 +15,10 @@ class Semgrep < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "64c6cc089d8e53a43b075003e3c070b92709e9213d07f38f88e00e4df639e0a1"
-    sha256 cellar: :any, big_sur:       "e30423d1fa75b62ce77ff8b212fa888715e8c94a6851d7c7924418afe042d6f0"
-    sha256 cellar: :any, catalina:      "f07df906aed697c7c325f4efe3877be1441b6682b5af68845c3116407dc910fc"
-    sha256 cellar: :any, mojave:        "8ccf5e761244c2817d0eccd4feaffcd77c2d34dfcb30e3334a179cc3b0f73ea1"
+    sha256 cellar: :any, arm64_big_sur: "3983df03c38fbf5e1cf6559cd1e220ed4d2da332ba40d874eca7125402051030"
+    sha256 cellar: :any, big_sur:       "c31f9b99d21c4cd2a128a00b2455aca240a352f4c4b7c102a90e98e6c79661d7"
+    sha256 cellar: :any, catalina:      "3c9c2e9d7c223bdfa23fb838355039522a87ccfb43fb663b9d98649b853020c5"
+    sha256 cellar: :any, mojave:        "9a2417bc5f479ec541f6d2b71daed2177154c6d9e1d517e09238fb79210d4521"
   end
 
   depends_on "cmake" => :build
@@ -31,8 +31,8 @@ class Semgrep < Formula
   depends_on "python@3.9"
 
   resource "attrs" do
-    url "https://files.pythonhosted.org/packages/f0/cb/80a4a274df7da7b8baf083249b0890a0579374c3d74b5ac0ee9291f912dc/attrs-20.3.0.tar.gz"
-    sha256 "832aa3cde19744e49938b91fea06d69ecb9e649c93ba974535d08ad92164f700"
+    url "https://files.pythonhosted.org/packages/4d/e0/8f3ccee89317124211d2efa44739c939b99e2446b82596c8fc6e824cf851/attrs-21.1.0.tar.gz"
+    sha256 "3901be1cb7c2a780f14668691474d9252c070a756be0a9ead98cfeabfa11aeb8"
   end
 
   resource "certifi" do
@@ -60,12 +60,6 @@ class Semgrep < Formula
     sha256 "c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a"
   end
 
-  # only doing this because junit-xml source is not available in PyPI for v1.9
-  resource "junit-xml" do
-    url "https://github.com/kyrus/python-junit-xml.git",
-        revision: "4bd08a272f059998cedf9b7779f944d49eba13a6"
-  end
-
   resource "packaging" do
     url "https://files.pythonhosted.org/packages/86/3c/bcd09ec5df7123abcf695009221a52f90438d877a2f1499453c6938f5728/packaging-20.9.tar.gz"
     sha256 "5b327ac1320dc863dca72f4514ecc086f31186744b84a230374cc1fd776feae5"
@@ -87,18 +81,23 @@ class Semgrep < Formula
   end
 
   resource "ruamel.yaml" do
-    url "https://files.pythonhosted.org/packages/16/8b/54a26c1031595e5edd0e616028b922d78d8ffba8bc775f0a4faeada846cc/ruamel.yaml-0.16.10.tar.gz"
-    sha256 "099c644a778bf72ffa00524f78dd0b6476bca94a1da344130f4bf3381ce5b954"
+    url "https://files.pythonhosted.org/packages/62/cf/148028462ab88a71046ba0a30780357ae9e07125863ea9ca7808f1ea3798/ruamel.yaml-0.17.4.tar.gz"
+    sha256 "44bc6b54fddd45e4bc0619059196679f9e8b79c027f4131bb072e6a22f4d5e28"
+  end
+
+  resource "ruamel.yaml.clib" do
+    url "https://files.pythonhosted.org/packages/fa/a1/f9c009a633fce3609e314294c7963abe64934d972abea257dce16a15666f/ruamel.yaml.clib-0.2.2.tar.gz"
+    sha256 "2d24bd98af676f4990c4d715bcdc2a60b19c56a3fb3a763164d2d8ca0e806ba7"
   end
 
   resource "six" do
-    url "https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426/six-1.15.0.tar.gz"
-    sha256 "30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"
+    url "https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e/six-1.16.0.tar.gz"
+    sha256 "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"
   end
 
   resource "tqdm" do
-    url "https://files.pythonhosted.org/packages/ef/58/60cc1e9af5714d1b86062f6dc00c5dd6973c902da6259f930b9c6e7a3430/tqdm-4.59.0.tar.gz"
-    sha256 "d666ae29164da3e517fcf125e41d4fe96e5bb375cd87ff9763f6b38b5592fe33"
+    url "https://files.pythonhosted.org/packages/35/35/bd5af89c97ad5177ed234d9e79d01a984f8b5226b8ffc8b5d3c4fc8e157d/tqdm-4.60.0.tar.gz"
+    sha256 "ebdebdb95e3477ceea267decfc0784859aa3df3e27e22d23b83e9b272bf157ae"
   end
 
   resource "urllib3" do
@@ -130,22 +129,18 @@ class Semgrep < Formula
       system "opam", "init", "--no-setup", "--disable-sandboxing"
       ENV.deparallelize { system "opam", "switch", "create", "ocaml-base-compiler.4.10.2" }
 
+      # Delete OCaml version file since it conflicts with C++20 version header
+      # This can be removed once semgrep upgrades to ocaml 4.12.0
+      rm "#{opamroot}/ocaml-base-compiler.4.10.2/lib/ocaml/version"
+
       system "opam", "exec", "--", "make", "setup"
 
       # Install spacegrep
-      cd "spacegrep" do
-        system "opam", "install", "--deps-only", "-y", "."
-        system "opam", "exec", "--", "make"
-        system "opam", "exec", "--", "make", "install"
-        bin.install "_build/default/src/bin/Space_main.exe" => "spacegrep"
-      end
+      system "opam", "exec", "--", "make", "build-spacegrep"
+      bin.install "spacegrep/_build/default/src/bin/Space_main.exe" => "spacegrep"
 
       # Install tree-sitter
       cd "ocaml-tree-sitter" do
-        cd "tree-sitter" do
-          system "opam", "exec", "--", "make"
-          system "opam", "exec", "--", "make", "install"
-        end
         system "opam", "install", "-y", "."
       end
 

@@ -1,8 +1,8 @@
 class Groonga < Formula
   desc "Fulltext search engine and column store"
   homepage "https://groonga.org/"
-  url "https://packages.groonga.org/source/groonga/groonga-11.0.0.tar.gz"
-  sha256 "92040015ae0eaef7e6b3fb6b8da32b5d42d8cbb9d5fa7b262cfa72640ab77036"
+  url "https://packages.groonga.org/source/groonga/groonga-11.0.2.tar.gz"
+  sha256 "de29cb5648e3c29873d343747d626a5efcb302357dc7bd82dc4df776e2de558c"
   license "LGPL-2.1-or-later"
 
   livecheck do
@@ -11,10 +11,10 @@ class Groonga < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "a13ea21d2bda53f4a21af0beea01a655ee96f375e4c7b2debe46f09382493fde"
-    sha256 big_sur:       "dc6597d2ebfe1227fa22b2fe648cd34078856b580ce4bcf2cf1ecc754c32fe9a"
-    sha256 catalina:      "d0a0807d3d57dc0fb4653dc318efc816737e423bd803836a211034abbe1a755c"
-    sha256 mojave:        "56459e3a9174b5a4ff6ae1ff7a55f62d28e4bc6157698542e33b48cc841d2b02"
+    sha256 arm64_big_sur: "840a214dbd6057506f062ff10c96654d17ad47345f1ae128f272835c79ab08c7"
+    sha256 big_sur:       "1c9131afc85d7f3d74f30bafc313acf58caa76c90276e915968f83552203c5f4"
+    sha256 catalina:      "7380bc185cde1a86452bc367474522df3686ec239eb38f595c9c1f0f5d442267"
+    sha256 mojave:        "e50c7f92c091e3b7998869b659422d015b300d70966aa071f5b6952394f835c1"
   end
 
   head do
@@ -60,8 +60,10 @@ class Groonga < Formula
       system "./autogen.sh"
     end
 
-    system "./configure", *args
-    system "make", "install"
+    mkdir "builddir" do
+      system "../configure", *args
+      system "make", "install"
+    end
 
     resource("groonga-normalizer-mysql").stage do
       ENV.prepend_path "PATH", bin

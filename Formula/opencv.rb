@@ -1,10 +1,10 @@
 class Opencv < Formula
   desc "Open source computer vision library"
   homepage "https://opencv.org/"
-  url "https://github.com/opencv/opencv/archive/4.5.1.tar.gz"
-  sha256 "e27fe5b168918ab60d58d7ace2bd82dd14a4d0bd1d3ae182952c2113f5637513"
+  url "https://github.com/opencv/opencv/archive/4.5.2.tar.gz"
+  sha256 "ae258ed50aa039279c3d36afdea5c6ecf762515836b27871a8957c610d0424f8"
   license "Apache-2.0"
-  revision 3
+  revision 1
 
   livecheck do
     url :stable
@@ -12,10 +12,10 @@ class Opencv < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "08183e5e5d48cc0ad40050a65ddd86c70bde41435c339ab06ef887f26754e58a"
-    sha256 big_sur:       "6ea488911c616643554ed7a5611c598369820dde4d6fdbc1c3d0ebf76b877ceb"
-    sha256 catalina:      "fba82ab6b60fbb0b892808bb8be6a17ff7805d9e9647705b4c0c656dd2f6a11e"
-    sha256 mojave:        "8a4e0c37ab0cc35a53e31d2ae265a2e5c8d22799d0c88ca582f5e6ed9da515d6"
+    sha256 arm64_big_sur: "5bb57ebee8b138158d4dadef06869ccc52bdc21b5c393193db53301a90e5d9d6"
+    sha256 big_sur:       "71d4b8def39e7f731f31616fe9326c3365af4daed3e8ecfc5f20c11b69dc211d"
+    sha256 catalina:      "eec1795f2c98bacf62f29ad7ff77d43f18c739726d8833e9fdcda80b2aacb3bf"
+    sha256 mojave:        "dc80f9e6bb981bbd7b872ebd890a76591dea6f2b0d231bd888ce9bdb4d2a81bf"
   end
 
   depends_on "cmake" => :build
@@ -38,8 +38,8 @@ class Opencv < Formula
   depends_on "webp"
 
   resource "contrib" do
-    url "https://github.com/opencv/opencv_contrib/archive/4.5.1.tar.gz"
-    sha256 "12c3b1ddd0b8c1a7da5b743590a288df0934e5cef243e036ca290c2e45e425f5"
+    url "https://github.com/opencv/opencv_contrib/archive/4.5.2.tar.gz"
+    sha256 "9f52fd3114ac464cb4c9a2a6a485c729a223afb57b9c24848484e55cef0b5c2a"
   end
 
   def install
@@ -95,13 +95,17 @@ class Opencv < Formula
     end
 
     mkdir "build" do
+      os = "mac"
+      on_linux do
+        os = "linux"
+      end
       system "cmake", "..", *args
-      inreplace "modules/core/version_string.inc", "#{HOMEBREW_SHIMS_PATH}/mac/super/", ""
+      inreplace "modules/core/version_string.inc", "#{HOMEBREW_SHIMS_PATH}/#{os}/super/", ""
       system "make"
       system "make", "install"
       system "make", "clean"
       system "cmake", "..", "-DBUILD_SHARED_LIBS=OFF", *args
-      inreplace "modules/core/version_string.inc", "#{HOMEBREW_SHIMS_PATH}/mac/super/", ""
+      inreplace "modules/core/version_string.inc", "#{HOMEBREW_SHIMS_PATH}/#{os}/super/", ""
       system "make"
       lib.install Dir["lib/*.a"]
       lib.install Dir["3rdparty/**/*.a"]

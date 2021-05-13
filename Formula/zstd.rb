@@ -4,12 +4,15 @@ class Zstd < Formula
   url "https://github.com/facebook/zstd/archive/v1.4.9.tar.gz"
   sha256 "acf714d98e3db7b876e5b540cbf6dee298f60eb3c0723104f6d3f065cd60d6a8"
   license "BSD-3-Clause"
+  revision 1
+  head "https://github.com/facebook/zstd.git", branch: "dev"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "beddf3a858da5063f7a407e5c78c0c83a2efd2595354acb750118da7d87f0974"
-    sha256 cellar: :any, big_sur:       "34a6c2cc25d1a7bca6e2294ec3d024f359a2aaf705798b9cbdd71bccdd5c08bd"
-    sha256 cellar: :any, catalina:      "d3f7b4d61e213d3fae27317d496251768ad8cfe03a4aa1ab11479c632a7e4050"
-    sha256 cellar: :any, mojave:        "685d57a5577f21f89d5ee20aa986c447adf315bcf4daf96d22cb5cf170e4a5ce"
+    rebuild 1
+    sha256 cellar: :any, arm64_big_sur: "3d51ef9a3f13e82d4dc2e3796c3f02ee32593686c87498f0ba49302b38fb5f7a"
+    sha256 cellar: :any, big_sur:       "84b118224c8da97b293087196e5dabcefceaede9d0c4c60dd05bcb103d2668a6"
+    sha256 cellar: :any, catalina:      "3bdec91921f43b57d2afb4fd61641dd912330c010b2c1979c51602cecfe66f1a"
+    sha256 cellar: :any, mojave:        "29f6070e68f504cda74fb368ca267cf4031203371fb74cd4bdb9547229fec849"
   end
 
   depends_on "cmake" => :build
@@ -17,11 +20,14 @@ class Zstd < Formula
   uses_from_macos "zlib"
 
   def install
-    system "make", "install", "PREFIX=#{prefix}/"
-
-    # Build parallel version
-    system "make", "-C", "contrib/pzstd", "PREFIX=#{prefix}"
-    bin.install "contrib/pzstd/pzstd"
+    cd "build/cmake" do
+      system "cmake", "-S", ".", "-B", "builddir",
+                      "-DZSTD_BUILD_CONTRIB=ON",
+                      "-DCMAKE_INSTALL_RPATH=#{rpath}",
+                      *std_cmake_args
+      system "cmake", "--build", "builddir"
+      system "cmake", "--install", "builddir"
+    end
   end
 
   test do

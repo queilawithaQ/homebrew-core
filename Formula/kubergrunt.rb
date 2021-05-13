@@ -1,15 +1,15 @@
 class Kubergrunt < Formula
   desc "Collection of commands to fill in the gaps between Terraform, Helm, and Kubectl"
   homepage "https://github.com/gruntwork-io/kubergrunt"
-  url "https://github.com/gruntwork-io/kubergrunt/archive/v0.6.10.tar.gz"
-  sha256 "cc4582e719783133b2f08abf5ed63b0b692a1a86678e37f30fbcb4254b580dc5"
+  url "https://github.com/gruntwork-io/kubergrunt/archive/v0.6.15.tar.gz"
+  sha256 "04aa7721a3186f9631e4edd26662c687dc0fbaec5bc64af598c0d3dd411066b4"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "2c3712e3164a8a1bdc775385f4713b113deff378d7dc70ae0eee40cc6735958d"
-    sha256 cellar: :any_skip_relocation, big_sur:       "a50bdea568a128b2590e42ab017f5418a7d299f8c130dbc0b0531b27e3e2c80b"
-    sha256 cellar: :any_skip_relocation, catalina:      "7e12b504aa830a5ce348f997a013b9a51a61725508a95e0565ebeff80716d8ca"
-    sha256 cellar: :any_skip_relocation, mojave:        "14a7f6007fe6cca41eacc60c384cd45b734a17c49b8596a36c537d2aff39c83e"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "c2762460224fd73f87da9c32aafd9ba79914416afb1f0e58f3af532ab416488a"
+    sha256 cellar: :any_skip_relocation, big_sur:       "d7e6f3865155e564373dcb6c55bb64a86926afe7954b3da532613f2873fb76f1"
+    sha256 cellar: :any_skip_relocation, catalina:      "229b3ff21746a835baddadaddd5a8caa0f35e429bfa770de5a14dbdbff6de0c9"
+    sha256 cellar: :any_skip_relocation, mojave:        "431c1f11b79f87cf1c5385aa36969ef5a253c3809dcc86541cc45f34ab2ba05e"
   end
 
   depends_on "go" => :build

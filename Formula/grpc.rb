@@ -2,8 +2,8 @@ class Grpc < Formula
   desc "Next generation open source RPC library and framework"
   homepage "https://grpc.io/"
   url "https://github.com/grpc/grpc.git",
-      tag:      "v1.36.4",
-      revision: "3e53dbe8213137d2c731ecd4d88ebd2948941d75",
+      tag:      "v1.37.1",
+      revision: "8664c8334c05d322fbbdfb9e3b24601a23e9363c",
       shallow:  false
   license "Apache-2.0"
   head "https://github.com/grpc/grpc.git"
@@ -14,10 +14,10 @@ class Grpc < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "50cae3f7c0e151ed74804875c9eb033dbd2e475ae69df217a9bcdf2091df362a"
-    sha256 big_sur:       "6f1dcef07cc4f3b8b2880ab121a6113e93d97fac4620664ecb606f7d8b8678f5"
-    sha256 catalina:      "55402728a380a470750c9a55f7fa398020a2af774d6e523f1a0eefe2bb450b1e"
-    sha256 mojave:        "58ea9c29d6b768535f9828ef36b73fc586e369d2df9e99042ee015de71fe55dc"
+    sha256 cellar: :any, arm64_big_sur: "2f11475d08ab3bad8577f3cd7577da5af575bf6e5072f75769f5e9dd85b782a1"
+    sha256 cellar: :any, big_sur:       "60262977e20371b8e818b7820792698a899999985d356c6ceee1b36289dbb128"
+    sha256 cellar: :any, catalina:      "b02be4642bfce958727bf03bff51d2acf6e180830a67566969ce975a8a37f0a8"
+    sha256 cellar: :any, mojave:        "9b3f8b20776fc5607a59bd0bad8c65c4c9d0a90e9e1fc44d2584581b236883f2"
   end
 
   depends_on "autoconf" => :build
@@ -33,13 +33,26 @@ class Grpc < Formula
 
   uses_from_macos "zlib"
 
+  on_macos do
+    depends_on "llvm" => :build if MacOS.version <= :mojave
+  end
+
+  fails_with :clang do
+    build 1100
+    cause "Requires C++17 features not yet implemented"
+  end
+
   def install
+    ENV.remove "HOMEBREW_LIBRARY_PATHS", Formula["llvm"].opt_lib
+    on_macos do
+      ENV.llvm_clang if MacOS.version <= :mojave
+    end
     mkdir "cmake/build" do
       args = %W[
         ../..
         -DCMAKE_CXX_STANDARD=17
         -DCMAKE_CXX_STANDARD_REQUIRED=TRUE
-        -DCMAKE_INSTALL_RPATH=#{lib}
+        -DCMAKE_INSTALL_RPATH=#{rpath}
         -DBUILD_SHARED_LIBS=ON
         -DgRPC_BUILD_TESTS=OFF
         -DgRPC_INSTALL=ON
@@ -61,7 +74,7 @@ class Grpc < Formula
       unless Hardware::CPU.arm?
         args = %W[
           ../..
-          -DCMAKE_INSTALL_RPATH=#{lib}
+          -DCMAKE_INSTALL_RPATH=#{rpath}
           -DBUILD_SHARED_LIBS=ON
           -DgRPC_BUILD_TESTS=ON
         ] + std_cmake_args

@@ -3,15 +3,15 @@ class SvtplayDl < Formula
 
   desc "Download videos from https://www.svtplay.se/"
   homepage "https://svtplay-dl.se/"
-  url "https://files.pythonhosted.org/packages/59/9f/ad5dac119070167444b3b6103bc0a42860aed74da14312a9b8d8471f6ea6/svtplay-dl-3.3.tar.gz"
-  sha256 "c51beef374410eabb205751f30cae2711d42959cced1bd733956c245ca6d422b"
+  url "https://files.pythonhosted.org/packages/eb/71/7dd2120e84a8f1aa936f08b535bfbca22b0cfb09948a8d50158600058b00/svtplay-dl-3.7.tar.gz"
+  sha256 "74a5365c44113181764c4328e3131624e68c7f299831635e2aca8cda1d53e136"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "4baacce4f6eb171f8cdbe6c82a87c6d94a1794af9cfb20f3a2c1d3f053abbeaf"
-    sha256 cellar: :any, big_sur:       "1e2d17f606d8b5bde54e199243b64754c032f3da08bb34b14e4e84255378b907"
-    sha256 cellar: :any, catalina:      "49adf26c75ff2fde63adb1e12a86f7a6bf3b120546887edc8c602e41739efdc4"
-    sha256 cellar: :any, mojave:        "e5ebc45ff86034a99bae7ca93507071e2db34ac9a3dccb5b6fa46ae896c1a503"
+    sha256 cellar: :any, arm64_big_sur: "64bbd7b92be024a55e1c24b6e19c87215a269e598f9ea1ef9200cc09d3d8c50b"
+    sha256 cellar: :any, big_sur:       "7760f8d01431677c256696c2eff2140c34ebcf1f8d457862dae388fbeebb8a97"
+    sha256 cellar: :any, catalina:      "e8bd91dd42890b4101f3709a5f1908874631420c94cfc398fdf762b33caa7e27"
+    sha256 cellar: :any, mojave:        "4bc8fe10eaea6904ac80aa87e6c5242c13a412ec67d89c668c28f60898abc4f2"
   end
 
   depends_on "rust" => :build
@@ -34,8 +34,8 @@ class SvtplayDl < Formula
   end
 
   resource "cryptography" do
-    url "https://files.pythonhosted.org/packages/fa/2d/2154d8cb773064570f48ec0b60258a4522490fcb115a6c7c9423482ca993/cryptography-3.4.6.tar.gz"
-    sha256 "2d32223e5b0ee02943f32b19245b61a62db83a882f0e76cc564e1cec60d48f87"
+    url "https://files.pythonhosted.org/packages/9b/77/461087a514d2e8ece1c975d8216bc03f7048e6090c5166bc34115afdaa53/cryptography-3.4.7.tar.gz"
+    sha256 "3d10de8116d25649631977cb37da6cbdd2d6fa0e0281d014a5b7d337255ca713"
   end
 
   resource "idna" do

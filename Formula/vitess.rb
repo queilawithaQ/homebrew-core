@@ -1,18 +1,25 @@
 class Vitess < Formula
   desc "Database clustering system for horizontal scaling of MySQL"
   homepage "https://vitess.io"
-  url "https://github.com/vitessio/vitess/archive/v9.0.0.tar.gz"
-  sha256 "14254f423f2472fb48034299cbfc4acc6b767f7497036cf43eb3e7f2a70f7beb"
+  url "https://github.com/vitessio/vitess/archive/v10.0.1.tar.gz"
+  sha256 "8d12aca42b912af114df56b70672977b0f0304808016f0515e360ab0b34efb13"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:  "aa51ca8319e5c017cd77fdaa3118773164cb06e4d2d463a026804d756d9a48ee"
-    sha256 cellar: :any_skip_relocation, catalina: "9391247e8271f55f85ef108e5b8e55c9f529686bd104d4fa0c2b0075790efd6f"
-    sha256 cellar: :any_skip_relocation, mojave:   "51709fef029ab1134ed279f5d597c8e9c794dc5d9fc117845119f9c9b08a78a1"
+    sha256 cellar: :any_skip_relocation, big_sur:  "eceb3111673e616d616f38f479a1e5508a9d1a93c04dfaf269623f006d3f19f4"
+    sha256 cellar: :any_skip_relocation, catalina: "49aebd85d9ffdfa4bab9c3cda7bc8c1680098989718247304125d746a9079814"
+    sha256 cellar: :any_skip_relocation, mojave:   "44ce90c92d9f2ab747c932ed1ff41500cc5ee41a07d357916a9f9fe21a165fc8"
   end
 
   depends_on "go" => :build
   depends_on "etcd"
+
+  # Fixes build failure on Darwin, see: https://github.com/vitessio/vitess/pull/7787
+  # Remove in v11.0.0
+  patch do
+    url "https://github.com/vitessio/vitess/commit/7efa6aa4cd3b68ccd45d46e5f1d13a4a7f9bde7d.patch?full_index=1"
+    sha256 "625290343b23688c5ac885246ed43808b865ae16005565d88791f4f733c24ce0"
+  end
 
   def install
     system "make", "install-local", "PREFIX=#{prefix}", "VTROOT=#{buildpath}"

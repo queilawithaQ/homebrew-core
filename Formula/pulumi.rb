@@ -2,16 +2,16 @@ class Pulumi < Formula
   desc "Cloud native development platform"
   homepage "https://pulumi.io/"
   url "https://github.com/pulumi/pulumi.git",
-      tag:      "v2.23.1",
-      revision: "92544b746a82bde6aa573bf0f61e6e10762ed492"
+      tag:      "v3.2.1",
+      revision: "24875d810cff410fa447775a3b8a3bde61c2637b"
   license "Apache-2.0"
   head "https://github.com/pulumi/pulumi.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "b677510d619b3f8b3e0ec641d6e2163c78e661fbf6ffce873c8c4539591d5bb3"
-    sha256 cellar: :any_skip_relocation, big_sur:       "dc87fee7268530346be4020037af421abc7c63746573d183528cfe5d07150f58"
-    sha256 cellar: :any_skip_relocation, catalina:      "3cc01b053a3e8cdba5efcec68ebf802472e3fe5024c41635230b0ae7e2db0bde"
-    sha256 cellar: :any_skip_relocation, mojave:        "8147d31eb386443ce70dc7eb7377de35860022c39e007977a803294d5a23868e"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "4e75d122b1945453f35cfa4876f7b3848fa85b7de42b10dd7f5aed92d33c8342"
+    sha256 cellar: :any_skip_relocation, big_sur:       "4422a5120765a66bf73e608b1f7a117550c8c43a0cc960920152978e69b089a1"
+    sha256 cellar: :any_skip_relocation, catalina:      "31488a0495c8943199b0d0105b39f8e96152f9b9bd33c8e4606c1f815a495c35"
+    sha256 cellar: :any_skip_relocation, mojave:        "476f2a072c01a8f51c407e59f14ab0201fd78fdfae99570dfc67339cb2bf7cba"
   end
 
   depends_on "go" => :build

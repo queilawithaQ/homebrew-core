@@ -1,23 +1,23 @@
 class Pipx < Formula
   desc "Execute binaries from Python packages in isolated environments"
   homepage "https://github.com/pipxproject/pipx"
-  url "https://files.pythonhosted.org/packages/34/19/e79e0a9836187e0b576da06859314887715c3adf4c6e2b4b4d5629f5a04f/pipx-0.16.1.0.tar.gz"
-  sha256 "22b9a0f0536e6b4e7ae030d33cbe34528c3f7ad1615d0c3795f2e5ac4db9d76d"
+  url "https://files.pythonhosted.org/packages/92/09/c4afd1d89677871c3a69657b9aa34c12328b2fb409b068e3933a6e8c2fa4/pipx-0.16.2.1.tar.gz"
+  sha256 "805319eab100c0c36e349b76103bbe903445229a60ebb0010d7cf7590ff5ba20"
   license "MIT"
   head "https://github.com/pipxproject/pipx.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "bab02779c5da9216dbc21812e5786dce16e6c0f79457575fd78037ed96bd6cd0"
-    sha256 cellar: :any_skip_relocation, big_sur:       "9c07a40553cfa635460d685e72ec0fc29192a0c50167d6c5ee8a441db3065453"
-    sha256 cellar: :any_skip_relocation, catalina:      "abc0c5222a5ddafa0230be3df0e96251b10731ac139a776b367486fccf817ace"
-    sha256 cellar: :any_skip_relocation, mojave:        "85019ec96f1cf0aa890a9424522755a3beb3a69d6ef508293cf9292895acd1b9"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "a6dde65154b456011d4157a3dded90f118266af5f1447a1601044d219706e164"
+    sha256 cellar: :any_skip_relocation, big_sur:       "61219c287997023648711a74f6a88ed74cc8696a5a8cdca4db23ab9c4c0c51cb"
+    sha256 cellar: :any_skip_relocation, catalina:      "61219c287997023648711a74f6a88ed74cc8696a5a8cdca4db23ab9c4c0c51cb"
+    sha256 cellar: :any_skip_relocation, mojave:        "61219c287997023648711a74f6a88ed74cc8696a5a8cdca4db23ab9c4c0c51cb"
   end
 
   depends_on "python@3.9"
 
   resource "argcomplete" do
-    url "https://files.pythonhosted.org/packages/cb/53/d2e3d11726367351b00c8f078a96dacb7f57aef2aca0d3b6c437afc56b55/argcomplete-1.12.2.tar.gz"
-    sha256 "de0e1282330940d52ea92a80fea2e4b9e0da1932aaa570f84d268939d1897b04"
+    url "https://files.pythonhosted.org/packages/6a/b4/3b1d48b61be122c95f4a770b2f42fc2552857616feba4d51f34611bd1352/argcomplete-1.12.3.tar.gz"
+    sha256 "2c7dbffd8c045ea534921e63b0be6fe65e88599990d8dc408ac8c542b72a5445"
   end
 
   resource "click" do
@@ -28,6 +28,13 @@ class Pipx < Formula
   resource "colorama" do
     url "https://files.pythonhosted.org/packages/1f/bb/5d3246097ab77fa083a61bd8d3d527b7ae063c7d8e8671b1cf8c4ec10cbe/colorama-0.4.4.tar.gz"
     sha256 "5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"
+  end
+
+  resource "distro" do
+    on_linux do
+      url "https://files.pythonhosted.org/packages/a6/a4/75064c334d8ae433445a20816b788700db1651f21bdb0af33db2aab142fe/distro-1.5.0.tar.gz"
+      sha256 "0e58756ae38fbd8fc3020d54badb8eae17c5b9dcbed388b17bb55b8a5928df92"
+    end
   end
 
   resource "packaging" do
@@ -66,6 +73,6 @@ class Pipx < Formula
     system "#{bin}/pipx", "install", "csvkit"
     assert_predicate testpath/".local/bin/csvjoin", :exist?
     system "#{bin}/pipx", "uninstall", "csvkit"
-    assert_no_match Regexp.new("csvjoin"), shell_output("#{bin}/pipx list")
+    refute_match "csvjoin", shell_output("#{bin}/pipx list")
   end
 end

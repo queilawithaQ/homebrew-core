@@ -1,15 +1,15 @@
 class X8664ElfGcc < Formula
   desc "GNU compiler collection for x86_64-elf"
   homepage "https://gcc.gnu.org"
-  url "https://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz"
-  mirror "https://ftpmirror.gnu.org/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz"
-  sha256 "b8dd4368bb9c7f0b98188317ee0254dd8cc99d1e3a18d0ff146c855fe16c1d8c"
+  url "https://ftp.gnu.org/gnu/gcc/gcc-11.1.0/gcc-11.1.0.tar.xz"
+  mirror "https://ftpmirror.gnu.org/gcc/gcc-11.1.0/gcc-11.1.0.tar.xz"
+  sha256 "4c4a6fb8a8396059241c2e674b85b351c26a5d678274007f076957afa1cc9ddf"
+  license "GPL-3.0-or-later" => { with: "GCC-exception-3.1" }
 
   bottle do
-    sha256 big_sur:     "5ea6b9319ee06ff6e914f97e1af1243e5ec820a22ea3d33e7decae2effd228b5"
-    sha256 catalina:    "fabfa58ff9baa00f65192dac31f63133e8c98b1b2bf4ef49ba451f6331ed2cc2"
-    sha256 mojave:      "6775f752210fe04754eca0de749d7243e436da6a24118660faca5bbf62eedb16"
-    sha256 high_sierra: "ef83d1c3909cc2d7b42d5dca74909c548f653d34a55d141f8d5402992214d622"
+    sha256 big_sur:  "88534ab7b03901f67f4c35f998b5022a7ae3214db8e30fdcf7c83424b42af292"
+    sha256 catalina: "63c2f1f77439b4e2e452b7fb0d4ae7e69242f7be2df2a01864e0895f93e2dd86"
+    sha256 mojave:   "132bb7c7505c86b8cd4a3e6cee01acff07288034517345b7781771a0b17e5bec"
   end
 
   depends_on "gmp"
@@ -27,8 +27,7 @@ class X8664ElfGcc < Formula
                              "--without-headers",
                              "--with-as=#{Formula["x86_64-elf-binutils"].bin}/x86_64-elf-as",
                              "--with-ld=#{Formula["x86_64-elf-binutils"].bin}/x86_64-elf-ld",
-                             "--enable-languages=c,c++",
-                             "SED=/usr/bin/sed"
+                             "--enable-languages=c,c++"
       system "make", "all-gcc"
       system "make", "install-gcc"
       system "make", "all-target-libgcc"

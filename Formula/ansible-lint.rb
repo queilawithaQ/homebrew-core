@@ -3,15 +3,15 @@ class AnsibleLint < Formula
 
   desc "Checks ansible playbooks for practices and behaviour"
   homepage "https://github.com/ansible/ansible-lint/"
-  url "https://files.pythonhosted.org/packages/6f/74/c0b783c018d59e52242bde54485a5de9f1b6f8878c41f7b83b550d1f2b64/ansible-lint-5.0.5.tar.gz"
-  sha256 "93b06db16750f662a0ef0914fc7182f6c70aa4161d5695f64b39a56eaf6229c9"
+  url "https://files.pythonhosted.org/packages/56/ac/726a486e7a6118c701dfdd6d04a7b745c24fbb79da07b16a453cc737aaad/ansible-lint-5.0.8.tar.gz"
+  sha256 "b67b9628407ae9bc15bb0bb71f79871bdf593fefe6b0684c0cc44be5fc90803f"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "8e59d5789d7ec5f8cca79a1f7dbad1a297815d41ed5d376f639add67e44bcd09"
-    sha256 cellar: :any, big_sur:       "f032e1d8a3624b898c3b77015662a60ae504011be85c3fb510cf7e97e35b0fd5"
-    sha256 cellar: :any, catalina:      "4444e0b0d293799f91c287730720313c9090b0bbc08214d7b194ed8f58fb0012"
-    sha256 cellar: :any, mojave:        "7d7e4320dda2dab23b7d42b9f1a4ca76b5e14c91869ff544458f9f37124ed008"
+    sha256 cellar: :any, arm64_big_sur: "4e219143c0defc631b86a2d7eb685ce44402c310c0640d1bfc583185ab8680ba"
+    sha256 cellar: :any, big_sur:       "e42d8e02612bda0cf0b78a661f75bb2fbbc5cd31baf5f9f2473c2406eee8a03c"
+    sha256 cellar: :any, catalina:      "7bc3ea65b6e29e6a77aeb896a4412dcb139672aa2dccd81e4551cdf94209b0b4"
+    sha256 cellar: :any, mojave:        "e640f8f42540745165419e55809052df50020103f78fc71a881bd6e7e9e88409"
   end
 
   depends_on "pkg-config" => :build
@@ -45,8 +45,8 @@ class AnsibleLint < Formula
   end
 
   resource "Pygments" do
-    url "https://files.pythonhosted.org/packages/15/9d/bc9047ca1eee944cc245f3649feea6eecde3f38011ee9b8a6a64fb7088cd/Pygments-2.8.1.tar.gz"
-    sha256 "2656e1a6edcdabf4275f9a3640db59fd5de107d88e8663c5d4e9a0fa62f77f94"
+    url "https://files.pythonhosted.org/packages/ba/6e/7a7c13c21d8a4a7f82ccbfe257a045890d4dbf18c023f985f565f97393e3/Pygments-2.9.0.tar.gz"
+    sha256 "a18f47b506a429f6f4b9df81bb02beab9ca21d0a5fee38ed15aef65f0545519f"
   end
 
   resource "pyparsing" do
@@ -60,13 +60,13 @@ class AnsibleLint < Formula
   end
 
   resource "rich" do
-    url "https://files.pythonhosted.org/packages/ae/f6/6ffb46f6cf0bb584e44279accd3321cb838b78b324031feb8fd9adf63ed2/rich-9.13.0.tar.gz"
-    sha256 "d59e94a0e3e686f0d268fe5c7060baa1bd6744abca71b45351f5850a3aaa6764"
+    url "https://files.pythonhosted.org/packages/12/3c/e4e2b356057f3ce557fcda8a2b9bf114b06f71ade88dac8a0883ae800e28/rich-10.1.0.tar.gz"
+    sha256 "8f05431091601888c50341697cfc421dc398ce37b12bca0237388ef9c7e2c9e9"
   end
 
   resource "ruamel.yaml" do
-    url "https://files.pythonhosted.org/packages/1d/2f/40abf6501e051df8af970bfa6d81a90fcd62dc536f82ceec80a2694a3123/ruamel.yaml-0.16.13.tar.gz"
-    sha256 "bb48c514222702878759a05af96f4b7ecdba9b33cd4efcf25c86b882cef3a942"
+    url "https://files.pythonhosted.org/packages/62/cf/148028462ab88a71046ba0a30780357ae9e07125863ea9ca7808f1ea3798/ruamel.yaml-0.17.4.tar.gz"
+    sha256 "44bc6b54fddd45e4bc0619059196679f9e8b79c027f4131bb072e6a22f4d5e28"
   end
 
   resource "ruamel.yaml.clib" do
@@ -74,9 +74,19 @@ class AnsibleLint < Formula
     sha256 "2d24bd98af676f4990c4d715bcdc2a60b19c56a3fb3a763164d2d8ca0e806ba7"
   end
 
+  resource "six" do
+    url "https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e/six-1.16.0.tar.gz"
+    sha256 "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"
+  end
+
+  resource "tenacity" do
+    url "https://files.pythonhosted.org/packages/9e/ff/65d44f70e9a5273b6185ccbff194bb649e4fa6bd328113feda964f277f2d/tenacity-7.0.0.tar.gz"
+    sha256 "5bd16ef5d3b985647fe28dfa6f695d343aa26479a04e8792b9d3c8f49e361ae1"
+  end
+
   resource "typing-extensions" do
-    url "https://files.pythonhosted.org/packages/16/06/0f7367eafb692f73158e5c5cbca1aec798cdf78be5167f6415dd4205fa32/typing_extensions-3.7.4.3.tar.gz"
-    sha256 "99d4073b617d30288f569d3f13d2bd7548c3a7e4c8de87db09a9d29bb3a4a60c"
+    url "https://files.pythonhosted.org/packages/aa/55/62e2d4934c282a60b4243a950c9dbfa01ae7cac0e8d6c0b5315b87432c81/typing_extensions-3.10.0.0.tar.gz"
+    sha256 "50b6f157849174217d0656f99dc82fe932884fb250826c18350e159ec6cdf342"
   end
 
   resource "wcmatch" do

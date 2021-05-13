@@ -1,9 +1,10 @@
 class Freeciv < Formula
   desc "Free and Open Source empire-building strategy game"
   homepage "http://freeciv.org"
-  url "https://downloads.sourceforge.net/project/freeciv/Freeciv%202.6/2.6.3/freeciv-2.6.3.tar.bz2"
-  sha256 "77432e027557a9eb407dac730ae9810ee172abe37111deb017fe72b8183ff8d1"
+  url "https://downloads.sourceforge.net/project/freeciv/Freeciv%202.6/2.6.4/freeciv-2.6.4.tar.bz2"
+  sha256 "40db957766acbd49c5af15afd1711da996b6681be7abee3352c5f2539c10c1ce"
   license "GPL-2.0-or-later"
+  revision 1
 
   livecheck do
     url :stable
@@ -11,10 +12,10 @@ class Freeciv < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "b32f1d068dac64d037bb4784d1bfe2f3d88801d45395647b46e83e9352428e97"
-    sha256 big_sur:       "57f0a07826b7fa224a79eda88041375d21fcd2787ab57bca311542da278da5a6"
-    sha256 catalina:      "c46864366282e6b626a787e45453f539c3604c334a84326a0c8cc4ab2511e7dd"
-    sha256 mojave:        "287706ed5964b4959c16017e641afe30e0348fd4840e9516525bceeb49ffa8d4"
+    sha256 arm64_big_sur: "82f54998dba83d162113b46dd9ac9f2cbba68caae87bc056aea9c26141f29070"
+    sha256 big_sur:       "720e1ba7af296df2b5fcb79b5cb9f880021bf3445aad4972a9122034a3fdaed7"
+    sha256 catalina:      "996c3cf541f982b93dab9d7787133f278085a7e386cdcc1a684102635f20aeef"
+    sha256 mojave:        "312934876eb111c8a413b20aff5733f70da79dba38e3b9b9597eeaf9e464a4cd"
   end
 
   head do
@@ -27,6 +28,7 @@ class Freeciv < Formula
   end
 
   depends_on "pkg-config" => :build
+  depends_on "adwaita-icon-theme"
   depends_on "atk"
   depends_on "cairo"
   depends_on "freetype"

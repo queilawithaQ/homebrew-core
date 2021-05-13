@@ -1,16 +1,17 @@
 class Rdkit < Formula
   desc "Open-source chemoinformatics library"
   homepage "https://rdkit.org/"
-  url "https://github.com/rdkit/rdkit/archive/Release_2020_09_5.tar.gz"
-  sha256 "85cec9618e7ef6365b9b908ed674c073d898b6627521cc7fd8c2e05fea8a5def"
+  url "https://github.com/rdkit/rdkit/archive/Release_2021_03_1.tar.gz"
+  sha256 "9495f797a54ac70b3b6e12776de7d82acd7f7b5d5f0cc1f168c763215545610b"
   license "BSD-3-Clause"
+  revision 1
   head "https://github.com/rdkit/rdkit.git"
 
   bottle do
-    sha256 arm64_big_sur: "15c4901321cbac4403a635b34951b561ac89dfbf042a938ecf34de9b0a88ed76"
-    sha256 big_sur:       "4f294a38e82fd6935e34afcd91cfea1866efd4c2da26cb5348edeb325a64b6f0"
-    sha256 catalina:      "a0b671abaead16cda99e30d9a490894c2ef3dd19a1233a18d40c04a34c6c0772"
-    sha256 mojave:        "f6bbf7d54231caa43b0161109fef2a62a5cad30da94932f04bd11450a44303fc"
+    sha256 arm64_big_sur: "4517bab8a0cbf87d593d4da115beef2f5df826eb5f876f57178099fe6007b8fa"
+    sha256 big_sur:       "855d43ea94058f878cdba983391f3344d07223ce24b5400fe811adec6adcf305"
+    sha256 catalina:      "f8fc9a8cb5afcf5d891fc4a53da47a3a7cc40351d769ce73e735b02987e722ba"
+    sha256 mojave:        "6f7c9125af11fa603668b89ca0594648d75a6b2c50934be6191c203ec18137dc"
   end
 
   depends_on "cmake" => :build
@@ -65,6 +66,9 @@ class Rdkit < Formula
     system "cmake", ".", *args
     system "make"
     system "make", "install"
+
+    site_packages = "lib/python#{py3ver}/site-packages"
+    (prefix/site_packages/"homebrew-rdkit.pth").write libexec/site_packages
   end
 
   def caveats
@@ -76,6 +80,7 @@ class Rdkit < Formula
   end
 
   test do
+    system Formula["python@3.9"].opt_bin/"python3", "-c", "import rdkit"
     (testpath/"test.py").write <<~EOS
       from rdkit import Chem ; print(Chem.MolToSmiles(Chem.MolFromSmiles('C1=CC=CN=C1')))
     EOS
