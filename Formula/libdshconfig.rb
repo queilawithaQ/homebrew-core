@@ -3,7 +3,12 @@ class Libdshconfig < Formula
   homepage "https://www.netfort.gr.jp/~dancer/software/dsh.html.en"
   url "https://www.netfort.gr.jp/~dancer/software/downloads/libdshconfig-0.20.13.tar.gz"
   sha256 "6f372686c5d8d721820995d2b60d2fda33fdb17cdddee9fce34795e7e98c5384"
-  license "GPL-2.0"
+  license "GPL-2.0-or-later"
+
+  livecheck do
+    url "https://www.netfort.gr.jp/~dancer/software/downloads/"
+    regex(/href=.*?libdshconfig[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
 
   bottle do
     rebuild 1

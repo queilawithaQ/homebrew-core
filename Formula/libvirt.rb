@@ -1,8 +1,8 @@
 class Libvirt < Formula
   desc "C virtualization API"
   homepage "https://www.libvirt.org"
-  url "https://libvirt.org/sources/libvirt-7.2.0.tar.xz"
-  sha256 "01f459d0c7ba5009622a628dba1a026200e8f4a299fea783b936a71d7e0ed1d0"
+  url "https://libvirt.org/sources/libvirt-7.4.0.tar.xz"
+  sha256 "b366d73dee6ce77a226bedef592e0620ceb8e22e5998f60768017f79fc4ead26"
   license all_of: ["LGPL-2.1-or-later", "GPL-2.0-or-later"]
 
   livecheck do
@@ -11,10 +11,10 @@ class Libvirt < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "146d2eac4517371391bac247d094f1bc9cb58260ed318e5d626206a957291114"
-    sha256 big_sur:       "9101f862c4abd5717abc26df984a98dd6d82f5167534b40a940a19008328bdaf"
-    sha256 catalina:      "d5616442169acbc6313ee7fe9c683c7b7cc8736dbdd05652f97baac8d837b807"
-    sha256 mojave:        "0f621cff7139e5ba348bbedad1c1fd39484aa0bad517a00427186eb25b3b6b65"
+    sha256 arm64_big_sur: "91d530ec362950d767cf657b73e6a67227b84053a5e1f482aae5fe034e618445"
+    sha256 big_sur:       "e95e6bab1c0fb49ea9d1cdbe7a96dcdedda2c1b576d1014a5340133e8d7e1d99"
+    sha256 catalina:      "27d65b0d11f2443dae3bd1a45378ee642dd2639a874fa18c590b9c0270d7ab84"
+    sha256 mojave:        "ccddb16e18d914a1c66af8ee4baedcdab15e47fb323f54a82cd84a829238f030"
   end
 
   head do
@@ -28,7 +28,9 @@ class Libvirt < Formula
   depends_on "python@3.9" => :build
   depends_on "gettext"
   depends_on "glib"
+  depends_on "gnu-sed"
   depends_on "gnutls"
+  depends_on "grep"
   depends_on "libgcrypt"
   depends_on "libiscsi"
   depends_on "libssh2"

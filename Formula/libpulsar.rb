@@ -5,12 +5,13 @@ class Libpulsar < Formula
   mirror "https://archive.apache.org/dist/pulsar/pulsar-2.7.2/apache-pulsar-2.7.2-src.tar.gz"
   sha256 "2e125df2ccf374e237676fb036ca00cb4d076d1683b86c672161888f5a5ef32f"
   license "Apache-2.0"
+  revision 2
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "4d1c159326f854f9b4797e0c7011bff9938c9cf78af82c0a91bed364f8ca8a52"
-    sha256 cellar: :any, big_sur:       "bfb533888df0fdc8249c5893c4ec02702135ed0ecfe8ef55333107cdb998b46c"
-    sha256 cellar: :any, catalina:      "2d3c809a9dc969a98512444f1dab6afae08690c8d765ef420b86ea5d97552755"
-    sha256 cellar: :any, mojave:        "ca26d267f9306739aa6df240903b430262513ae359dfcc68b41e90b9a65a501e"
+    sha256 cellar: :any, arm64_big_sur: "2e3dffc6ac480c7acfd625c6e3a382c7316f6bbd467ac1c3d12bd3a4a7ddf22b"
+    sha256 cellar: :any, big_sur:       "f5f55678e946fe389898923eba165006ca93e7574518cc52270d1d89960d858a"
+    sha256 cellar: :any, catalina:      "0600145b0af61c4893aa54ad41ca3d6b92ee7fd6906c202f6b9ec405ef4dadcc"
+    sha256 cellar: :any, mojave:        "bc82229be13f8025dfbb39edee256d0771953fea4cd12430ba10b12cbcdc7a4a"
   end
 
   depends_on "cmake" => :build

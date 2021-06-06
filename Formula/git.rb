@@ -5,7 +5,7 @@ class Git < Formula
   url "https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.31.1.tar.xz"
   sha256 "9f61417a44d5b954a5012b6f34e526a3336dcf5dd720e2bb7ada92ad8b3d6680"
   license "GPL-2.0-only"
-  head "https://github.com/git/git.git", shallow: false
+  head "https://github.com/git/git.git"
 
   livecheck do
     url "https://www.kernel.org/pub/software/scm/git/"
@@ -87,9 +87,15 @@ class Git < Formula
       CFLAGS=#{ENV.cflags}
       LDFLAGS=#{ENV.ldflags}
       NO_TCLTK=1
-      NO_OPENSSL=1
-      APPLE_COMMON_CRYPTO=1
     ]
+
+    on_macos do
+      args += %w[NO_OPENSSL=1 APPLE_COMMON_CRYPTO=1]
+    end
+    on_linux do
+      openssl_prefix = Formula["openssl@1.1"].opt_prefix
+      args += %W[NO_APPLE_COMMON_CRYPTO=1 OPENSSLDIR=#{openssl_prefix}]
+    end
 
     system "make", "install", *args
 

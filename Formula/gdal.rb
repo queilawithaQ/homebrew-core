@@ -1,10 +1,10 @@
 class Gdal < Formula
   desc "Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://download.osgeo.org/gdal/3.2.2/gdal-3.2.2.tar.xz"
-  sha256 "a7e1e414e5c405af48982bf4724a3da64a05770254f2ce8affb5f58a7604ca57"
+  url "https://download.osgeo.org/gdal/3.3.0/gdal-3.3.0.tar.xz"
+  sha256 "190c8f4b56afc767f43836b2a5cd53cc52ee7fdc25eb78c6079c5a244e28efa7"
   license "MIT"
-  revision 4
+  revision 2
 
   livecheck do
     url "https://download.osgeo.org/gdal/CURRENT/"
@@ -12,10 +12,10 @@ class Gdal < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "d6e51e87c4d31029de4c7a852b88012384e322ce59937a5d25db6ebf558c95a9"
-    sha256 big_sur:       "50f776448b2c9be2575025bab201e1723daffa28fdc195100492bf82e3dffade"
-    sha256 catalina:      "f0fefb246f7f77e4fb3f9ed9507b79a954a4099822cda43a51ce8e1e8941ed5c"
-    sha256 mojave:        "685b9dcc0809b1902c9016b8c2195fa0cf15495bbf8d5cae9a48fc7347f7b983"
+    sha256 arm64_big_sur: "959af890f4c921228ca48fb1c0632a4cfeb5e96d3e330ca5c00ceca2acf3ab3b"
+    sha256 big_sur:       "bb339b16d188b360ce3eef5a5aacfb3d1ca3b84b802e7d0de6b42b4a95a3c90c"
+    sha256 catalina:      "3f578946fffe342fa5523968e02a14458b2b977f46d5980a801124c032106957"
+    sha256 mojave:        "0458c2646d661b28e956bbb5286d6ecb56da6d33805aff8520094c8c05dd8cab"
   end
 
   head do
@@ -46,7 +46,7 @@ class Gdal < Formula
   depends_on "openjpeg"
   depends_on "pcre"
   depends_on "poppler"
-  depends_on "proj"
+  depends_on "proj@7"
   depends_on "python@3.9"
   depends_on "sqlite" # To ensure compatibility with SpatiaLite
   depends_on "unixodbc" # macOS version is not complete enough
@@ -92,7 +92,7 @@ class Gdal < Formula
       "--with-png=#{Formula["libpng"].opt_prefix}",
       "--with-spatialite=#{Formula["libspatialite"].opt_prefix}",
       "--with-sqlite3=#{Formula["sqlite"].opt_prefix}",
-      "--with-proj=#{Formula["proj"].opt_prefix}",
+      "--with-proj=#{Formula["proj@7"].opt_prefix}",
       "--with-zstd=#{Formula["zstd"].opt_prefix}",
       "--with-liblzma=yes",
       "--with-cfitsio=#{Formula["cfitsio"].opt_prefix}",

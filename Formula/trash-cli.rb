@@ -3,16 +3,16 @@ class TrashCli < Formula
 
   desc "Command-line interface to the freedesktop.org trashcan"
   homepage "https://github.com/andreafrancia/trash-cli"
-  url "https://files.pythonhosted.org/packages/6d/bf/9fd2ed5a413908196bbc334cdf272e59f17a32fef2854b811ce9ed0007e7/trash-cli-0.21.5.11.tar.gz"
-  sha256 "57d95aa1b719cae85d95d3761a7ca5a59efbeb7fe6a25d2723250e34fd302003"
+  url "https://files.pythonhosted.org/packages/6c/e6/10b85ce1e8abf94658b912700d74e23b6d0ea9f01f7fbe0019778f00ac9a/trash-cli-0.21.5.25.tar.gz"
+  sha256 "c58905b04a60bb70231648ac6f280965a4cfdd2e2682e6d94b12f99a40620538"
   license "GPL-2.0-or-later"
   head "https://github.com/andreafrancia/trash-cli.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "a2f2ebdf4ea90ecb6dabd82619b194df39ffb54644413929c2667192d5bec947"
-    sha256 cellar: :any_skip_relocation, big_sur:       "ad1ecebf5875f4ac45d59089802091c0cf34cc57953c918ee057e0691d982b6e"
-    sha256 cellar: :any_skip_relocation, catalina:      "e7abc294e34cfe148ee1215f8c48b83029275d8cf5e6551a34d7dc6b693fc521"
-    sha256 cellar: :any_skip_relocation, mojave:        "a50fd31a94b57fdbf3d39804507449590e662acfd262c39b4bae40319d34bebf"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "20192230ec43f0d77096bafbc017eb70603b47de51aef929425dbfb9a2106896"
+    sha256 cellar: :any_skip_relocation, big_sur:       "1ba0199a5aaf3908ab0625e81402905b8c4999acfe92ebe6e14e64be7efa9ef5"
+    sha256 cellar: :any_skip_relocation, catalina:      "fd0bf46e0c3b4f70be6815cdf6bba7cf461ce87b4188aeba835546117433f799"
+    sha256 cellar: :any_skip_relocation, mojave:        "e1edc607de541df15941559c343da659efc80f70610421895a8620ee38d42bbe"
   end
 
   depends_on "python@3.9"

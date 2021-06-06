@@ -1,8 +1,8 @@
 class Dialog < Formula
   desc "Display user-friendly message boxes from shell scripts"
   homepage "https://invisible-island.net/dialog/"
-  url "https://invisible-mirror.net/archives/dialog/dialog-1.3-20210324.tgz"
-  sha256 "01c2d1e2e9af9b083ea200caad084fdfda55178d5bbf4e42c9fff44935151653"
+  url "https://invisible-mirror.net/archives/dialog/dialog-1.3-20210530.tgz"
+  sha256 "1f62df6a48dac087b98452119e4cdfcaa3447b3eb5746b241e5632e1d57bfc4b"
   license "LGPL-2.1-or-later"
 
   livecheck do
@@ -11,10 +11,10 @@ class Dialog < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "36a7ae1f6265699cd3b75a0c6c3d583fe1516439cc779bf8a5ee4606d1cb8357"
-    sha256 cellar: :any_skip_relocation, big_sur:       "4fb719fa5573402c89dfa1ec9662b49727837f408883fe1b634519e87d670ca9"
-    sha256 cellar: :any_skip_relocation, catalina:      "5e2c06ad6adbb69ac46cc75b1a71ffeb9becb918e54484563e2da16dfdab5a31"
-    sha256 cellar: :any_skip_relocation, mojave:        "34d01a1614762e0ce58b0920ca7ad8433e0d34a77c13b21c5c1e71728afde6ae"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "3c0a2d6c566c6e52b60f89473f2302fc358b5b0e7bdfcb56e68f4156b19935de"
+    sha256 cellar: :any_skip_relocation, big_sur:       "efd474be5a0e0afeabb52e507e04340c6eecda2b27cce99a9c33c0f5ed20e47d"
+    sha256 cellar: :any_skip_relocation, catalina:      "0d0443b814de110ad082853b803476292507d8e069316e2280097ad5985ab768"
+    sha256 cellar: :any_skip_relocation, mojave:        "823a60bde7692ba06fedd66b95fa7eee00d36ad327bfa6c2047018e234eddb1a"
   end
 
   uses_from_macos "ncurses"

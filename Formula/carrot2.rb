@@ -7,19 +7,21 @@ class Carrot2 < Formula
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:  "ddaaa474a26c2928e2a080b41ba93aec4c525e400d81315c4f96ad5eba491863"
-    sha256 cellar: :any_skip_relocation, catalina: "30958bc92829b4baadc8bca3164ea20b2bba51c9c2ff96a55f29edccd27f3fbd"
-    sha256 cellar: :any_skip_relocation, mojave:   "dd82165536db4f4a723d1789f376dca7c1a617fc1ee402818e991ff8734c39d5"
+    rebuild 2
+    sha256 cellar: :any_skip_relocation, big_sur:  "378bc81bc95cdfc71b6b9e08058516e40f8bd8446d25fc65cc6e7d7a3840801e"
+    sha256 cellar: :any_skip_relocation, catalina: "7ade89023e00a6fc71b7aa5f3fd8d5c9e4a806248e5aec30cf47d0252d48c523"
+    sha256 cellar: :any_skip_relocation, mojave:   "cc31066d605e9319d118fa02ccabe747772151824e80c53d9940ed21a7853e42"
   end
 
-  depends_on "gradle" => :build
+  # Switch to `gradle` when carrot2 supports Gradle 7+
+  depends_on "gradle@6" => :build
   depends_on "openjdk"
 
   def install
     # Make possible to build the formula with the latest available in Homebrew gradle
     inreplace "gradle/validation/check-environment.gradle",
       /expectedGradleVersion = '[^']+'/,
-      "expectedGradleVersion = '#{Formula["gradle"].version}'"
+      "expectedGradleVersion = '#{Formula["gradle@6"].version}'"
 
     system "gradle", "assemble", "--no-daemon"
 

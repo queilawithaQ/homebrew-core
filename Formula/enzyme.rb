@@ -1,25 +1,24 @@
 class Enzyme < Formula
   desc "High-performance automatic differentiation of LLVM"
   homepage "https://enzyme.mit.edu"
-  url "https://github.com/wsmoses/Enzyme/archive/v0.0.10.tar.gz"
-  sha256 "6fcee5390541e259f26def103f0423df990ebf364933cf2a3610a08de3b0691f"
+  url "https://github.com/wsmoses/Enzyme/archive/v0.0.12.tar.gz"
+  sha256 "d9b003a9a01e87fac1f23a7efcdd8b6cfa578f5d6b43663575b8d7472db5d787"
   license "Apache-2.0" => { with: "LLVM-exception" }
   head "https://github.com/wsmoses/Enzyme.git", branch: "main"
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any, arm64_big_sur: "80c586c3e8e94cf217caddd42e638024fddd7d601b71a985c96cfaef95f3ce09"
-    sha256 cellar: :any, big_sur:       "02b55a45ace3e8e5a6a8decdd3c75529cc8d2c0bab88cbf1a128eece935260cb"
-    sha256 cellar: :any, catalina:      "03f43c75ddb4ee25918425f4210da8302e277ba8f0cf37d30e1a6a997889dc02"
-    sha256 cellar: :any, mojave:        "111d03cab8fd7cef649ecf339713d90df3f4eedc7b798293adba3287bf65d591"
+    sha256 cellar: :any, arm64_big_sur: "705619ae918d9392e5d12f27be1114dcf46760cbf57a5a2ef2f253cd831832dc"
+    sha256 cellar: :any, big_sur:       "e82c81f46baa233f82b9f1af1010948faa1c432bf95ee39124ca3e5754ac6db3"
+    sha256 cellar: :any, catalina:      "39791294c9536c43272b4e8017c69971e0025e0fe6be04024aeb172b7928c1cd"
+    sha256 cellar: :any, mojave:        "a1308d9411cd93af02f6a419e116f24cddf6cd848ffc5c019aa54510518959ed"
   end
 
   depends_on "cmake" => :build
-  depends_on "llvm@11"
+  depends_on "llvm"
 
   def install
     mkdir "build" do
-      system "cmake", "../enzyme", *std_cmake_args, "-DLLVM_DIR=#{Formula["llvm@11"].opt_lib}/cmake/llvm"
+      system "cmake", "../enzyme", *std_cmake_args, "-DLLVM_DIR=#{Formula["llvm"].opt_lib}/cmake/llvm"
       system "make"
       system "make", "install"
     end
@@ -41,7 +40,7 @@ class Enzyme < Formula
       }
     EOS
 
-    llvm = Formula["llvm@11"]
+    llvm = Formula["llvm"]
     opt = llvm.opt_bin/"opt"
     ENV["CC"] = llvm.opt_bin/"clang"
 

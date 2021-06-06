@@ -3,22 +3,22 @@ class Jc < Formula
 
   desc "Serializes the output of command-line tools to structured JSON output"
   homepage "https://github.com/kellyjonbrazil/jc"
-  url "https://files.pythonhosted.org/packages/47/26/ee61a6841bc81e59a0bdb610b75a9266659bda02227894d0cea22a7d9c1c/jc-1.15.3.tar.gz"
-  sha256 "239c79b54b059dee73ac7fc23357db20ed5e7d749c95eb5deae749001fbbd3c1"
+  url "https://files.pythonhosted.org/packages/63/27/61bd99eb1ac86a187b55bcb81b0619d94d9c80724035796857e236e9e7a2/jc-1.15.5.tar.gz"
+  sha256 "50862ddd7473c89b42ad84c63d7b56941c87982a14611e42e55549f7bf75ca61"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "2342fa985c24956e55f69cc4f12df7815d6df1537b7fb9c0b41fc7e062871af7"
-    sha256 cellar: :any_skip_relocation, big_sur:       "0a2b897f45099917924dfb024887ea2d11748b00f82fb7ded43ce3cb1bd7687c"
-    sha256 cellar: :any_skip_relocation, catalina:      "aedb739cf7941e9765ebf84a5f7d088d85e9e3e7efc8b006fefbf2af7cff2cd7"
-    sha256 cellar: :any_skip_relocation, mojave:        "09175a5efe81ba502a32c6b05f7bc8750fa6c92be179d0048d23136b3d799270"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "94746819a6038789fa25b500a8c2dd64b9080b396796fb23e69397f55b60f5fd"
+    sha256 cellar: :any_skip_relocation, big_sur:       "6ed3658511927c0a7d3c2d9f2ca3ab6b23aa91bae01d4523ca1da5cee37986e9"
+    sha256 cellar: :any_skip_relocation, catalina:      "b92b36f428ee87fd7f7235318d33d00c13cdc9f0aa66f1d56cf27a7d7c375aa4"
+    sha256 cellar: :any_skip_relocation, mojave:        "f91594ede4ff7bf770bac6279220d2d06517750b345b4cde1eec4e704d3087bf"
   end
 
   depends_on "python@3.9"
 
   resource "Pygments" do
-    url "https://files.pythonhosted.org/packages/15/9d/bc9047ca1eee944cc245f3649feea6eecde3f38011ee9b8a6a64fb7088cd/Pygments-2.8.1.tar.gz"
-    sha256 "2656e1a6edcdabf4275f9a3640db59fd5de107d88e8663c5d4e9a0fa62f77f94"
+    url "https://files.pythonhosted.org/packages/ba/6e/7a7c13c21d8a4a7f82ccbfe257a045890d4dbf18c023f985f565f97393e3/Pygments-2.9.0.tar.gz"
+    sha256 "a18f47b506a429f6f4b9df81bb02beab9ca21d0a5fee38ed15aef65f0545519f"
   end
 
   resource "ruamel.yaml" do

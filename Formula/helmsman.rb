@@ -2,15 +2,15 @@ class Helmsman < Formula
   desc "Helm Charts as Code tool"
   homepage "https://github.com/Praqma/helmsman"
   url "https://github.com/Praqma/helmsman.git",
-      tag:      "v3.6.10",
-      revision: "fc2dc7832689544a6ea0e9242f0adbe7543c1ebd"
+      tag:      "v3.7.0",
+      revision: "995800328cf48b13ccf19f3d459767db269e3823"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "fc2de1279990f7ca275807bf838168c9b476239b7f85029c33611e84ef29899f"
-    sha256 cellar: :any_skip_relocation, big_sur:       "5cbc3d88ad87492935e8acfc8ba38930d049f0ddae983d6b0c389321005e7052"
-    sha256 cellar: :any_skip_relocation, catalina:      "46388ac364757215acfa2ca380d059cc0b3b9dd58249c1ccb42f82fb97aeb42d"
-    sha256 cellar: :any_skip_relocation, mojave:        "bfe8e401f747e016e0c292d40217640aed8a89c4f97cf42ce318d52c73418673"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "cfd2ab562ab5bc6304d3f82655f93875fdfe3bc6c3cb235f8b5c13ddc9ebbc2d"
+    sha256 cellar: :any_skip_relocation, big_sur:       "1e4db69c004603804cb86347a0c9fb86fc83c6ea1c6c6751bd66dd03ea961571"
+    sha256 cellar: :any_skip_relocation, catalina:      "12a5f4a4a8489c4b931092beceabb9ecae2927c9a43483f9f7f7dd10e850adf0"
+    sha256 cellar: :any_skip_relocation, mojave:        "bf2c4fe81938188969df95a39645881e509c7768171808786bcc89e039386a67"
   end
 
   depends_on "go" => :build
@@ -26,6 +26,6 @@ class Helmsman < Formula
     assert_match version.to_s, shell_output("#{bin}/helmsman version")
 
     output = shell_output("#{bin}/helmsman --apply -f #{pkgshare}/example.yaml 2>&1", 1)
-    assert_match "helm diff plugin is not installed", output
+    assert_match "helm diff not found", output
   end
 end

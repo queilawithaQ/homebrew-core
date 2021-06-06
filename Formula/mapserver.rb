@@ -4,6 +4,7 @@ class Mapserver < Formula
   url "https://download.osgeo.org/mapserver/mapserver-7.6.3.tar.gz"
   sha256 "0e0db478dabddee50498cd89669340f160a0437fed5a9f823022b19e2f150365"
   license "MIT"
+  revision 2
 
   livecheck do
     url "https://mapserver.org/download.html"
@@ -11,9 +12,9 @@ class Mapserver < Formula
   end
 
   bottle do
-    sha256 cellar: :any, big_sur:  "33978063b22a50201f6220195b01a8821118c681b297a13ccb9db0d39ace296a"
-    sha256 cellar: :any, catalina: "8c9a2d13273c503c25e48f6879f3f9bb6039ef5c5002289188d0e700aafe64e2"
-    sha256 cellar: :any, mojave:   "806642674a74f8161d39c92efd0cb545183b7f9e244ef55128dd9c1bcf7eef26"
+    sha256 cellar: :any, big_sur:  "383800e38f0fca0ce658159e828049b3d1cf1aa74abd39b2a40bacaf0e5f3550"
+    sha256 cellar: :any, catalina: "1078b18f57fccc14a09bdf847738a099eb9fe23b79df904667d3ef4454ea1710"
+    sha256 cellar: :any, mojave:   "0b32e025ea3c5fd55cc6bb7e6fdf91012007d9f5fd7a9866b1ebcb135e94091f"
   end
 
   depends_on "cmake" => :build
@@ -28,7 +29,7 @@ class Mapserver < Formula
   depends_on "giflib"
   depends_on "libpng"
   depends_on "postgresql"
-  depends_on "proj"
+  depends_on "proj@7"
   depends_on "protobuf-c"
   depends_on "python@3.9"
 

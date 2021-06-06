@@ -1,15 +1,15 @@
 class Procs < Formula
   desc "Modern replacement for ps written by Rust"
   homepage "https://github.com/dalance/procs"
-  url "https://github.com/dalance/procs/archive/v0.11.5.tar.gz"
-  sha256 "1ab36326af655882c0c291fc78538f9228e238e047e0ceb16d24c6b72498d991"
+  url "https://github.com/dalance/procs/archive/v0.11.8.tar.gz"
+  sha256 "50ef6175c08a5ce7f65c81924e8f295bab9622b453b51178a8b8c37c3ef2beef"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "3990cf25d9c3fa83169bb30cb5776e88a4fade5bed5a06374b50ffe5d14679ac"
-    sha256 cellar: :any_skip_relocation, big_sur:       "aafca07219f4e6b1fc7281ee7beed8a8e6a55090864598c2c0a115d1310ce6bb"
-    sha256 cellar: :any_skip_relocation, catalina:      "8014350b64db9d4b301bcb832c6afc8e1f45d81857a9e5d0cdbb54520a32de71"
-    sha256 cellar: :any_skip_relocation, mojave:        "eb13ae0064dfebeeba1c48ff7ce9f20bd5a0a73c4f837bcadcb24c55e4711417"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "3ea499c87e23aa0ccc4b09fab476cf4f024c7a22849746e1491c0f784a4c2f94"
+    sha256 cellar: :any_skip_relocation, big_sur:       "6a5bcfed2d9478f408a731190ba0123834b3a26d46acfe8a0f3ff07371926a61"
+    sha256 cellar: :any_skip_relocation, catalina:      "19c8493771d14e992c85103fbebade854e7099bc95013751468c077e42d8181e"
+    sha256 cellar: :any_skip_relocation, mojave:        "a9d81106f9e8cb246dcf9ba80e102594e52b52f248d930c6e8b0b3443f021710"
   end
 
   depends_on "rust" => :build
@@ -17,16 +17,16 @@ class Procs < Formula
   def install
     system "cargo", "install", *std_cargo_args
 
-    system "#{bin}/procs", "--completion", "bash"
-    system "#{bin}/procs", "--completion", "fish"
-    system "#{bin}/procs", "--completion", "zsh"
+    system bin/"procs", "--completion", "bash"
+    system bin/"procs", "--completion", "fish"
+    system bin/"procs", "--completion", "zsh"
     bash_completion.install "procs.bash" => "procs"
     fish_completion.install "procs.fish"
     zsh_completion.install "_procs"
   end
 
   test do
-    output = shell_output("#{bin}/procs")
+    output = shell_output(bin/"procs")
     count = output.lines.count
     assert count > 2
     assert output.start_with?(" PID:")

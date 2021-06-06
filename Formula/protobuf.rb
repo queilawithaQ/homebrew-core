@@ -1,8 +1,8 @@
 class Protobuf < Formula
   desc "Protocol buffers (Google's data interchange format)"
   homepage "https://github.com/protocolbuffers/protobuf/"
-  url "https://github.com/protocolbuffers/protobuf/releases/download/v3.15.8/protobuf-all-3.15.8.tar.gz"
-  sha256 "2b737d6d120418c443c561cf4032c0141f9626f68f532b5d2c27ee8a191c996e"
+  url "https://github.com/protocolbuffers/protobuf/releases/download/v3.17.2/protobuf-all-3.17.2.tar.gz"
+  sha256 "8f118c1d5f83fbe8c3fc805007b40e689b22b7baf79ab923ca00455d4284b799"
   license "BSD-3-Clause"
 
   livecheck do
@@ -11,10 +11,10 @@ class Protobuf < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "a1615a95bf6f0bd3d9111fd0afa9260373295eadf147c35aef03e31abdbef6bc"
-    sha256 cellar: :any, big_sur:       "48434534a8272ad371be138166687d9a1f1492c508c302ba860bb182cb7f2bcf"
-    sha256 cellar: :any, catalina:      "e71533593002b605f21f2faaccc841fdec2b809bb8fbdb399a5c7d11851428e1"
-    sha256 cellar: :any, mojave:        "f95e52b808503a024951b6696bf5a9776cf88d135ea1a6774445ae6b801850be"
+    sha256 cellar: :any, arm64_big_sur: "6128bdadb84923d51c3a747b4c1ea1a10e03db5afb4b292500b3b3b95418feaf"
+    sha256 cellar: :any, big_sur:       "72c6dfdc47c6bfc53f184795602300daddefdc85a129379d58ef61b1208f3c22"
+    sha256 cellar: :any, catalina:      "b8ce14f97cdee69d3d91928e655e1a8250d76b1dc7c67f5f06c0464e6f43b75b"
+    sha256 cellar: :any, mojave:        "d9fe451840d739939d36060353295ec3cd83c50224de4bfb00e88bcf29861bbe"
   end
 
   head do
@@ -26,11 +26,7 @@ class Protobuf < Formula
   end
 
   depends_on "python@3.9" => [:build, :test]
-
-  resource "six" do
-    url "https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426/six-1.15.0.tar.gz"
-    sha256 "30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"
-  end
+  depends_on "six"
 
   def install
     # Don't build in debug mode. See:
@@ -53,18 +49,10 @@ class Protobuf < Formula
     ENV.append_to_cflags "-I#{include}"
     ENV.append_to_cflags "-L#{lib}"
 
-    resource("six").stage do
-      system Formula["python@3.9"].opt_bin/"python3", *Language::Python.setup_install_args(libexec)
-    end
     chdir "python" do
-      system Formula["python@3.9"].opt_bin/"python3", *Language::Python.setup_install_args(libexec),
+      system Formula["python@3.9"].opt_bin/"python3", *Language::Python.setup_install_args(prefix),
                         "--cpp_implementation"
     end
-
-    version = Language::Python.major_minor_version Formula["python@3.9"].opt_bin/"python3"
-    site_packages = "lib/python#{version}/site-packages"
-    pth_contents = "import site; site.addsitedir('#{libexec/site_packages}')\n"
-    (prefix/site_packages/"homebrew-protobuf.pth").write pth_contents
   end
 
   test do

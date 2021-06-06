@@ -4,8 +4,8 @@ class Semgrep < Formula
   desc "Easily detect and prevent bugs and anti-patterns in your codebase"
   homepage "https://semgrep.dev"
   url "https://github.com/returntocorp/semgrep.git",
-      tag:      "v0.50.1",
-      revision: "e6522f0e753e39d2b256b42a45c2dc09d55d3b43"
+      tag:      "v0.54.0",
+      revision: "c22876ea85419088d1df0675a962c76a9b1966ce"
   license "LGPL-2.1-only"
   head "https://github.com/returntocorp/semgrep.git", branch: "develop"
 
@@ -15,10 +15,10 @@ class Semgrep < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "3983df03c38fbf5e1cf6559cd1e220ed4d2da332ba40d874eca7125402051030"
-    sha256 cellar: :any, big_sur:       "c31f9b99d21c4cd2a128a00b2455aca240a352f4c4b7c102a90e98e6c79661d7"
-    sha256 cellar: :any, catalina:      "3c9c2e9d7c223bdfa23fb838355039522a87ccfb43fb663b9d98649b853020c5"
-    sha256 cellar: :any, mojave:        "9a2417bc5f479ec541f6d2b71daed2177154c6d9e1d517e09238fb79210d4521"
+    sha256 cellar: :any, arm64_big_sur: "fbbb59e2f82593caf889fe9bcc0c21beeacd5e799c5794056a8f15433fef89a5"
+    sha256 cellar: :any, big_sur:       "f43ac6b8b5f879e48a3f336a5c43fb31427361816e7b49e39b983e49a48a33d8"
+    sha256 cellar: :any, catalina:      "58e14a8ffca8bb4cae611b9a7611d0705928c51bef394c57f802ed33557cf83f"
+    sha256 cellar: :any, mojave:        "f04c016d128ddc31c944829a978f13ee6c9e70d2f27e53a8ab775857e030fa59"
   end
 
   depends_on "cmake" => :build
@@ -31,13 +31,13 @@ class Semgrep < Formula
   depends_on "python@3.9"
 
   resource "attrs" do
-    url "https://files.pythonhosted.org/packages/4d/e0/8f3ccee89317124211d2efa44739c939b99e2446b82596c8fc6e824cf851/attrs-21.1.0.tar.gz"
-    sha256 "3901be1cb7c2a780f14668691474d9252c070a756be0a9ead98cfeabfa11aeb8"
+    url "https://files.pythonhosted.org/packages/ed/d6/3ebca4ca65157c12bd08a63e20ac0bdc21ac7f3694040711f9fd073c0ffb/attrs-21.2.0.tar.gz"
+    sha256 "ef6aaac3ca6cd92904cdd0d83f629a15f18053ec84e6432106f7a4d04ae4f5fb"
   end
 
   resource "certifi" do
-    url "https://files.pythonhosted.org/packages/06/a9/cd1fd8ee13f73a4d4f491ee219deeeae20afefa914dfb4c130cfc9dc397a/certifi-2020.12.5.tar.gz"
-    sha256 "1a4995114262bffbc2413b159f2a1a480c969de6e6eb13ee966d470af86af59c"
+    url "https://files.pythonhosted.org/packages/6d/78/f8db8d57f520a54f0b8a438319c342c61c22759d8f9a1cd2e2180b5e5ea9/certifi-2021.5.30.tar.gz"
+    sha256 "2bbf76fd432960138b3ef6dda3dde0544f27cbf8546c458e60baf371917ba9ee"
   end
 
   resource "chardet" do
@@ -81,8 +81,8 @@ class Semgrep < Formula
   end
 
   resource "ruamel.yaml" do
-    url "https://files.pythonhosted.org/packages/62/cf/148028462ab88a71046ba0a30780357ae9e07125863ea9ca7808f1ea3798/ruamel.yaml-0.17.4.tar.gz"
-    sha256 "44bc6b54fddd45e4bc0619059196679f9e8b79c027f4131bb072e6a22f4d5e28"
+    url "https://files.pythonhosted.org/packages/fd/6b/b83bdc8fb9aad62f6469117874e7c11b64d94ba9e8557f73ca1f28c2df7d/ruamel.yaml-0.17.7.tar.gz"
+    sha256 "5c3fa739bbedd2f23769656784e671c6335d17a5bf163c3c3901d8663c0af287"
   end
 
   resource "ruamel.yaml.clib" do
@@ -96,13 +96,13 @@ class Semgrep < Formula
   end
 
   resource "tqdm" do
-    url "https://files.pythonhosted.org/packages/35/35/bd5af89c97ad5177ed234d9e79d01a984f8b5226b8ffc8b5d3c4fc8e157d/tqdm-4.60.0.tar.gz"
-    sha256 "ebdebdb95e3477ceea267decfc0784859aa3df3e27e22d23b83e9b272bf157ae"
+    url "https://files.pythonhosted.org/packages/06/ca/721a7abe555012efaa4d6ee18a0048a4f27d84c6220bb6aa6eba049117d6/tqdm-4.61.0.tar.gz"
+    sha256 "cd5791b5d7c3f2f1819efc81d36eb719a38e0906a7380365c556779f585ea042"
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/cb/cf/871177f1fc795c6c10787bc0e1f27bb6cf7b81dbde399fd35860472cecbc/urllib3-1.26.4.tar.gz"
-    sha256 "e7b021f7241115872f92f43c6508082facffbd1c048e3c6e2bb9c2a157e28937"
+    url "https://files.pythonhosted.org/packages/94/40/c396b5b212533716949a4d295f91a4c100d51ba95ea9e2d96b6b0517e5a5/urllib3-1.26.5.tar.gz"
+    sha256 "a7acd0977125325f516bda9735fa7142b909a8d01e8b2e4c8108d0984e6e0098"
   end
 
   def install

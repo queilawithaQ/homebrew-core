@@ -4,7 +4,7 @@ class Widelands < Formula
   url "https://launchpad.net/widelands/build21/build21/+download/widelands-build21-source.tar.gz"
   version "21"
   sha256 "601e0e4c6f91b3fb0ece2cd1b83ecfb02344a1b9194fbb70ef3f70e06994e357"
-  revision 6
+  revision 7
 
   livecheck do
     url :stable
@@ -12,10 +12,10 @@ class Widelands < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "f37c6351a1d89ada0599d020bbe69939591e40288d0b59af8f83b17560c48b62"
-    sha256 big_sur:       "60fe8cbb4cb9e21ad7b5dce4fb33c4b29dcd6c37cea53d747676fb537d5c0d44"
-    sha256 catalina:      "673c7428f0a5e2e18f72d20cdd1cee05193f6a8fc854506880d393a5d3d652f4"
-    sha256 mojave:        "92feabb99f4225ca9c82acad5a080695f648e5aa02157df70b1b2f38b66338a3"
+    sha256 arm64_big_sur: "71c4c90c5683047144f7dffc7bd98a517ce666f7993fd66c0c90d4c393f228c1"
+    sha256 big_sur:       "e7709fb825d5d858b30249b295c24fc2472de28f94c9a647809569e9709bf046"
+    sha256 catalina:      "3aaa4d406d614ceec36f37439e5b9c12e2782cb423012e8d65f27dbf90071688"
+    sha256 mojave:        "aa235cbf6fc6c976731834dda095c7dbb792ac3a241de65dacf8f167d99b959e"
   end
 
   depends_on "cmake" => :build
@@ -49,6 +49,13 @@ class Widelands < Formula
   end
 
   test do
+    on_linux do
+      # Unable to start Widelands, because we were unable to add the home directory:
+      # RealFSImpl::make_directory: No such file or directory: /tmp/widelands-test/.local/share/widelands
+      mkdir_p ".local/share/widelands"
+      mkdir_p ".config/widelands"
+    end
+
     system bin/"widelands", "--version"
   end
 end

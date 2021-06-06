@@ -2,16 +2,16 @@ class Auditbeat < Formula
   desc "Lightweight Shipper for Audit Data"
   homepage "https://www.elastic.co/products/beats/auditbeat"
   url "https://github.com/elastic/beats.git",
-      tag:      "v7.12.1",
-      revision: "651a2ad1225f3d4420a22eba847de385b71f711d"
+      tag:      "v7.13.1",
+      revision: "2d80f6e99f41b65a270d61706fa98d13cfbda18d"
   license "Apache-2.0"
   head "https://github.com/elastic/beats.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "10ac40bb3b4a601c929a49faf7c42c2aaa3a06267fc87df4e047e714ec3877c9"
-    sha256 cellar: :any_skip_relocation, big_sur:       "9c5eb5aa30d10422214d8132baa21c25935e05954d48cee8495b78e56ca95135"
-    sha256 cellar: :any_skip_relocation, catalina:      "f52b83f00b86281bac1c0dc71e4c2a20868fe53795874667aaca5597f0d3361b"
-    sha256 cellar: :any_skip_relocation, mojave:        "ae19711346a9cd6d9a202238d5d36959fc17513764c28b24ee752ee7972b69d1"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "458b89591cfb28b5568b21dfc69cc2f8c65182fcf2c792c7b20cbe079852ac29"
+    sha256 cellar: :any_skip_relocation, big_sur:       "349c382aef0692473e33edce0c88b6343e25f1c5bb7cce6cde8bdc5f34bea6df"
+    sha256 cellar: :any_skip_relocation, catalina:      "24aa2bd45e14a00e1730181a91007d94db8d074752af3f3931213f9b28efddb4"
+    sha256 cellar: :any_skip_relocation, mojave:        "ee3fbd41e495ee39b4fced6dfb52299b0ca0835bf13dd82e2c1077b515fab374"
   end
 
   depends_on "go" => :build
@@ -54,24 +54,8 @@ class Auditbeat < Formula
     (var/"log/auditbeat").mkpath
   end
 
-  plist_options manual: "auditbeat"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
-      "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>Program</key>
-          <string>#{opt_bin}/auditbeat</string>
-          <key>RunAtLoad</key>
-          <true/>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run opt_bin/"auditbeat"
   end
 
   test do
