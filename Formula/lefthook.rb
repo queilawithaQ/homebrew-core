@@ -1,15 +1,15 @@
 class Lefthook < Formula
   desc "Fast and powerful Git hooks manager for any type of projects"
   homepage "https://github.com/evilmartians/lefthook"
-  url "https://github.com/evilmartians/lefthook/archive/refs/tags/v0.7.4.tar.gz"
-  sha256 "f4247621abd7ee9860d8c18d6357077978f09e439bde9ff16462e3e743a93ee9"
+  url "https://github.com/evilmartians/lefthook/archive/refs/tags/v0.7.6.tar.gz"
+  sha256 "d3a52befa497d1a1a9a8cacdb2d3e233c87f6920e09b032fdbfe49e99b27ecec"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "c6ed1732fdb56b182d83b1a4972f62be7a3d6f202cb7740e8b2e6b053127eaed"
-    sha256 cellar: :any_skip_relocation, big_sur:       "f98449b55a8dc41ad16371e7fd85b24d9fbc46387fa3c245463316e50206a32a"
-    sha256 cellar: :any_skip_relocation, catalina:      "732fd05a4e458e2eecfcd75bf51be493a9b4539cc3a2c61736e61d67029bf139"
-    sha256 cellar: :any_skip_relocation, mojave:        "85f85f6ac4ad8335f9483e010301eae52ad1b1e26271a6ac76f8e99e8d5e3ac6"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "c2b9173da09e8b067e4da09f9aeeb83e9eb941c8f8b5a1a64212ee73e95a38f6"
+    sha256 cellar: :any_skip_relocation, big_sur:       "994054301cbd256012cacdc9f18035b1126c8b9c265ed92c0fdd33f5b49f82c7"
+    sha256 cellar: :any_skip_relocation, catalina:      "642f251ad57b2db7c6029ac2fabac8c3b8678ab8dd0fe8ee3cf47b6183778110"
+    sha256 cellar: :any_skip_relocation, mojave:        "f4093725732ed61c70a440ccd7e7632974f33810f7b4662376a413fa3361e683"
   end
 
   depends_on "go" => :build

@@ -14,6 +14,7 @@ class Gcc < Formula
     sha256 "4c4a6fb8a8396059241c2e674b85b351c26a5d678274007f076957afa1cc9ddf"
   end
   license "GPL-3.0-or-later" => { with: "GCC-exception-3.1" }
+  revision 1
   head "https://gcc.gnu.org/git/gcc.git"
 
   livecheck do
@@ -25,25 +26,21 @@ class Gcc < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "0b2cefe66734ad3735ab68ee3a37f35e8a6ac973c65123c26c57e4cdba77b770"
-    sha256 big_sur:       "0de7e36bd2fb710bcb25ba27581784570c55a3e2ec652ecdd3a5cf1b6105a9e3"
-    sha256 catalina:      "f3e0b6948b4c1cd454f3b8a020929381b559662b92eccc080b2f9a52683f3743"
-    sha256 mojave:        "57d923640559ee09ad782e6dd5035613772ca9f63c660b28e3b16a7e2f767962"
+    sha256 arm64_big_sur: "5ad4c157cf19f01c6acfed380db28ff15276f02f4b5d6a20f5a7034583b174aa"
+    sha256 big_sur:       "4ec68e83ce46f4c686a4c9a7f90a748705543826da81e4c74c78d210b6c66c81"
+    sha256 catalina:      "c8405807d9bdab853432100e8d85bf3b4c7d4a4123067f099699a492d40a430b"
+    sha256 mojave:        "cac0a37271b71e40b3df7b9fa83190c11dfcd9640d8b3d02bc2ba2bae5b964ac"
   end
 
   # The bottles are built on systems with the CLT installed, and do not work
   # out of the box on Xcode-only systems due to an incorrect sysroot.
-  pour_bottle? do
-    on_macos do
-      reason "The bottle needs the Xcode CLT to be installed."
-      satisfy { MacOS::CLT.installed? }
-    end
-  end
+  pour_bottle? only_if: :clt_installed
 
   depends_on "gmp"
   depends_on "isl"
   depends_on "libmpc"
   depends_on "mpfr"
+  depends_on "zstd"
 
   uses_from_macos "zlib"
 
@@ -71,6 +68,7 @@ class Gcc < Formula
     #  - Go, currently not supported on macOS
     #  - BRIG
     languages = %w[c c++ objc obj-c++ fortran]
+    languages << "d" if Hardware::CPU.intel?
 
     pkgversion = "Homebrew GCC #{pkg_version} #{build.used_options*" "}".strip
     cpu = Hardware::CPU.arm? ? "aarch64" : "x86_64"
@@ -86,9 +84,12 @@ class Gcc < Formula
       --with-mpfr=#{Formula["mpfr"].opt_prefix}
       --with-mpc=#{Formula["libmpc"].opt_prefix}
       --with-isl=#{Formula["isl"].opt_prefix}
+      --with-zstd=#{Formula["zstd"].opt_prefix}
       --with-pkgversion=#{pkgversion}
       --with-bugurl=#{tap.issues_url}
     ]
+    # libphobos is part of gdc
+    args << "--enable-libphobos" if Hardware::CPU.intel?
 
     on_macos do
       args << "--build=#{cpu}-apple-darwin#{OS.kernel_version.major}"
@@ -96,6 +97,10 @@ class Gcc < Formula
 
       # Xcode 10 dropped 32-bit support
       args << "--disable-multilib" if DevelopmentTools.clang_build_version >= 1000
+
+      # Workaround for Xcode 12.5 bug on Intel
+      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100340
+      args << "--without-build-config" if Hardware::CPU.intel? && DevelopmentTools.clang_build_version >= 1205
 
       # System headers may not be in /usr/include
       sdk = MacOS.sdk_path_if_needed
@@ -119,6 +124,7 @@ class Gcc < Formula
       system "make", "install"
 
       bin.install_symlink bin/"gfortran-#{version_suffix}" => "gfortran"
+      bin.install_symlink bin/"gdc-#{version_suffix}" => "gdc" if Hardware::CPU.intel?
     end
 
     # Handle conflicts between GCC formulae and avoid interfering
@@ -176,5 +182,18 @@ class Gcc < Formula
     EOS
     system "#{bin}/gfortran", "-o", "test", "test.f90"
     assert_equal "Done\n", `./test`
+
+    if Hardware::CPU.intel?
+      (testpath/"hello_d.d").write <<~EOS
+        import std.stdio;
+        int main()
+        {
+          writeln("Hello, world!");
+          return 0;
+        }
+      EOS
+      system "#{bin}/gdc-#{version_suffix}", "-o", "hello-d", "hello_d.d"
+      assert_equal "Hello, world!\n", `./hello-d`
+    end
   end
 end

@@ -2,8 +2,8 @@ class Grpc < Formula
   desc "Next generation open source RPC library and framework"
   homepage "https://grpc.io/"
   url "https://github.com/grpc/grpc.git",
-      tag:      "v1.37.1",
-      revision: "8664c8334c05d322fbbdfb9e3b24601a23e9363c",
+      tag:      "v1.38.0",
+      revision: "54dc182082db941aa67c7c3f93ad858c99a16d7d",
       shallow:  false
   license "Apache-2.0"
   head "https://github.com/grpc/grpc.git"
@@ -14,10 +14,10 @@ class Grpc < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "2f11475d08ab3bad8577f3cd7577da5af575bf6e5072f75769f5e9dd85b782a1"
-    sha256 cellar: :any, big_sur:       "60262977e20371b8e818b7820792698a899999985d356c6ceee1b36289dbb128"
-    sha256 cellar: :any, catalina:      "b02be4642bfce958727bf03bff51d2acf6e180830a67566969ce975a8a37f0a8"
-    sha256 cellar: :any, mojave:        "9b3f8b20776fc5607a59bd0bad8c65c4c9d0a90e9e1fc44d2584581b236883f2"
+    sha256 cellar: :any, arm64_big_sur: "2d92a0d2b43ed5dbff6c023a80d22c275b2c55c504f1e0a6bde4d74df5d419cd"
+    sha256 cellar: :any, big_sur:       "4a8540c5de4d11a439c86d203e5e070d6ff5341a3c9656ac33f661489fe68e0e"
+    sha256 cellar: :any, catalina:      "8bd2c0a031f4f3f401b64baec713b1733f03418d691f408500daff5a86dcd924"
+    sha256 cellar: :any, mojave:        "3763b63015a4cac21d76335d73eaf3a046678c3f1122c4bf6588e9bab7285fce"
   end
 
   depends_on "autoconf" => :build
@@ -34,7 +34,7 @@ class Grpc < Formula
   uses_from_macos "zlib"
 
   on_macos do
-    depends_on "llvm" => :build if MacOS.version <= :mojave
+    depends_on "llvm" => :build if DevelopmentTools.clang_build_version <= 1100
   end
 
   fails_with :clang do
@@ -45,7 +45,7 @@ class Grpc < Formula
   def install
     ENV.remove "HOMEBREW_LIBRARY_PATHS", Formula["llvm"].opt_lib
     on_macos do
-      ENV.llvm_clang if MacOS.version <= :mojave
+      ENV.llvm_clang if DevelopmentTools.clang_build_version <= 1100
     end
     mkdir "cmake/build" do
       args = %W[
@@ -67,21 +67,21 @@ class Grpc < Formula
       system "cmake", *args
       system "make", "install"
 
-      # grpc_cli does not build correctly with a non-/usr/local prefix.
-      # Reported upstream at https://github.com/grpc/grpc/issues/25176
-      # When removing the `unless` block, make sure to do the same for
-      # the test block.
-      unless Hardware::CPU.arm?
-        args = %W[
-          ../..
-          -DCMAKE_INSTALL_RPATH=#{rpath}
-          -DBUILD_SHARED_LIBS=ON
-          -DgRPC_BUILD_TESTS=ON
-        ] + std_cmake_args
-        system "cmake", *args
-        system "make", "grpc_cli"
-        bin.install "grpc_cli"
-        lib.install Dir[shared_library("libgrpc++_test_config", "*")]
+      args = %W[
+        ../..
+        -DCMAKE_INSTALL_RPATH=#{rpath}
+        -DBUILD_SHARED_LIBS=ON
+        -DgRPC_BUILD_TESTS=ON
+      ] + std_cmake_args
+      system "cmake", *args
+      system "make", "grpc_cli"
+      bin.install "grpc_cli"
+      lib.install Dir[shared_library("libgrpc++_test_config", "*")]
+
+      on_macos do
+        # These are installed manually, so need to be relocated manually as well
+        MachO::Tools.add_rpath(bin/"grpc_cli", rpath)
+        MachO::Tools.add_rpath(lib/shared_library("libgrpc++_test_config"), rpath)
       end
     end
   end
@@ -99,9 +99,8 @@ class Grpc < Formula
     pkg_config_flags = shell_output("pkg-config --cflags --libs libcares protobuf re2 grpc++").chomp.split
     system ENV.cc, "test.cpp", "-L#{Formula["abseil"].opt_lib}", *pkg_config_flags, "-o", "test"
     system "./test"
-    unless Hardware::CPU.arm?
-      output = shell_output("grpc_cli ls localhost:#{free_port} 2>&1", 1)
-      assert_match "Received an error when querying services endpoint.", output
-    end
+
+    output = shell_output("grpc_cli ls localhost:#{free_port} 2>&1", 1)
+    assert_match "Received an error when querying services endpoint.", output
   end
 end

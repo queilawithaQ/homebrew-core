@@ -20,16 +20,7 @@ class PythonAT39 < Formula
 
   # setuptools remembers the build flags python is built with and uses them to
   # build packages later. Xcode-only systems need different flags.
-  pour_bottle? do
-    on_macos do
-      reason <<~EOS
-        The bottle needs the Apple Command Line Tools to be installed.
-          You can install them, if desired, with:
-            xcode-select --install
-      EOS
-      satisfy { MacOS::CLT.installed? }
-    end
-  end
+  pour_bottle? only_if: :clt_installed
 
   depends_on "pkg-config" => :build
   depends_on "gdbm"
@@ -181,6 +172,17 @@ class PythonAT39 < Formula
       s.gsub! "sqlite_setup_debug = False", "sqlite_setup_debug = True"
       s.gsub! "for d_ in self.inc_dirs + sqlite_inc_paths:",
               "for d_ in ['#{Formula["sqlite"].opt_include}']:"
+    end
+
+    on_linux do
+      # Python's configure adds the system ncurses include entry to CPPFLAGS
+      # when doing curses header check. The check may fail when there exists
+      # a 32-bit system ncurses (conflicts with the brewed 64-bit one).
+      # See https://github.com/Homebrew/linuxbrew-core/pull/22307#issuecomment-781896552
+      # We want our ncurses! Override system ncurses includes!
+      inreplace "configure",
+        'CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"',
+        "CPPFLAGS=\"$CPPFLAGS -I#{Formula["ncurses"].opt_include}\""
     end
 
     # Allow python modules to use ctypes.find_library to find homebrew's stuff

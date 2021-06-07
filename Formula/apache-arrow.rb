@@ -1,18 +1,17 @@
 class ApacheArrow < Formula
   desc "Columnar in-memory analytics layer designed to accelerate big data"
   homepage "https://arrow.apache.org/"
-  url "https://www.apache.org/dyn/closer.lua?path=arrow/arrow-4.0.0/apache-arrow-4.0.0.tar.gz"
-  mirror "https://archive.apache.org/dist/arrow/arrow-4.0.0/apache-arrow-4.0.0.tar.gz"
-  sha256 "4a31d0bf702e953bdbcda67af10762a33308281bd247fcbd152ee177419649ae"
+  url "https://www.apache.org/dyn/closer.lua?path=arrow/arrow-4.0.1/apache-arrow-4.0.1.tar.gz"
+  mirror "https://archive.apache.org/dist/arrow/arrow-4.0.1/apache-arrow-4.0.1.tar.gz"
+  sha256 "75ccbfa276b925c6b1c978a920ff2f30c4b0d3fdf8b51777915b6f69a211896e"
   license "Apache-2.0"
-  revision 1
   head "https://github.com/apache/arrow.git"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "a404fde9ca54f797e7452fedf31283e9983e2e9ade687d82ff4c642f75173ddd"
-    sha256 cellar: :any, big_sur:       "cd79491a2538c95c9668a8b85cb97291b9450700618e767b94a4f988b7c89809"
-    sha256 cellar: :any, catalina:      "2cb7fd71e05cb2dba2316c91691cc47ff9ab294e4eb3d884935c073eb9cf05ac"
-    sha256 cellar: :any, mojave:        "a039fb7f7c94dedfd1281adf0848bc673f8f213c5da48a1d9114757cc8fdb3ae"
+    sha256 cellar: :any, arm64_big_sur: "f77306ec4191f47b7cf263548239fdf6fe15f2fc01ea350993d3cffa92b9ad44"
+    sha256 cellar: :any, big_sur:       "4d18d3c43a2e0662857f9af6e8d16a4f947ef7c946d12472ae9a5c7363d506e5"
+    sha256 cellar: :any, catalina:      "9d11d0ba22679dc3c2569392be721a55d20825ae353bda4ef159be3c26f348ec"
+    sha256 cellar: :any, mojave:        "08f1ee827928e7c2da2fb0307d1e1e75f7c627715d794f2fc53da565c440577d"
   end
 
   depends_on "boost" => :build

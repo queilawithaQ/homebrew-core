@@ -5,6 +5,7 @@ class Llvm < Formula
   sha256 "9ed1688943a4402d7c904cc4515798cdb20080066efa010fe7e1f2551b423628"
   # The LLVM Project is under the Apache License v2.0 with LLVM Exceptions
   license "Apache-2.0" => { with: "LLVM-exception" }
+  revision 1
   head "https://github.com/llvm/llvm-project.git", branch: "main"
 
   livecheck do
@@ -13,19 +14,14 @@ class Llvm < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "bf7e6bdeb7f9eef8113dfe5e2ef410fa37881473811b31c8fd0038f3ded22b60"
-    sha256 cellar: :any, big_sur:       "275c72f9da27d13b2b1144629d8b8c6f425b672d1e716a81d0e0d8aed6eeb6b9"
-    sha256 cellar: :any, catalina:      "330381b5d4be23e5ec878ed13ba8f96f311078a8be8130fcc6f49e7ef31dc8d5"
-    sha256 cellar: :any, mojave:        "b7239f312db88db8f6795feac9bd2524df081408e071331bf1e4ceab8f6ba7fb"
+    sha256 cellar: :any, arm64_big_sur: "4c8e51f4be4bd897f7eff223409c7215afa87dc6dfe943b90f6a719fa99505b0"
+    sha256 cellar: :any, big_sur:       "a72f029b6c0dbb708b1da7a0fee2ff771adce0141f891145d4cd04dcc74c8f08"
+    sha256 cellar: :any, catalina:      "647ff05ed5d5edcf5be265a731bdfbae67ff2a3a1c4d077bbe3084c9319838f0"
+    sha256 cellar: :any, mojave:        "9231c5c2edb2c0d5226bec12cf1fe40b92beedbdf2fcc03585aa1f0a5d9ae2bc"
   end
 
   # Clang cannot find system headers if Xcode CLT is not installed
-  pour_bottle? do
-    on_macos do
-      reason "The bottle needs the Xcode CLT to be installed."
-      satisfy { MacOS::CLT.installed? }
-    end
-  end
+  pour_bottle? only_if: :clt_installed
 
   keg_only :provided_by_macos
 
@@ -141,6 +137,11 @@ class Llvm < Formula
       system "cmake", "--build", ".", "--target", "install-xcode-toolchain" if MacOS::Xcode.installed?
     end
 
+    on_macos do
+      # Install versioned symlink, or else `llvm-config` doesn't work properly
+      lib.install_symlink "libLLVM.dylib" => "libLLVM-#{version.major}.dylib" unless build.head?
+    end
+
     # Install LLVM Python bindings
     # Clang Python bindings are installed by CMake
     (lib/site_packages).install llvmpath/"bindings/python/llvm"
@@ -158,6 +159,9 @@ class Llvm < Formula
 
   test do
     assert_equal prefix.to_s, shell_output("#{bin}/llvm-config --prefix").chomp
+    assert_equal "-lLLVM-#{version.major}", shell_output("#{bin}/llvm-config --libs").chomp
+    assert_equal (lib/shared_library("libLLVM-#{version.major}")).to_s,
+                 shell_output("#{bin}/llvm-config --libfiles").chomp
 
     (testpath/"omptest.c").write <<~EOS
       #include <stdlib.h>

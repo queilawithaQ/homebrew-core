@@ -1,15 +1,15 @@
 class Comby < Formula
   desc "Tool for changing code across many languages"
   homepage "https://comby.dev"
-  url "https://github.com/comby-tools/comby/archive/1.5.0.tar.gz"
-  sha256 "d3280774581c82f4f772c9c832c3804db432cab80d4118fa074c0f80c4ef1077"
+  url "https://github.com/comby-tools/comby/archive/1.6.0.tar.gz"
+  sha256 "bd288ff606f972f9bf2bfb14d967731ff5dd8358d4f2bba7ab4cdc65273cd7bb"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "4c1e5628b7ae614142f3631cc44d14351fe732de273d1d60813dacd547706ffa"
-    sha256 cellar: :any, big_sur:       "ab5ac2c9eff849840ef83533faedf536ae1ef9cf97b9291198eca6ccf96a1218"
-    sha256 cellar: :any, catalina:      "b3bd679f9b35ab1018b4c7284442ebf9e03f3bcec6b108268a44ccacbce5a874"
-    sha256 cellar: :any, mojave:        "8b48e82365ad52abb59af1b5c75e28cbac0b782b9dca0c4ac145bcfdf8a8b6d1"
+    sha256 cellar: :any, arm64_big_sur: "452877f9b07c40d246f24bea38f318c064c3ef0492513baaabe129e58d8513e4"
+    sha256 cellar: :any, big_sur:       "fb56717bfc4f4eade203b400a0b89895ce868259e5de9d64a6b8647fec824bff"
+    sha256 cellar: :any, catalina:      "c502d02ba6108b3ff17304e0485eb10b75ecba479e528128633465332f2bff89"
+    sha256 cellar: :any, mojave:        "ac79a5af6da615860f53ee80b1898ecd0bc393d4072a57c0b1ecf56b789a61bf"
   end
 
   depends_on "autoconf" => :build
@@ -17,6 +17,7 @@ class Comby < Formula
   depends_on "ocaml" => :build
   depends_on "opam" => :build
   depends_on "pkg-config" => :build
+  depends_on "gmp"
   depends_on "libev"
   depends_on "pcre"
 

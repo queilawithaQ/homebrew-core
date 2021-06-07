@@ -1,15 +1,15 @@
 class Just < Formula
   desc "Handy way to save and run project-specific commands"
   homepage "https://github.com/casey/just"
-  url "https://github.com/casey/just/archive/v0.9.2.tar.gz"
-  sha256 "0f064d0ea9f3d8bbcd84c5e6a85243738bdb6f49d059f589fd6928c64ea6fb64"
+  url "https://github.com/casey/just/archive/v0.9.4.tar.gz"
+  sha256 "70c0d6cbc21b7d4e993cd0218d89f82e86498ac86762e785dc2fec6c65202905"
   license "CC0-1.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "70bc227889f14cfb1d7efa1ae2bb25deee2c1fb244a9088b4174451136ab11c0"
-    sha256 cellar: :any_skip_relocation, big_sur:       "eaae40cb4f0df07de67f3049efc4864d8a40e6472d65a62e2b073fa4cc4d5480"
-    sha256 cellar: :any_skip_relocation, catalina:      "0177d63b6d2b85713ddc8f5154a903ec9d8adbe68e863997276fd25c57872a3e"
-    sha256 cellar: :any_skip_relocation, mojave:        "91cf4c35f36accf188f03398da452570ce8879b629822c104e5c4db85e4eb44e"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "a7007d784dd56ca0c596e641e96b73ee32ac21fd30f93d11af0f434df01c9c4c"
+    sha256 cellar: :any_skip_relocation, big_sur:       "87760e80e1fd21b9e4e31b4e087733a1f747ba09781e20c94a13ccedae04c717"
+    sha256 cellar: :any_skip_relocation, catalina:      "930d9a441bafbb63240d3052dfbceaf812b2b2bfa60431283679d8ed1d98bab7"
+    sha256 cellar: :any_skip_relocation, mojave:        "9f5fb1dd103031ff0a4a05f86b12b82a0361244e8188e0a13842ccbad7e235f5"
   end
 
   depends_on "rust" => :build
@@ -28,7 +28,7 @@ class Just < Formula
       default:
         touch it-worked
     EOS
-    system "#{bin}/just"
+    system bin/"just"
     assert_predicate testpath/"it-worked", :exist?
   end
 end

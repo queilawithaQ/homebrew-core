@@ -2,16 +2,16 @@ class Eksctl < Formula
   desc "Simple command-line tool for creating clusters on Amazon EKS"
   homepage "https://eksctl.io"
   url "https://github.com/weaveworks/eksctl.git",
-      tag:      "0.49.0",
-      revision: "5ed89559c5e07521f2d1576446844b4cfa36d8e2"
+      tag:      "0.52.0",
+      revision: "fdac193c7264e2fb76c025ac1e01f08708b31db6"
   license "Apache-2.0"
   head "https://github.com/weaveworks/eksctl.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "5f6108dd9e3ee267a59acfe862ed395169ebdbe7ee0049c58b6d87846a1d478b"
-    sha256 cellar: :any_skip_relocation, big_sur:       "a8fea617f092da8e454d4a4da24e347f9dfbb930a62114b222d0599202e2f3c6"
-    sha256 cellar: :any_skip_relocation, catalina:      "dfc7bd73be2f4db29dd0e799c2609651f08bd3167bede170962df09b0f62329d"
-    sha256 cellar: :any_skip_relocation, mojave:        "de76cea17d38ed7cba8151617cd5b1f0f31f5eb7f8da7460617ddd3bf9e11ba5"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "104670bbe025fecefe233d0d264e6daa46cf8223441f8a80542a82023b3c8dfb"
+    sha256 cellar: :any_skip_relocation, big_sur:       "ce9b24ce106dae1bd3994e2be5eb586658587af9294338203c74f642a99c97c2"
+    sha256 cellar: :any_skip_relocation, catalina:      "a8eb228bbc87bf3cb135dee92bf2a0e4e14a953bde92d48da8ac835ff2d9b97a"
+    sha256 cellar: :any_skip_relocation, mojave:        "9532bbcab0dff12cb63969bc1b9d0d8e3704a6e6db6b19ba676a9aee5dd6346e"
   end
 
   depends_on "counterfeiter" => :build

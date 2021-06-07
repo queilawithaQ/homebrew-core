@@ -1,15 +1,15 @@
 class Osm2pgsql < Formula
   desc "OpenStreetMap data to PostgreSQL converter"
   homepage "https://osm2pgsql.org"
-  url "https://github.com/openstreetmap/osm2pgsql/archive/1.4.2.tar.gz"
-  sha256 "fc68283930ccd468ed9b28685150741b16083fec86800a4b011884ae22eb061c"
+  url "https://github.com/openstreetmap/osm2pgsql/archive/1.5.0.tar.gz"
+  sha256 "d31be268dda21cf31418f68c78b8e0cbbd90cd8a283c4dfe0c134a7960936fce"
   license "GPL-2.0-only"
   head "https://github.com/openstreetmap/osm2pgsql.git"
 
   bottle do
-    sha256 big_sur:  "3f530e403705b21a4a3fcd1b88ba86e960fa59fe68927dc97d444a4c44a84c68"
-    sha256 catalina: "c1b0f77d4750d1d9869d6a7e825d3eb5299df7f4f97a9ca9a2d527535cc91022"
-    sha256 mojave:   "0f90e7f8b56644c4d3c764a4b8c2d6b69ed5be0b58cb183e6d5ebcd51c662069"
+    sha256 big_sur:  "7a053ba31f800eb1d49e9ee4de6b54ade35f4f527ece2c1530ce1e79ff2909b9"
+    sha256 catalina: "8480abcc84286248903f547c3a16ea7a81c90f57eee3872bce2c07dc41f1d239"
+    sha256 mojave:   "b304583a22752a1d811490c8eb44d9c5f316619d782bc2fd19f29837871b4ecd"
   end
 
   depends_on "cmake" => :build
@@ -18,7 +18,7 @@ class Osm2pgsql < Formula
   depends_on "geos"
   depends_on "luajit-openresty"
   depends_on "postgresql"
-  depends_on "proj"
+  depends_on "proj@7"
 
   def install
     # This is essentially a CMake disrespects superenv problem
