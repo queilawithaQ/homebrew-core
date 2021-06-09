@@ -27,6 +27,9 @@
   },
   "black": "black[d]",
   "buku": "buku[server]",
+  "certbot": {
+    "extra_packages": ["certbot-apache", "certbot-nginx"]
+  },
   "cloudformation-cli": {
     "extra_packages": ["cloudformation-cli-go-plugin", "cloudformation-cli-java-plugin"]
   },
@@ -84,6 +87,9 @@
   "mycli": {
     "exclude_packages": ["tabulate"]
   },
+  "nox": {
+    "exclude_packages": ["six"]
+  },
   "openstackclient": {
     "extra_packages": ["python-heatclient", "python-octaviaclient"]
   },
@@ -103,6 +109,9 @@
     "extra_packages": ["importlib-metadata", "typing-extensions"]
   },
   "protobuf": {
+    "exclude_packages": ["six"]
+  },
+  "pywhat": {
     "exclude_packages": ["six"]
   },
   "regipy": {
@@ -150,12 +159,18 @@
     	"pyobjc-framework-SystemExtensions", "pyobjc-framework-UserNotifications", "pyobjc-framework-VideoSubscriberAccount",
     	"pyobjc-framework-VideoToolbox", "pyobjc-framework-Vision", "pyobjc-framework-WebKit"]
   },
+  "sceptre": {
+    "exclude_packages": ["six"]
+  },
   "scipy": {
     "exclude_packages": ["numpy"]
   },
   "semgrep": "semgrep",
   "sqlite-utils": {
     "exclude_packages": ["tabulate"]
+  },
+  "theharvester": {
+    "exclude_packages": ["six"]
   },
   "todoman": {
     "exclude_packages": ["tabulate"]
