@@ -67,6 +67,9 @@
       "exclude_packages": ["numpy"],
       "extra_packages": ["wheel"]
   },
+  "flintrock": {
+    "exclude_packages": ["six"]
+  },
   "homeassistant-cli": {
     "exclude_packages": ["tabulate"]
   },
@@ -177,6 +180,9 @@
   },
   "todoman": {
     "exclude_packages": ["tabulate"]
+  },
+  "twarc": {
+    "exclude_packages": ["six"]
   },
   "xdot": {
     "extra_packages": ["graphviz"]

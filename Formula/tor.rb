@@ -1,9 +1,9 @@
 class Tor < Formula
   desc "Anonymizing overlay network for TCP"
   homepage "https://www.torproject.org/"
-  url "https://www.torproject.org/dist/tor-0.4.5.8.tar.gz"
-  mirror "https://www.torservers.net/mirrors/torproject.org/dist/tor-0.4.5.8.tar.gz"
-  sha256 "57ded091e8bcdcebb0013fe7ef4a4439827cb169358c7874fd05fa00d813e227"
+  url "https://www.torproject.org/dist/tor-0.4.5.9.tar.gz"
+  mirror "https://www.torservers.net/mirrors/torproject.org/dist/tor-0.4.5.9.tar.gz"
+  sha256 "f304e456102ed26c39e5f16ece2115585398cdb4e67455139c86ea43cdf70856"
   # Complete list of licenses:
   # https://gitweb.torproject.org/tor.git/plain/LICENSE
   license all_of: [
@@ -19,10 +19,10 @@ class Tor < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "b47b6b1608f8c1a14becf03b6dfe27d4f129353b515d1520931048bb79e57f8e"
-    sha256 big_sur:       "1e21e596e47055fc6956f1caabb732542cf47c7ca25c1d1ff86ba9f3f099190c"
-    sha256 catalina:      "634ab04bf972f10c0b23c72b75886a2233506f879fa776113c358ee8527227ba"
-    sha256 mojave:        "7efcba4ab06298b03f489db233140ece3758597978fc026bdf272c33662bc55c"
+    sha256 arm64_big_sur: "7e729248757a51afab67ffd0ece975e2cfd2c72d19f29e07b1f966e6bb68a27f"
+    sha256 big_sur:       "d45fbd9a1f2bd3c4dd59c4c74816040cd5952ef8fa39d9b0777867e1d21bb1fb"
+    sha256 catalina:      "caaf2a35e6617f72094351d3945bc118cc7b8000fe3cbf14399efa05d3467eed"
+    sha256 mojave:        "252b1de21cf4395e7ec8af17f2f6e28f961ec5b38728e4cd82127873b9212db2"
   end
 
   depends_on "pkg-config" => :build
