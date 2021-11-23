@@ -1,10 +1,9 @@
 class Dafny < Formula
   desc "Verification-aware programming language"
   homepage "https://github.com/dafny-lang/dafny/blob/master/README.md"
-  url "https://github.com/dafny-lang/dafny/archive/v3.1.0.tar.gz"
-  sha256 "6cecba54e4190094b805fa6462538413226dca44f288a8500003884878f1cc7a"
+  url "https://github.com/dafny-lang/dafny/archive/v3.3.0.tar.gz"
+  sha256 "0cdbffa90d2556e068cb6fb8601c9ecda649dc671734354cd6071d3b8b948b41"
   license "MIT"
-  revision 1
 
   livecheck do
     url :stable
@@ -12,13 +11,13 @@ class Dafny < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:  "c7a837b791950ce29c20680e7ab20a2dc53532d5c70ec202ca93a9564b79b2d6"
-    sha256 cellar: :any_skip_relocation, catalina: "0fae39b63e376ff8b91de963ff8e2ff82e40c19407bc86baac807a45c8624e55"
-    sha256 cellar: :any_skip_relocation, mojave:   "5113fa608be666979f67a46c3c8868c0e17d0fae5df450057217bbf5603b95d1"
+    sha256 cellar: :any_skip_relocation, big_sur:  "10862f4e7daaf0dd2a310686384984301f43ceeecfdad21398ab984c4c3cd485"
+    sha256 cellar: :any_skip_relocation, catalina: "2a46518f73e9ae9a7d1b6457d65176dfdeedbf1d5b2395a914badc73c35a964b"
   end
 
   depends_on "gradle" => :build
   depends_on "nuget" => :build
+  depends_on arch: :x86_64 # dotnet does not support ARM
   depends_on "dotnet"
   depends_on "openjdk@11"
 
@@ -30,7 +29,7 @@ class Dafny < Formula
   end
 
   def install
-    system "make", "exe", "runtime"
+    system "make", "exe"
 
     libexec.install Dir["Binaries/*", "Scripts/quicktest.sh"]
 

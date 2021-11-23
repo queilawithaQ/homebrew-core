@@ -1,10 +1,10 @@
 class Stockfish < Formula
   desc "Strong open-source chess engine"
   homepage "https://stockfishchess.org/"
-  url "https://github.com/official-stockfish/Stockfish/archive/sf_13.tar.gz"
-  sha256 "15d14721b3be17c597535bdbb44fb951a1ee948312d90fbf55fa0e52b8b81d62"
+  url "https://github.com/official-stockfish/Stockfish/archive/sf_14.1.tar.gz"
+  sha256 "11d71018af47ba047175f846be72d8d9878df698e9b5d708ab158cf530633600"
   license "GPL-3.0-only"
-  head "https://github.com/official-stockfish/Stockfish.git"
+  head "https://github.com/official-stockfish/Stockfish.git", branch: "master"
 
   livecheck do
     url :stable
@@ -12,11 +12,19 @@ class Stockfish < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "a695ec759970fee9683ea548aaa9d90a0e355965f813d6eb3561b15a15ad4390"
-    sha256 cellar: :any_skip_relocation, big_sur:       "76291e5d29db6a4c5c9bd3fe6ca728294cc5f6bc67610831a214e7d98ab7d47f"
-    sha256 cellar: :any_skip_relocation, catalina:      "2786e7ccf04a15f45861c6949caa3b11219353bf3c2aadc03e8bbc2114ecbc67"
-    sha256 cellar: :any_skip_relocation, mojave:        "e375b405f0d4f38eb8b9fa73156817a62777e80d350b9ef46b0088bf3cf739fe"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "ef5e55e732a950acb837ea3eb4adfac3fdaa2b0e1ee282d70d5f1eb2c883cc6a"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "df0bfa47fc470ecde1d715f7ca949c3fd77a903f93a8eea9dba4b5a106eafbb2"
+    sha256 cellar: :any_skip_relocation, monterey:       "bed614a1f3d7d6b9ea90bd3fdc5f6186de9de856a6468b70547a5489c5adb753"
+    sha256 cellar: :any_skip_relocation, big_sur:        "11a90a078e9e3ecf881fb616d254f6ee9e921e03f382018f524d34cf09c1946f"
+    sha256 cellar: :any_skip_relocation, catalina:       "a7d63b4cde1d25c2467461e0410570c7c66c9cf0285e17f13791ce26e199f402"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "34ab8d99e0e5948551a9bea72fe37b8d6574890c0c90e84ce4a02121ae4311ac"
   end
+
+  on_linux do
+    depends_on "gcc" # For C++17
+  end
+
+  fails_with gcc: "5"
 
   def install
     arch = Hardware::CPU.arm? ? "apple-silicon" : "x86-64-modern"

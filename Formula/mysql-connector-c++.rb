@@ -1,8 +1,8 @@
 class MysqlConnectorCxx < Formula
   desc "MySQL database connector for C++ applications"
   homepage "https://dev.mysql.com/downloads/connector/cpp/"
-  url "https://dev.mysql.com/get/Downloads/Connector-C++/mysql-connector-c++-8.0.25-src.tar.gz"
-  sha256 "49f082ed21c04348b7080d505ae0c85fd3bd1156ff511a3b53a97ab026243194"
+  url "https://dev.mysql.com/get/Downloads/Connector-C++/mysql-connector-c++-8.0.27-src.tar.gz"
+  sha256 "5886698fc682a5e8740822ed9b461bc51b60cf9cbadf4e1c7febe59584b2bfb7"
 
   livecheck do
     url "https://dev.mysql.com/downloads/connector/cpp/?tpl=files&os=src"
@@ -10,10 +10,10 @@ class MysqlConnectorCxx < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "da7e6c838d9544e91cad96f5617fa23de2e4f840c141aee312e5211324aa58ee"
-    sha256 cellar: :any, big_sur:       "f59f257af671acd600a06866dd58bafdea6713e4302f927e55c03420654936a1"
-    sha256 cellar: :any, catalina:      "db1c0ddf7b343b3e078d01356d0e5184ba423dc8400746dfb52df85c07c3210c"
-    sha256 cellar: :any, mojave:        "46abfd0b0d36f325ca400272b2c331dc1c07581b8dcb1818aa9def027b417a52"
+    sha256 cellar: :any,                 arm64_big_sur: "a4cc9b1f8b9d72667a52d118f9fcdfbac27e82cd74e0f12339f8dfe9401051fc"
+    sha256 cellar: :any,                 big_sur:       "72b1c4ed0b90d576e917b98268da4ab5b94843784049e5155c30a3f1cbbb0733"
+    sha256 cellar: :any,                 catalina:      "18bf7a692f7b65626ef3fc2e0fd2ca7f9c3e62484e553941f94f386d71c2f599"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1c4829d44958cf8560c8e112d9d25ce27b8cee81fb4c289e9fdab53334d15cdd"
   end
 
   depends_on "boost" => :build

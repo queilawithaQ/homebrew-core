@@ -6,32 +6,26 @@ class Libgccjit < Formula
     # backported with his help to gcc-11 branch. Too big for a patch.
     url "https://github.com/fxcoudert/gcc/archive/refs/tags/gcc-11.1.0-arm-20210504.tar.gz"
     sha256 "ce862b4a4bdc8f36c9240736d23cd625a48af82c2332d2915df0e16e1609a74c"
-    version "11.1.0"
+    version "11.2.0"
   else
-    url "https://ftp.gnu.org/gnu/gcc/gcc-11.1.0/gcc-11.1.0.tar.xz"
-    mirror "https://ftpmirror.gnu.org/gcc/gcc-11.1.0/gcc-11.1.0.tar.xz"
-    sha256 "4c4a6fb8a8396059241c2e674b85b351c26a5d678274007f076957afa1cc9ddf"
+    url "https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz"
+    mirror "https://ftpmirror.gnu.org/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz"
+    sha256 "d08edc536b54c372a1010ff6619dd274c0f1603aa49212ba20f7aa2cda36fa8b"
   end
   homepage "https://gcc.gnu.org/"
-  license "GPL-3.0-or-later" => {
-    with: "GCC-exception-3.1",
-  }
-  head "https://gcc.gnu.org/git/gcc.git"
+  license "GPL-3.0-or-later" => { with: "GCC-exception-3.1" }
+  revision 1
+  head "https://gcc.gnu.org/git/gcc.git", branch: "master"
 
   livecheck do
-    # Should be
-    # url :stable
-    # but that does not work with the ARM-specific branch above
-    url "https://ftp.gnu.org/gnu/gcc/gcc-11.1.0"
-    regex(%r{href=.*?gcc[._-]v?(\d+(?:\.\d+)+)(?:/?["' >]|\.t)}i)
+    formula "gcc"
   end
 
   bottle do
-    rebuild 1
-    sha256 arm64_big_sur: "2355d93ae4c5b11d46dab907d4efcbfec1b3709cb43a109e7154380ea85c3f50"
-    sha256 big_sur:       "c989e946e04eca805211b334f29cb31324754b411bff322bffd7201bcf308365"
-    sha256 catalina:      "1930af2cbcf23a92ef2b8961d179f8ce14bc2648f4ce6d8f94f1e55eac5d17db"
-    sha256 mojave:        "d2f6470ba1f348962768fb2d4cd12fbbc3508062ffbd91d14269a68ad59ffbed"
+    sha256 arm64_big_sur: "82a176792716ed3396362fa357e5464b3aa3c0260bd9d200f786355b3f8d7eba"
+    sha256 monterey:      "aa7537256c094ca2298a91a28625dd97ebd8077b9ffdc2b6d8842fe464d9e6e7"
+    sha256 big_sur:       "e3636a382bd4698e99aa965986e1ddc75918d4856281c33480fd00669f6f3666"
+    sha256 catalina:      "f97a281a23bef0068e0bf1fbdccab242e2eb13a2a8f57671184588a06548cdf3"
   end
 
   # The bottles are built on systems with the CLT installed, and do not work
@@ -49,6 +43,12 @@ class Libgccjit < Formula
   # GCC bootstraps itself, so it is OK to have an incompatible C++ stdlib
   cxxstdlib_check :skip
 
+  # Darwin 21 (Monterey) support
+  patch do
+    url "https://github.com/iains/gcc-darwin-arm64/commit/20f61faaed3b335d792e38892d826054d2ac9f15.patch?full_index=1"
+    sha256 "c0605179a856ca046d093c13cea4d2e024809ec2ad4bf3708543fc3d2e60504b"
+  end
+
   def install
     # GCC will suffer build errors if forced to use a particular linker.
     ENV.delete "LD"
@@ -62,6 +62,7 @@ class Libgccjit < Formula
       --libdir=#{lib}/gcc/#{version.major}
       --disable-nls
       --enable-checking=release
+      --with-gcc-major-version-only
       --with-gmp=#{Formula["gmp"].opt_prefix}
       --with-mpfr=#{Formula["mpfr"].opt_prefix}
       --with-mpc=#{Formula["libmpc"].opt_prefix}

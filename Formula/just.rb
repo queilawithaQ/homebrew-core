@@ -1,15 +1,23 @@
 class Just < Formula
   desc "Handy way to save and run project-specific commands"
   homepage "https://github.com/casey/just"
-  url "https://github.com/casey/just/archive/0.9.5.tar.gz"
-  sha256 "f332ebb6c890e4e7b2bdb80a6324ecb4720890a2e53b4c178777e9537bbd4f54"
+  url "https://github.com/casey/just/archive/0.10.4.tar.gz"
+  sha256 "81d7e7d5496861a37f8668dbeb845381c41ea0ef5fa087c7b8bd41b70134218d"
   license "CC0-1.0"
+  head "https://github.com/casey/just.git"
+
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "718385d08918b314bc3adfcaaf735522091fe7c58b5cf87236adc7bef06cb4d1"
-    sha256 cellar: :any_skip_relocation, big_sur:       "36de4c54b187328287bd5eeb899155039b7e6d2fa42d21311917c4d0b4f99700"
-    sha256 cellar: :any_skip_relocation, catalina:      "2c85c0c2b65f4ba5939fcf934eb13e451c94a586b9bf4860711aee249c08d718"
-    sha256 cellar: :any_skip_relocation, mojave:        "b1e420b3a06cc6dae414a65ad508ffd1488c765421810e84f07a8bbcd8708fa9"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "bae9785bdc153e1d591ea8b02ac5c91a46ad88a63cd342322e21fd2f706e733a"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "96890ef0a3dd0196021f90fe3f5ed59800c8a001c78bbd1afd00184b58f6d236"
+    sha256 cellar: :any_skip_relocation, monterey:       "8aaf68098fc50c988c97c38ba68dbc548ee9852f973b18bb5e46dd1b14b245f2"
+    sha256 cellar: :any_skip_relocation, big_sur:        "6387ce3af5769bc5136c7176b7de5c027edee04abc411b16e53ad40fa50d562e"
+    sha256 cellar: :any_skip_relocation, catalina:       "c29ee1411073506cec9d103b6e7a9b2fc7e48a76431bd99aacbd35fdd21d6a29"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "20b3f50da02c3270d2f10c2db22680a89fc432f7c5011f7a71bf4f66ba98443e"
   end
 
   depends_on "rust" => :build

@@ -1,8 +1,8 @@
 class Dub < Formula
   desc "Build tool for D projects"
   homepage "https://code.dlang.org/getting_started"
-  url "https://github.com/dlang/dub/archive/v1.26.0.tar.gz"
-  sha256 "53f32a2d4c933bf5743778b710c424f8f0bd0393bb32dc73b9756cf10750ae43"
+  url "https://github.com/dlang/dub/archive/v1.27.0.tar.gz"
+  sha256 "fb800f3355f167ac7f997f77e31e331db9d33477779fdaaf2851b3abcecc801a"
   license "MIT"
   version_scheme 1
   head "https://github.com/dlang/dub.git"
@@ -13,19 +13,23 @@ class Dub < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:  "7414a40c941f02d51ffd14a7f9aa9545ce58a7c39ad6ebb72a13508064a5369f"
-    sha256 cellar: :any_skip_relocation, catalina: "bb85f781678dfafcb2c9d183281e29a488b3e7e3921f69da4a6ff152959474b0"
-    sha256 cellar: :any_skip_relocation, mojave:   "e8907c0ef61417362b32f14361536d51d6a78eb52f5810c6b3a58757680ac611"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "8a74cb46fb2e1b14261d877c8c1c3c492f5ca9cb333f1be78412119e957d7f81"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "20c67d16147775d49407fae421cef74e323cef53dab0a663b562e9710cde031f"
+    sha256 cellar: :any_skip_relocation, monterey:       "6bf803ca4bf4b379e42a3790a9cf8e2a42e81252479097fdf2c9553b4e3488e2"
+    sha256 cellar: :any_skip_relocation, big_sur:        "522469719933702ba030cce31f83a4f19638e17945efce2786eaa6ab29b38d4b"
+    sha256 cellar: :any_skip_relocation, catalina:       "a708c2b342b00718471ec8427e56f7d36f91d1029939469110ca830d0a961748"
+    sha256 cellar: :any_skip_relocation, mojave:         "5da8b64546f9436fcc1210c7acf63a9f95a2c300b7eec8192610e3ec25d7c124"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "f60af34e8faf094bd0cfefedcad4cb7f5f7fa71634c9dad21229d44c693f7486"
   end
 
-  depends_on "dmd" => :build
+  depends_on "ldc" => :build
   depends_on "pkg-config"
 
   uses_from_macos "curl"
 
   def install
     ENV["GITVER"] = version.to_s
-    system "./build.d"
+    system "ldc2", "-run", "./build.d"
     system "bin/dub", "scripts/man/gen_man.d"
     bin.install "bin/dub"
     man1.install Dir["scripts/man/*.1"]

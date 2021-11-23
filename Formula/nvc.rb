@@ -1,15 +1,16 @@
 class Nvc < Formula
   desc "VHDL compiler and simulator"
   homepage "https://github.com/nickg/nvc"
-  url "https://github.com/nickg/nvc/releases/download/r1.5.1/nvc-1.5.1.tar.gz"
-  sha256 "2c418a19c60ee91c92865700be53907b8fbfaa3ea64bfc32aed996ed2c55df43"
+  url "https://github.com/nickg/nvc/releases/download/r1.5.3/nvc-1.5.3.tar.gz"
+  sha256 "a9232d645321f5f560fc466cae43d2e514db801b9e4a9bcb24f881c473206513"
   license "GPL-3.0-or-later"
 
   bottle do
-    sha256 arm64_big_sur: "7c05a43adb8e06f4d7c476ee7648c98baf6cba58f964321c9d8035493168e88c"
-    sha256 big_sur:       "d4064f6d3d03798588a886d0c243184169b582d1228f344c97d1d380f4ec6767"
-    sha256 catalina:      "2164b0c823a884279abecb21ed79425cdc910ee472a771f99aa51c5db1134a78"
-    sha256 mojave:        "e6125afeec736628f6f02f3912d8aa0c412049b07b08ca4c2f7a88ca38b194c0"
+    sha256 arm64_monterey: "f062caad9512a3c0d4d6a98f279355882922e2994ca2eae6b948adcb337ccaac"
+    sha256 arm64_big_sur:  "0b77a79a7970ac8b0d53b6527ab1f5ef0cc7982012d526b2538f9b2c5277491b"
+    sha256 monterey:       "ceb5b84552da80889605d9ca8b887955029d146f03f530da8c550394f50122f1"
+    sha256 big_sur:        "419611c66adec0332e11016ab6fa9b56ba116254fef1062a9d526a971dc3abba"
+    sha256 catalina:       "12cc92837fa8206d53be4c4be56c7fb568bf976a28feb6a3f314c119a34c59ea"
   end
 
   head do
@@ -23,9 +24,11 @@ class Nvc < Formula
   depends_on "pkg-config" => :build
   depends_on "llvm"
 
-  resource "vim-hdl-examples" do
+  uses_from_macos "flex" => :build
+
+  resource "homebrew-test" do
     url "https://github.com/suoto/vim-hdl-examples.git",
-        revision: "c112c17f098f13719784df90c277683051b61d05"
+        revision: "fcb93c287c8e4af7cc30dc3e5758b12ee4f7ed9b"
   end
 
   def install
@@ -39,7 +42,7 @@ class Nvc < Formula
   end
 
   test do
-    resource("vim-hdl-examples").stage testpath
+    resource("homebrew-test").stage testpath
     system "#{bin}/nvc", "-a", "#{testpath}/basic_library/very_common_pkg.vhd"
   end
 end

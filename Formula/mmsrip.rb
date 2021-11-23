@@ -5,6 +5,11 @@ class Mmsrip < Formula
   sha256 "5aed3cf17bfe50e2628561b46e12aec3644cfbbb242d738078e8b8fce6c23ed6"
   license "GPL-2.0"
 
+  livecheck do
+    url :homepage
+    regex(/href=.*?mmsrip[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
+
   bottle do
     rebuild 1
     sha256 cellar: :any_skip_relocation, arm64_big_sur: "e5d47cddeabd5f3cbd7b0c2c988d10dee8726dcf557f95eb3cada3a1cdc954a7"
@@ -15,6 +20,7 @@ class Mmsrip < Formula
     sha256 cellar: :any_skip_relocation, sierra:        "b4578327661828737b3aa71615806ba6e2781d7c0815a12815023242ac80e598"
     sha256 cellar: :any_skip_relocation, el_capitan:    "cf0bc6b407f4861b174eddf55ae5da45330d37abc428013ca19f173d36a96d2a"
     sha256 cellar: :any_skip_relocation, yosemite:      "07f4c9d5a84bb52e3c799ebe7c395a4939c0c7ac5dff0fb46e2ce84abd9b5417"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6e3d2396067956a932acbac5b815338b0e46e05ffa157dc20833725f01af8630"
   end
 
   def install

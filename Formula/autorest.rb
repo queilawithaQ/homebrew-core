@@ -3,15 +3,16 @@ require "language/node"
 class Autorest < Formula
   desc "Swagger (OpenAPI) Specification code generator"
   homepage "https://github.com/Azure/autorest"
-  url "https://registry.npmjs.org/autorest/-/autorest-3.2.3.tgz"
-  sha256 "d7a5b92cef2f86b617cef36c327934c7f264fe59c76b6d6e41d1e43129c5cab3"
+  url "https://registry.npmjs.org/autorest/-/autorest-3.5.1.tgz"
+  sha256 "3361f0cf71b7013efb38376f65f973f0dfa83a86a59cfb749380344bcea8bdbe"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "e0f77a4335caaaf6de01afa580bd0bd709c9c18c5042e1e5b2ae1c1093c48d78"
+    sha256 cellar: :any_skip_relocation, all: "42c2714757885b2ce0383b48ee0ae82ef1ba0e836bcc44706a9ea822cc0b09c4"
   end
 
   depends_on arch: :x86_64
+  depends_on :macos # test fails on Linux
   depends_on "node"
 
   resource "homebrew-petstore" do

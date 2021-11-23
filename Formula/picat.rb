@@ -1,9 +1,9 @@
 class Picat < Formula
   desc "Simple, and yet powerful, logic-based multi-paradigm programming language"
   homepage "http://picat-lang.org/"
-  url "http://picat-lang.org/download/picat31_src.tar.gz"
-  version "3.1"
-  sha256 "093ca00f74a67a70ed8c5e42f3e3e29a43b761daa3cf9ca7d6bb216c401f4e72"
+  url "http://picat-lang.org/download/picat312_src.tar.gz"
+  version "3.1#2"
+  sha256 "eb13be811d9470420d8d9e488f1f4a7771a934e3b27120aa6529648d5a070d9e"
   license "MPL-2.0"
 
   livecheck do
@@ -12,13 +12,21 @@ class Picat < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:  "6e50d5fbc8c8ae11541653ad8a46f17c5a7c00b9949b446e167d2524e8edc1f7"
-    sha256 cellar: :any_skip_relocation, catalina: "9230d26c90deef822d5d54c94bdfee12dd4b6d70130cca70eac02980f3c2ca97"
-    sha256 cellar: :any_skip_relocation, mojave:   "a707f1d3ab71127d7ef235704267e076607abad53a3c129bc5cf0336af9adf78"
+    sha256 cellar: :any_skip_relocation, monterey:     "9a6567ded5a5cdacb7f454715beeca4cae6590b11c28cfe172388751567807c4"
+    sha256 cellar: :any_skip_relocation, big_sur:      "aaf2ef1f21a19c8bf60b5ed7b52b91f12693babdaaec8edb458b888e6f748838"
+    sha256 cellar: :any_skip_relocation, catalina:     "40e9b771743f9799af5c2abc091a3099faeb0a14be8136d5aa3fea1624c67d83"
+    sha256 cellar: :any_skip_relocation, mojave:       "248ac7a621f9b9f860170dd1bf57aafd6f785e35140d58c2a563fbd4e6604a42"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "7b15831545abe443fa02911fe09ea411bce3b2be30cb22f1da47a6434667e8d3"
   end
 
   def install
-    system "make", "-C", "emu", "-f", "Makefile.mac64"
+    makefile = if OS.mac?
+      "Makefile.mac64"
+    else
+      ENV.cxx11
+      "Makefile.linux64"
+    end
+    system "make", "-C", "emu", "-f", makefile
     bin.install "emu/picat" => "picat"
     prefix.install "lib" => "pi_lib"
     doc.install Dir["doc/*"]

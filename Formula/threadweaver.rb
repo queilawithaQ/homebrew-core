@@ -1,16 +1,22 @@
 class Threadweaver < Formula
   desc "Helper for multithreaded programming"
   homepage "https://api.kde.org/frameworks/threadweaver/html/index.html"
-  url "https://download.kde.org/stable/frameworks/5.83/threadweaver-5.83.0.tar.xz"
-  sha256 "540ecedea40f1dec1fdda76464a2a610de713b03cc86f06c7245f307a1b2098a"
+  url "https://download.kde.org/stable/frameworks/5.88/threadweaver-5.88.0.tar.xz"
+  sha256 "b2f3079158a52c8e49ea0989e18a509dc9693f6a26f0739b133bee0f4b02df1f"
   license "LGPL-2.0-or-later"
-  head "https://invent.kde.org/frameworks/threadweaver.git"
+  head "https://invent.kde.org/frameworks/threadweaver.git", branch: "master"
+
+  # We check the tags from the `head` repository because the latest stable
+  # version doesn't seem to be easily available elsewhere.
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "199d668ef3fb2217baf72c1ea0d61777befa73760adf73bf1578e4806d82f998"
-    sha256 cellar: :any, big_sur:       "3622de43f8266031b374c4bcba2f68c0c04f9ca7ba99515dac68466c297f3656"
-    sha256 cellar: :any, catalina:      "3399ae41305e9b10449b22ce34ff00f236125b005cf1c4bf9fa249359f4ad733"
-    sha256 cellar: :any, mojave:        "8a978cb6c7423f0c40162403329b9e173ac805136fb8bbbf804c7d965172f800"
+    sha256 cellar: :any, arm64_big_sur: "e5077b92fdb517071fa4c253fea59fa02b19c3e4ed2d1b3f7a5c46a6f8491b19"
+    sha256 cellar: :any, big_sur:       "de345ab5238155bd6510b4c3f7a65d122a34222aef0e755f3d3d5f70b9ad0d14"
+    sha256 cellar: :any, catalina:      "051c4fe369b3a285e5c348b03b926203eb6e0fc42b0086ba9e9a62b04dc15032"
   end
 
   depends_on "cmake" => [:build, :test]
@@ -24,10 +30,9 @@ class Threadweaver < Formula
     args << "-DBUILD_TESTING=OFF"
     args << "-DBUILD_QCH=ON"
 
-    mkdir "build" do
-      system "cmake", "..", *args
-      system "make", "install"
-    end
+    system "cmake", "-S", ".", "-B", "build", *args
+    system "cmake", "--build", "build"
+    system "cmake", "--install", "build"
 
     pkgshare.install "examples"
   end

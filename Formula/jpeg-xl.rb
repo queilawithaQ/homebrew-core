@@ -1,34 +1,44 @@
 class JpegXl < Formula
   desc "New file format for still image compression"
   homepage "https://jpeg.org/jpegxl/index.html"
-  # Check whether this can be switched to `openexr` and `imath` at version bump
-  url "https://gitlab.com/wg1/jpeg-xl/-/archive/v0.3.7/jpeg-xl-v0.3.7.tar.bz2"
-  sha256 "32548f17c2a596e9963aa09934710f96dca6f78ec2337d7936dada89a6090b56"
-  license "Apache-2.0"
-  revision 1
+  url "https://github.com/libjxl/libjxl/archive/v0.6.1.tar.gz"
+  sha256 "ccbd5a729d730152303be399f033b905e608309d5802d77a61a95faa092592c5"
+  license "BSD-3-Clause"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "e855720e77098e6cf1ada7dd53561e73f426d7b241512c209ef8b21b915cd3b1"
-    sha256 cellar: :any, big_sur:       "0abccbb80acb60e345bc1f338bb7647bb6fb946529343104c887b4dc02b685fb"
-    sha256 cellar: :any, catalina:      "432600f118932b15359629c9a94f5a8e017d9985ae888af21f5f605b2f886dbd"
-    sha256 cellar: :any, mojave:        "d2045261bd46e2deaf3f3c460cac89f3b1810da54379df93a5be1e4f82399244"
+    sha256 cellar: :any,                 arm64_monterey: "299002d5c10f0009bcdf7b2f5c4d544e4b84fc36dd109a0b3dd5eee780dbb5f7"
+    sha256 cellar: :any,                 arm64_big_sur:  "ad8d741fe5ff44ed35f407ff6f692763c937d74e51156563fb3e8245ac534898"
+    sha256 cellar: :any,                 monterey:       "a311fe41c7dc098c82269b42fd819ef20ce7248f9df444ce4890576005124204"
+    sha256 cellar: :any,                 big_sur:        "77882f055f5509900e8f913352386201a3cb57cbae04f7de254416416d9638d7"
+    sha256 cellar: :any,                 catalina:       "ef47fc0d2de7c6623c1504d6df8b9b041763bec532c4f907793f4ffedc6f3050"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "011b3fd5a6bfdd494edaddf64cb4432cadf6ad71adf24201a9555848eb2717c4"
   end
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
   depends_on "brotli"
   depends_on "giflib"
-  depends_on "ilmbase"
+  depends_on "imath"
   depends_on "jpeg"
   depends_on "libpng"
-  depends_on "openexr@2"
+  depends_on "openexr"
   depends_on "webp"
 
+  uses_from_macos "libxml2" => :build
+  uses_from_macos "libxslt" => :build # for xsltproc
+
+  on_linux do
+    depends_on "gcc"
+  end
+
+  fails_with gcc: "5"
+  fails_with gcc: "6"
+
   # These resources are versioned according to the script supplied with jpeg-xl to download the dependencies:
-  # https://gitlab.com/wg1/jpeg-xl/-/blob/v#{version}/deps.sh
+  # https://github.com/libjxl/libjxl/tree/v#{version}/third_party
   resource "highway" do
     url "https://github.com/google/highway.git",
-        revision: "946a1b40233438a1b0363598a6deaa1628a01003"
+        revision: "e2397743fe092df68b760d358253773699a16c93"
   end
 
   resource "lodepng" do
@@ -46,10 +56,22 @@ class JpegXl < Formula
         revision: "64374756e03700d649f897dbd98c95e78c30c7da"
   end
 
+  # remove when https://github.com/libjxl/libjxl/commit/88fe3fff3dc70c72405f57c69feffd9823930034 is in a tag
+  patch do
+    url "https://github.com/libjxl/libjxl/commit/88fe3fff3dc70c72405f57c69feffd9823930034.patch?full_index=1"
+    sha256 "a1dba15e75093dea2d16d4fb1341e1ba8ba8400be723cb887a190d4d525ce9a6"
+  end
+
   def install
     resources.each { |r| r.stage buildpath/"third_party"/r.name }
     mkdir "build" do
-      system "cmake", "..", "-DBUILD_TESTING=OFF", *std_cmake_args
+      # disable manpages due to problems with asciidoc 10
+      system "cmake", "..", "-DBUILD_TESTING=OFF",
+        "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON",
+        "-DJPEGXL_ENABLE_JNI=OFF",
+        "-DJPEGXL_VERSION=#{version}",
+        "-DJPEGXL_ENABLE_MANPAGES=OFF",
+        *std_cmake_args
       system "cmake", "--build", "."
       system "cmake", "--build", ".", "--target", "install"
     end

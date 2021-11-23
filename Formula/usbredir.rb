@@ -1,8 +1,8 @@
 class Usbredir < Formula
   desc "USB traffic redirection library"
   homepage "https://www.spice-space.org"
-  url "https://www.spice-space.org/download/usbredir/usbredir-0.10.0.tar.xz"
-  sha256 "76de718db370d824a833075599a8a035ab284c4a1bf279cca26bb538484d8061"
+  url "https://www.spice-space.org/download/usbredir/usbredir-0.12.0.tar.xz"
+  sha256 "fbb44025bf55e1ce8d84afc7596bfa47c8a36cd603c6fa440f9102c1c9761e6d"
   license all_of: ["GPL-2.0-or-later", "LGPL-2.0-or-later"]
 
   livecheck do
@@ -11,10 +11,12 @@ class Usbredir < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "6b3470eeeccaa4755b997102cee313d879e8b91df61c076ecbbc18c4fc572d47"
-    sha256 cellar: :any, big_sur:       "26d2040e073333ad5e1aba9594f88c4450e7a9ee9780c8cc458267bea7e8c7c6"
-    sha256 cellar: :any, catalina:      "1986f37f4c043ee0822fb0cc61049ab57a73871e94e3e64ad1896861be49890b"
-    sha256 cellar: :any, mojave:        "04d2e58a8479304dba8f207283c5f740ea1a74440ecb3780aa4182025b268384"
+    sha256 cellar: :any, arm64_monterey: "a56fe37fbb55500168e5603be76b3a8dba035c18b045f651e314b815bfe0c953"
+    sha256 cellar: :any, arm64_big_sur:  "a89e97d94c354d11169c45cad63fb724d3af150e55897c6e5faf45633445ae51"
+    sha256 cellar: :any, monterey:       "16f4f0fc4e6ba97c15c7fe6442ab1f30ecce8d2748a7ed2acdfec258a0a6d3d3"
+    sha256 cellar: :any, big_sur:        "a0022d1a55c4a1c9d66c95f0611afac389bc83d74d506f576cd884951781077b"
+    sha256 cellar: :any, catalina:       "211eed5c2d4b71dd2b5c6b1f2b2782e1e788b774db086bb2b11b971114f7f4d3"
+    sha256               x86_64_linux:   "79cf30502a92984c9e7f0edaed63ceab42aaeab123698071ab0f1702ffa5dd0a"
   end
 
   depends_on "meson" => :build
@@ -23,13 +25,6 @@ class Usbredir < Formula
   depends_on "glib"
   depends_on "libusb"
 
-  # See https://gitlab.freedesktop.org/spice/usbredir/-/merge_requests/32
-  # Remove when the MR has been merged and included in the release.
-  patch do
-    url "https://gitlab.freedesktop.org/spice/usbredir/-/commit/be1078847e4e05fffea888544457ef6a75c8f330.diff"
-    sha256 "052b9352625cfefd96a4ef491b3f40b64cee5ddaca0ed0b5205ab6ef2f8882c5"
-  end
-
   def install
     system "meson", *std_meson_args, ".", "build"
     system "ninja", "-C", "build", "-v"
@@ -37,13 +32,13 @@ class Usbredir < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<~EOS
+    (testpath/"test.c").write <<~EOS
       #include <usbredirparser.h>
       int main() {
         return usbredirparser_create() ? 0 : 1;
       }
     EOS
-    system ENV.cc, "test.cpp",
+    system ENV.cc, "test.c",
                    "-L#{lib}",
                    "-lusbredirparser",
                    "-o", "test"

@@ -3,17 +3,17 @@ class Grc < Formula
 
   desc "Colorize logfiles and command output"
   homepage "http://kassiopeia.juls.savba.sk/~garabik/software/grc.html"
-  url "https://github.com/garabik/grc/archive/v1.12.tar.gz"
-  sha256 "4ca20134775ca15b2e26b4a464786aacd8c114cc793557b53959592b279b8d3c"
+  url "https://github.com/garabik/grc/archive/v1.13.tar.gz"
+  sha256 "a7b10d4316b59ca50f6b749f1d080cea0b41cb3b7258099c3eb195659d1f144f"
   license "GPL-2.0-or-later"
+  revision 1
   head "https://github.com/garabik/grc.git", branch: "devel"
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, all: "da6e328a8acfc73c3cc1021f37fcd83397452b98f14793845639b1c31c0034d8"
+    sha256 cellar: :any_skip_relocation, all: "f097a568c20af374d96e4261f3188d85dea8b815c1b77f3b85ebf4494932fc0a"
   end
 
-  depends_on "python@3.9"
+  depends_on "python@3.10"
 
   conflicts_with "cc65", because: "both install `grc` binaries"
 

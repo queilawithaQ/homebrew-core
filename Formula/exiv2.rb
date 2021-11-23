@@ -1,8 +1,8 @@
 class Exiv2 < Formula
   desc "EXIF and IPTC metadata manipulation library and tools"
   homepage "https://www.exiv2.org/"
-  url "https://www.exiv2.org/builds/exiv2-0.27.3-Source.tar.gz"
-  sha256 "a79f5613812aa21755d578a297874fb59a85101e793edc64ec2c6bd994e3e778"
+  url "https://www.exiv2.org/builds/exiv2-0.27.5-Source.tar.gz"
+  sha256 "35a58618ab236a901ca4928b0ad8b31007ebdc0386d904409d825024e45ea6e2"
   license "GPL-2.0-or-later"
   head "https://github.com/Exiv2/exiv2.git"
 
@@ -12,11 +12,12 @@ class Exiv2 < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "f3b4f6da40ef2fbb4da84cc592a1fd2618f1007b4104451b0afa214f14e53125"
-    sha256 cellar: :any, big_sur:       "1d3b44a02c0ebe2ee46ced38a59cf81c60f12a0990debb8b14479431195a572e"
-    sha256 cellar: :any, catalina:      "607f8322cba23a92185541c3b8ee245e7ff339becda5364e1ea6c2168015375c"
-    sha256 cellar: :any, mojave:        "f4ed492ccb45b869000b2cc514ae507422624f6413057ee158ea80b772e182fb"
-    sha256 cellar: :any, high_sierra:   "cd1d11df6b535b1ccfb3458cef28a7662c1e2b7213382e8292abbe00526c7b52"
+    sha256 cellar: :any,                 arm64_monterey: "5154d667d5a85b3ae16e7b7ba5b542f58db18dcd3c8ffd0186824e7ad3734fe7"
+    sha256 cellar: :any,                 arm64_big_sur:  "08ecb10e2ccb420a0085f02c7b9ae2f68a3a051df143794416f212d47a752768"
+    sha256 cellar: :any,                 monterey:       "8a2abceaf1f395ec5f8c99f17b3c51f3131e23d9d7ec767c254222c74cc947e6"
+    sha256 cellar: :any,                 big_sur:        "295f349b27fbbd1d2336ed4576934ca6066624691b0ab615b4bcaaf31c9b0eb1"
+    sha256 cellar: :any,                 catalina:       "d527846d027df10a5aef6d1dfee4f909dc1cdd33058325d6c7be5cd24b5f7ded"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "803e01203d880519740c22f7ad437c85ecd292c446131e24ce77fa9cb333bdf9"
   end
 
   depends_on "cmake" => :build

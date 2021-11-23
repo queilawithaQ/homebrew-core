@@ -1,10 +1,10 @@
 class Htop < Formula
   desc "Improved top (interactive process viewer)"
   homepage "https://htop.dev/"
-  url "https://github.com/htop-dev/htop/archive/3.0.5.tar.gz"
-  sha256 "4c2629bd50895bd24082ba2f81f8c972348aa2298cc6edc6a21a7fa18b73990c"
+  url "https://github.com/htop-dev/htop/archive/3.1.1.tar.gz"
+  sha256 "b52280ad05a535ec632fbcd47e8e2c40a9376a9ddbd7caa00b38b9d6bb87ced6"
   license "GPL-2.0-or-later"
-  head "https://github.com/htop-dev/htop.git"
+  head "https://github.com/htop-dev/htop.git", branch: "main"
 
   livecheck do
     url :stable
@@ -12,10 +12,13 @@ class Htop < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "e2b32da2189775e5a303b948bf2bf86224f2850786e849371efe002402f26c6f"
-    sha256 cellar: :any, big_sur:       "8f4e4c5d0ee34c41e008bb9a2ed4331303a42bd594ac358a822604a145c868ea"
-    sha256 cellar: :any, catalina:      "7dc2bf8825918876e3a853acbc9d7045786d1d418fdae2b0a4e6d4500006a08e"
-    sha256 cellar: :any, mojave:        "a009b141dcf7b95c60da3ef685ea0736be0c0a5e1e0de0945153697c6a032e2a"
+    sha256 cellar: :any,                 arm64_monterey: "a750757241fe07c332f12157fefd3122d223ad1356e1a85e70c78e8ab69aebc2"
+    sha256 cellar: :any,                 arm64_big_sur:  "bc5dfcfd0b154377c4436bc3f2c35a43d618319c43e9184d13832e06fdd79820"
+    sha256 cellar: :any,                 monterey:       "2467211375028b6d784c35b1d396971177023518e49566f160a4aa5b8dfdc470"
+    sha256 cellar: :any,                 big_sur:        "301c8306cbfe6584335a8e7db71e2436e336357b0371f5cf29b94b1a557c6652"
+    sha256 cellar: :any,                 catalina:       "7ddeb74a5a6873b69f705fb090e6b477dec8261dbb221a5b8dbc6bcc810af804"
+    sha256 cellar: :any,                 mojave:         "c5a1729400dfec62ee63ab53e5667f06d4709ee9021e3573c8ec1fd6ae4fcebc"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "a33628783ecc09a777afce0eb819e877a9379e71f9f22a074316ebf7ef2f47f4"
   end
 
   depends_on "autoconf" => :build
@@ -25,9 +28,15 @@ class Htop < Formula
   depends_on "python@3.9" => :build
   depends_on "ncurses" # enables mouse scroll
 
+  on_linux do
+    depends_on "lm-sensors"
+  end
+
   def install
     system "./autogen.sh"
-    system "./configure", "--prefix=#{prefix}"
+    args = ["--prefix=#{prefix}"]
+    args << "--enable-sensors" if OS.linux?
+    system "./configure", *args
     system "make", "install"
   end
 

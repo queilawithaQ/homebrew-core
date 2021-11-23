@@ -1,18 +1,16 @@
 class Vtk < Formula
   desc "Toolkit for 3D computer graphics, image processing, and visualization"
   homepage "https://www.vtk.org/"
-  url "https://www.vtk.org/files/release/9.0/VTK-9.0.1.tar.gz"
-  sha256 "1b39a5e191c282861e7af4101eaa8585969a2de05f5646c9199a161213a622c7"
+  url "https://www.vtk.org/files/release/9.1/VTK-9.1.0.tar.gz"
+  sha256 "8fed42f4f8f1eb8083107b68eaa9ad71da07110161a3116ad807f43e5ca5ce96"
   license "BSD-3-Clause"
-  revision 9
-  head "https://github.com/Kitware/VTK.git"
+  head "https://github.com/Kitware/VTK.git", branch: "master"
 
   bottle do
-    rebuild 1
-    sha256 arm64_big_sur: "8ab6a9fcb8a0f194bf70226b494d7ced7500f0bb767af969f33f2c29441f6e7c"
-    sha256 big_sur:       "fa479befb5c73d21e6a5262f3fe8043adee7343548c1e8442df1211bb2ca745e"
-    sha256 catalina:      "9fb9bd8a35735a863e715f9010767d98a97d679b64e3397f549bc474a96cbfb9"
-    sha256 mojave:        "793df59b482ff9a4ec0026d94c35f6305212f76d9031fa369e04edb4264b60a5"
+    sha256                               arm64_big_sur: "8a36ea9bc18cc1dcda17265e9bd57c67d2988182af3fee0299f9c6654fe94f38"
+    sha256                               big_sur:       "b213eef44f72f772a71579a36f94f16d02e4dbfb390e858edb7b66f0672d66fa"
+    sha256                               catalina:      "1a702b1c3def8710fe01b4c61e6b5e17fd7c56e505dc75f54dab687926cf5089"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "194988f3f713541e043db994b6701cbf8d8ae7227ff725280fe208a8af54f688"
   end
 
   depends_on "cmake" => [:build, :test]
@@ -45,14 +43,14 @@ class Vtk < Formula
   uses_from_macos "zlib"
 
   on_linux do
+    depends_on "gcc"
     depends_on "szip"
     depends_on "mesa-glu"
   end
 
-  def install
-    # Do not record compiler path because it references the shim directory
-    inreplace "Common/Core/vtkConfigure.h.in", "@CMAKE_CXX_COMPILER@", ENV.cxx
+  fails_with gcc: "5"
 
+  def install
     args = std_cmake_args + %W[
       -DBUILD_SHARED_LIBS:BOOL=ON
       -DBUILD_TESTING:BOOL=OFF
@@ -91,9 +89,7 @@ class Vtk < Formula
     # https://github.com/Homebrew/linuxbrew-core/pull/21654#issuecomment-738549701
     args << "-DOpenGL_GL_PREFERENCE=LEGACY"
 
-    on_macos do
-      args << "-DVTK_USE_COCOA:BOOL=ON"
-    end
+    args << "-DVTK_USE_COCOA:BOOL=ON" if OS.mac?
 
     mkdir "build" do
       system "cmake", "..", *args

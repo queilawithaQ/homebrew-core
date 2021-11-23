@@ -1,8 +1,8 @@
 class Cadical < Formula
   desc "Clean and efficient state-of-the-art SAT solver"
   homepage "http://fmv.jku.at/cadical/"
-  url "https://github.com/arminbiere/cadical/archive/refs/tags/rel-1.4.0.tar.gz"
-  sha256 "b5990bea7aa5df6002b9bfe782323742d786565b9dfee37bbc0dd0f4b8e65141"
+  url "https://github.com/arminbiere/cadical/archive/refs/tags/rel-1.5.2.tar.gz"
+  sha256 "4a4251bf0191677ca8cda275cb7bf5e0cf074ae0056819642d5a7e5c1a952e6e"
   license "MIT"
 
   livecheck do
@@ -11,10 +11,12 @@ class Cadical < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "c19d4807b7bc2ea2eff3a15fbf25c6ebe4a660bcd84088d0a17ed8de401e715c"
-    sha256 cellar: :any_skip_relocation, big_sur:       "780dede4d1880b19f2b5675c2de1dcf92aeff4b03cea584181c9dd52acd4ad62"
-    sha256 cellar: :any_skip_relocation, catalina:      "df66f1da5a5d384cf9b90c6c9c93f1546f057d4b21479973115be0a27fc3534e"
-    sha256 cellar: :any_skip_relocation, mojave:        "928b030fa849f45665d3b0cd0b9afb1de01130caab147d51d7b0e8e2416224cf"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "fba92fd3b9fd396ef6af40f719f5f65e00af68f1689fc5d148f2e0372d52c0fc"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "cc60f414d905e5ee39f875b62737bfd20efc49167f82c0f843482266e9c61687"
+    sha256 cellar: :any_skip_relocation, monterey:       "e5c1c3c8005992e5417c44d7336a0897fd95f1063403112020368869ac8aa987"
+    sha256 cellar: :any_skip_relocation, big_sur:        "131d790150f919a92dae5c03146329d5b817cbac67c1fba45d5429d8dae085eb"
+    sha256 cellar: :any_skip_relocation, catalina:       "b8f42f3bc6f87b5f83afb425a1b404d489d35f52c55e68925b2d4398e5e3be94"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "649f8f12906a0c307cebfd28cd1a107eca9901638ad3ca0999789827f83550da"
   end
 
   def install

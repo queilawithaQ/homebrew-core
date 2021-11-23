@@ -1,15 +1,17 @@
 class Zellij < Formula
   desc "Pluggable terminal workspace, with terminal multiplexer as the base feature"
   homepage "https://zellij.dev"
-  url "https://github.com/zellij-org/zellij/archive/v0.13.0.tar.gz"
-  sha256 "5439561d8d7fb51d0f9bd1f3d5a0caa79ffc7dffd1c910adc7c56841df2cfb6a"
+  url "https://github.com/zellij-org/zellij/archive/v0.20.1.tar.gz"
+  sha256 "aa2cc622f924c1d41a8b1b616aae3d7b989e483bca1041061db43b6d0c6c9f52"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "6f149b3a148bf00957ccfd407e0a82af73ab450635410ab6c00bf3bedced9e8f"
-    sha256 cellar: :any_skip_relocation, big_sur:       "83e1d1dc75d2ff8c36fba477702368ab1ed795848d13ccd611d23943618144fc"
-    sha256 cellar: :any_skip_relocation, catalina:      "ed561f0d71a74830809f8a88cb4ba755d1375fd36156786f24c806f45418c889"
-    sha256 cellar: :any_skip_relocation, mojave:        "a6dff2f7e96f2b7659de6505abe7baf9d75cc82d324f2cec3b4a06e0bdda3d67"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "2dba9049b26129a614e5adf80f8d8dad7d0b101f0ff961649d56bea1c03bff20"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "c66fa96c834ff76f5a5c382935ca79df8db8c6e144d42bca0acecea52ab49c91"
+    sha256 cellar: :any_skip_relocation, monterey:       "c16070aa9b2359b771ba579c11a7b57a63f12899b2fc2205f5a782892856bded"
+    sha256 cellar: :any_skip_relocation, big_sur:        "58efeed4d6b91f7b1347fc353a3b9f7fed9af070656043e8fb1150f143bcd29c"
+    sha256 cellar: :any_skip_relocation, catalina:       "5d4714e75de430852096c421e8da1cb4be6b174036a8763e1a413d35d282af47"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "63e0827224a9bc21c213246dd2d4fa0cb003a1f2465c561ba3fd90b91cc26c76"
   end
 
   depends_on "rust" => :build

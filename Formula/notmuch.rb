@@ -1,11 +1,10 @@
 class Notmuch < Formula
   desc "Thread-based email index, search, and tagging"
   homepage "https://notmuchmail.org/"
-  url "https://notmuchmail.org/releases/notmuch-0.32.1.tar.xz"
-  sha256 "a747ca4e8cc919d91feda6cadb97e63b72ff79119491989bbcea79ad47680615"
+  url "https://notmuchmail.org/releases/notmuch-0.34.tar.xz"
+  sha256 "83e9581542b6e387f61f30cf0f5e2d9038912ee1bb73ad64b84d1d9c543761b6"
   license "GPL-3.0-or-later"
-  revision 1
-  head "https://git.notmuchmail.org/git/notmuch", using: :git
+  head "https://git.notmuchmail.org/git/notmuch", using: :git, branch: "master"
 
   livecheck do
     url "https://notmuchmail.org/releases/"
@@ -13,10 +12,10 @@ class Notmuch < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "25e42a13769182c88367bd2940d6522210e5a82eee4f02a5173851de6ce918d5"
-    sha256 cellar: :any, big_sur:       "287a0e2f7e7dd492135626de4fbea9324893bd647bf2d8fc50e691da2be437eb"
-    sha256 cellar: :any, catalina:      "8001f0c34b748c8ee7dbd92d73b093f3aa31fc0b25160bb1e4315c65f236ecb8"
-    sha256 cellar: :any, mojave:        "6d3dd1031db525fb1623e61a12ca49bb948449b1fe4ba08b9461fa73f32ad594"
+    sha256 cellar: :any,                 arm64_big_sur: "17f1ca3f9c7dc6c0bbdc35886f9ca9575aa97bc9c3b8546e7b97cd1488b38f58"
+    sha256 cellar: :any,                 big_sur:       "ac542c390bbdaded2ac896ced92d001b75d58b2527ac22573c730cec7ff0ba55"
+    sha256 cellar: :any,                 catalina:      "ee5fec5e9722c88880b87559ac88312add2b9678840c307aa1d0845e90c16a2c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6742c78f994de9fa18c938a6a643081129e5ff42b96c0ede97b0092530d769b7"
   end
 
   depends_on "doxygen" => :build
@@ -32,12 +31,6 @@ class Notmuch < Formula
 
   uses_from_macos "zlib", since: :sierra
 
-  # Remove in the release after 0.32.1
-  patch do
-    url "https://git.notmuchmail.org/git?p=notmuch;a=patch;h=59c953656dbd2e65265a2c850f2375afc9d69589;hp=92454bc0935604f4a623e75dec9506c0283eee70"
-    sha256 "291066e48a26e8f78504413203685bedc77a35d0c8f94143e1daa058b444235e"
-  end
-
   def install
     args = %W[
       --prefix=#{prefix}
@@ -50,6 +43,7 @@ class Notmuch < Formula
     ]
 
     ENV.append_path "PYTHONPATH", Formula["sphinx-doc"].opt_libexec/"lib/python3.9/site-packages"
+    ENV.cxx11 if OS.linux?
 
     system "./configure", *args
     system "make", "V=1", "install"

@@ -1,16 +1,18 @@
 class Assimp < Formula
   desc "Portable library for importing many well-known 3D model formats"
   homepage "https://www.assimp.org/"
-  url "https://github.com/assimp/assimp/archive/v5.0.1.tar.gz"
-  sha256 "11310ec1f2ad2cd46b95ba88faca8f7aaa1efe9aa12605c55e3de2b977b3dbfc"
+  url "https://github.com/assimp/assimp/archive/v5.1.1.tar.gz"
+  sha256 "ccb71bcbd8b5047b3779f1732958ccdb7ada3f64e254f4293d9570a47e1ce803"
   license :cannot_represent
-  head "https://github.com/assimp/assimp.git"
+  head "https://github.com/assimp/assimp.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "0571a9c07e7166cbfbd2c12b17f121c718204491501f268cdd904791df3c3697"
-    sha256 cellar: :any, big_sur:       "8cd36113e1e7db18e625e652a522374bf6158306254f31627f2e8f067ae665db"
-    sha256 cellar: :any, catalina:      "b2450bc0cc287a25a2e4ca42ff229ee104a6de51ef3a8cc02603850572126f18"
-    sha256 cellar: :any, mojave:        "4ee11342b9d284810e88828be1662ee5be09a161f2c1353648e63255bbf4375b"
+    sha256 cellar: :any,                 arm64_monterey: "50b38380e1bcf864f74b3d0512ed22b9302514cf23b1405b073f37588e67444c"
+    sha256 cellar: :any,                 arm64_big_sur:  "fa7836872947f3e94c0ce2bef479188f6b11d1d5eb2de828eab49a1c0c82a0bd"
+    sha256 cellar: :any,                 monterey:       "fb38e3e57e1cded0de722728d9537b58c19fb2bffd6d7cfba16942657f99575d"
+    sha256 cellar: :any,                 big_sur:        "da87f310481dc74fc52e3c679869696278dcc58e8629d56dbc4b84710515def8"
+    sha256 cellar: :any,                 catalina:       "652c965c646bae5a64d9ac8382accde938417d7d1111cbcd23fcd68b1ddd338b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "ced187cbe7bbd7db639424ddef3ff3327861c41df91ba5f42fe82870d5e2cc58"
   end
 
   depends_on "cmake" => :build

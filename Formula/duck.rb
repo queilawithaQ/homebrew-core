@@ -1,8 +1,8 @@
 class Duck < Formula
   desc "Command-line interface for Cyberduck (a multi-protocol file transfer tool)"
   homepage "https://duck.sh/"
-  url "https://dist.duck.sh/duck-src-7.9.3.35019.tar.gz"
-  sha256 "2c58200b631a71846aa4d5b9bd5c19d7122c4d71a3765aed06b62cd4ffb8fc43"
+  url "https://dist.duck.sh/duck-src-8.0.0.36226.tar.gz"
+  sha256 "11c5aac7a8175490e8f503f846b33f861ba58a0e9ffdcf095572fbc637253f0d"
   license "GPL-3.0-only"
   head "https://svn.cyberduck.io/trunk/"
 
@@ -12,27 +12,130 @@ class Duck < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "6d3638018288858c55614a197d3173e5669132970e80fca0c260aaded2d04a57"
-    sha256 cellar: :any, big_sur:       "2ed09ecf01af71732d497550766150bafd614694f1e04e895621f7820a99f705"
-    sha256 cellar: :any, catalina:      "53e301cc7e18da135e98aa45444bbd0166e194651ea1a585fe8cce3bfbda03a9"
-    sha256 cellar: :any, mojave:        "fa13a4640f8053ac3e4427c19d5abc03d73d4218a357c4b37466f481a4bed310"
+    sha256 cellar: :any, monterey:     "545b49db13499efb008a88a38ae8fd1e5dbfd1edc3cef112364ea98f9fbcbce9"
+    sha256 cellar: :any, big_sur:      "5d70bd63aa2548899d7be3b5a959ea98344304c810add8c1c4861498ee0fa30f"
+    sha256 cellar: :any, catalina:     "8ee06a67b82045075f4b096cf0fb0b89dce1fe89b693894463da0d1525a80069"
+    sha256               x86_64_linux: "5a20254d28c656dd2521cd16e03bc658ffa8a6e6d55f644e7e7387f22b59dd52"
   end
 
   depends_on "ant" => :build
   depends_on "maven" => :build
+  depends_on "pkg-config" => :build
   depends_on xcode: :build
 
+  depends_on arch: :x86_64
+  depends_on "libffi"
+  depends_on "openjdk"
+
+  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "alsa-lib"
+    depends_on "freetype"
+    depends_on "libx11"
+    depends_on "libxext"
+    depends_on "libxi"
+    depends_on "libxrender"
+    depends_on "libxtst"
+
+    ignore_missing_libraries "libjvm.so"
+  end
+
+  resource "jna" do
+    url "https://github.com/java-native-access/jna/archive/refs/tags/5.8.0.tar.gz"
+    sha256 "97680b8ddb5c0f01e50f63d04680d0823a5cb2d9b585287094de38278d2e6625"
+  end
+
+  resource "JavaNativeFoundation" do
+    url "https://github.com/apple/openjdk/archive/refs/tags/iTunesOpenJDK-1014.0.2.12.1.tar.gz"
+    sha256 "e8556a73ea36c75953078dfc1bafc9960e64593bc01e733bc772d2e6b519fd4a"
+  end
+
   def install
-    xcconfig = buildpath/"Overrides.xcconfig"
-    xcconfig.write <<~EOS
-      OTHER_LDFLAGS = -headerpad_max_install_names
-    EOS
-    ENV["XCODE_XCCONFIG_FILE"] = xcconfig
+    # Consider creating a formula for this if other formulae need the same library
+    resource("jna").stage do
+      os = if OS.mac?
+        # Add linker flags for libffi because Makefile call to pkg-config doesn't seem to work properly.
+        inreplace "native/Makefile", "LIBS=", "LIBS=-L#{Formula["libffi"].opt_lib} -lffi"
+        # Force shared library to have dylib extension on macOS instead of jnilib
+        inreplace "native/Makefile",
+                  "LIBRARY=$(BUILD)/$(LIBPFX)jnidispatch$(JNISFX)",
+                  "LIBRARY=$(BUILD)/$(LIBPFX)jnidispatch$(LIBSFX)"
+
+        "mac"
+      else
+        OS.kernel_name
+      end
+
+      # Don't include directory with JNA headers in zip archive.  If we don't do this, they will be deleted
+      # and the zip archive has to be extracted to get them. TODO: ask upstream to provide an option to
+      # disable the zip file generation entirely.
+      inreplace "build.xml",
+                "<zipfileset dir=\"build/headers\" prefix=\"build-package-${os.prefix}-${jni.version}/headers\" />",
+                ""
+
+      system "ant", "-Dbuild.os.name=#{os}",
+                    "-Dbuild.os.arch=#{Hardware::CPU.arch}",
+                    "-Ddynlink.native=true",
+                    "-DCC=#{ENV.cc}",
+                    "native-build-package"
+
+      cd "build" do
+        ENV.deparallelize
+        ENV["JAVA_HOME"] = Language::Java.java_home(Formula["openjdk"].version.major.to_s)
+
+        # Fix zip error on macOS because libjnidispatch.dylib is not in file list
+        inreplace "build.sh", "libjnidispatch.so", "libjnidispatch.so libjnidispatch.dylib" if OS.mac?
+        # Fix relative path in build script, which is designed to be run out extracted zip archive
+        inreplace "build.sh", "cd native", "cd ../native"
+
+        system "sh", "build.sh"
+        buildpath.install shared_library("libjnidispatch")
+      end
+    end
+
+    resource("JavaNativeFoundation").stage do
+      next unless OS.mac?
+
+      cd "apple/JavaNativeFoundation" do
+        xcodebuild "VALID_ARCHS=#{Hardware::CPU.arch}", "-project", "JavaNativeFoundation.xcodeproj"
+        buildpath.install "build/Release/JavaNativeFoundation.framework"
+      end
+    end
+
+    os = if OS.mac?
+      xcconfig = buildpath/"Overrides.xcconfig"
+      xcconfig.write <<~EOS
+        OTHER_LDFLAGS = -headerpad_max_install_names
+      EOS
+      ENV["XCODE_XCCONFIG_FILE"] = xcconfig
+
+      "osx"
+    else
+      OS.kernel_name.downcase
+    end
+
     revision = version.to_s.rpartition(".").last
     system "mvn", "-DskipTests", "-Dgit.commitsCount=#{revision}",
-                  "--projects", "cli/osx", "--also-make", "verify"
-    libexec.install Dir["cli/osx/target/duck.bundle/*"]
-    bin.install_symlink "#{libexec}/Contents/MacOS/duck" => "duck"
+                  "--projects", "cli/#{os}", "--also-make", "verify"
+
+    libdir, bindir = if OS.mac?
+      %w[Contents/Frameworks Contents/MacOS]
+    else
+      %w[lib/app bin]
+    end.map { |dir| libexec/dir }
+
+    if OS.mac?
+      libexec.install Dir["cli/osx/target/duck.bundle/*"]
+      rm_rf libdir/"JavaNativeFoundation.framework"
+      libdir.install buildpath/"JavaNativeFoundation.framework"
+    else
+      libexec.install Dir["cli/linux/target/release/duck/*"]
+    end
+
+    rm libdir/shared_library("libjnidispatch")
+    libdir.install buildpath/shared_library("libjnidispatch")
+    bin.install_symlink "#{bindir}/duck" => "duck"
   end
 
   test do

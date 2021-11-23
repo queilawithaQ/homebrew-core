@@ -1,8 +1,8 @@
 class HaskellLanguageServer < Formula
   desc "Integration point for ghcide and haskell-ide-engine. One IDE to rule them all"
   homepage "https://github.com/haskell/haskell-language-server"
-  url "https://github.com/haskell/haskell-language-server/archive/1.2.0.tar.gz"
-  sha256 "8931fd95bf28300d3f18675b0f03aac9bda172becb67eaa8ef1f62e6d1c6238e"
+  url "https://github.com/haskell/haskell-language-server/archive/1.5.0.tar.gz"
+  sha256 "fb801c0693cb98446667b94bd858dcaaca2c1e18ec12bf260c4c928023bdfd06"
   license "Apache-2.0"
   head "https://github.com/haskell/haskell-language-server.git"
 
@@ -14,11 +14,12 @@ class HaskellLanguageServer < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "9c926682b049060c9b8d9e25a735c1ea8c93383d2a4fd9fd65c5e19e9829f0d6"
-    sha256 cellar: :any_skip_relocation, big_sur:       "4a928bee470e56e53de6d646b446e9a5b2bff37f3a341a943aca17a209a84a6b"
-    sha256 cellar: :any_skip_relocation, catalina:      "087f6635ecca491fa12c35366d1af246c36b164374122584545aed31309f0f2a"
-    sha256 cellar: :any_skip_relocation, mojave:        "7310f2a818c8789a53874c51ba80915788a37173df09a393834d056c594e6b52"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "db6100ae789dd9c323c4226020a0b2c4ae976fe253643a39be557ab6e2f9c34a"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "1950e3eb9d77b9cb32abf313de8747481b6aa6ed8f949212d23513f8d1f8d92b"
+    sha256 cellar: :any_skip_relocation, monterey:       "0e6306333ebd9de2f257d48a263775a1336789480b614922b517aee362c02a62"
+    sha256 cellar: :any_skip_relocation, big_sur:        "cb92175df8b9403eea3aea99be3dc77e9d9e53c051b9d614590843896f615b45"
+    sha256 cellar: :any_skip_relocation, catalina:       "636874b4321f7aa0ae1f0a32b0bceaed96464006e3b4b3c3f04cfc390dcb2020"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "88d634406571ed86ec9fb4782fcd5386a8abe9248f0868324feeca4453ebe8f8"
   end
 
   depends_on "cabal-install" => [:build, :test]

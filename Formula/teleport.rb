@@ -1,10 +1,10 @@
 class Teleport < Formula
   desc "Modern SSH server for teams managing distributed infrastructure"
   homepage "https://gravitational.com/teleport"
-  url "https://github.com/gravitational/teleport/archive/v6.2.5.tar.gz"
-  sha256 "08d8b931cee7e1b0ef676894fcd30ac057f7eda18cee9e73eddb695c3a5d9108"
+  url "https://github.com/gravitational/teleport/archive/v8.0.0.tar.gz"
+  sha256 "63cd8a169723575ee1658aa26622424038079815cf28443f4a3c770e95c1331f"
   license "Apache-2.0"
-  head "https://github.com/gravitational/teleport.git"
+  head "https://github.com/gravitational/teleport.git", branch: "master"
 
   # We check the Git tags instead of using the `GithubLatest` strategy, as the
   # "latest" version can be incorrect. As of writing, two major versions of
@@ -12,15 +12,16 @@ class Teleport < Formula
   # to a release from the older major version.
   livecheck do
     url :stable
-    strategy :git
     regex(/^v?(\d+(?:\.\d+)+)$/i)
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "2e286402ce4cb15ecff47ab1730ffd116300574fd70cd9e9855de7028188256e"
-    sha256 cellar: :any_skip_relocation, big_sur:       "0feb8ac136d65f2b9087c5770ebae79d7c06b1e9e9b4d06c68cfc837765839d1"
-    sha256 cellar: :any_skip_relocation, catalina:      "8032c32a010a0859d798d4dad4fe217e54a4284d6c86fe2688d8111c54390ab5"
-    sha256 cellar: :any_skip_relocation, mojave:        "01f722a472b1823e4f21d667b7e308dc937108e4c39167cc0c4e00fbf80d3e0a"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "632281be527a4dc11bb9cdc12407315cd7fa5bde7e3bd0d687c0fda89a41dc13"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "b7ab9865d5797f7529526e0d3b442dcc3d046a92959ff42c70a50b90490fbd8b"
+    sha256 cellar: :any_skip_relocation, monterey:       "ae9336e015a5da1c6d07cbb99aa3f22bf9e31ad540ef3ec8b397607b3183c3a7"
+    sha256 cellar: :any_skip_relocation, big_sur:        "dde5140de44d98f8cf416074b2b4cb2f28e7cb31a2a397bbef28cbe5aff3324b"
+    sha256 cellar: :any_skip_relocation, catalina:       "de1a78b89555887ef733a83ccba25a55b4327bdf5c1ff9917e4f9237edfed152"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "4babcd6497e80f95ee0b133e79ffba0437080df36fdfc060141e4628bff7e6e1"
   end
 
   depends_on "go" => :build
@@ -33,8 +34,8 @@ class Teleport < Formula
 
   # Keep this in sync with https://github.com/gravitational/teleport/tree/v#{version}
   resource "webassets" do
-    url "https://github.com/gravitational/webassets/archive/8a30ee4e3570c7db0566028b6b562167aa40f646.tar.gz"
-    sha256 "54eedd358523526945d309f16b5c53787bc7a9a9337336661361385a6767fc42"
+    url "https://github.com/gravitational/webassets/archive/a1039e35e86aec770db6cdb32321c93356477757.tar.gz"
+    sha256 "11010e65d44d8b9bb956ffbaf18249c8cb370d36c47d165f9fc905ea624ce25c"
   end
 
   def install
@@ -45,20 +46,29 @@ class Teleport < Formula
 
   test do
     assert_match version.to_s, shell_output("#{bin}/teleport version")
-    (testpath/"config.yml").write shell_output("#{bin}/teleport configure")
-      .gsub("0.0.0.0", "127.0.0.1")
-      .gsub("/var/lib/teleport", testpath)
-      .gsub("/var/run", testpath)
-      .gsub(/https_(.*)/, "")
-    begin
-      pid = spawn("#{bin}/teleport start -c #{testpath}/config.yml")
-      sleep 5
-      system "/usr/bin/curl", "--insecure", "https://localhost:3080"
-      system "/usr/bin/nc", "-z", "localhost", "3022"
-      system "/usr/bin/nc", "-z", "localhost", "3023"
-      system "/usr/bin/nc", "-z", "localhost", "3025"
-    ensure
-      Process.kill(9, pid)
+    assert_match version.to_s, shell_output("#{bin}/tsh version")
+    assert_match version.to_s, shell_output("#{bin}/tctl version")
+
+    mkdir testpath/"data"
+    (testpath/"config.yml").write <<~EOS
+      version: v2
+      teleport:
+        nodename: testhost
+        data_dir: #{testpath}/data
+        log:
+          output: stderr
+          severity: WARN
+    EOS
+
+    fork do
+      exec "#{bin}/teleport start --roles=proxy,node,auth --config=#{testpath}/config.yml"
     end
+
+    sleep 10
+    system "curl", "--insecure", "https://localhost:3080"
+
+    status = shell_output("#{bin}/tctl --config=#{testpath}/config.yml status")
+    assert_match(/Cluster\s*testhost/, status)
+    assert_match(/Version\s*#{version}/, status)
   end
 end

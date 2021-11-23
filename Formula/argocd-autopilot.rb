@@ -2,15 +2,17 @@ class ArgocdAutopilot < Formula
   desc "Opinionated way of installing Argo CD and managing GitOps repositories"
   homepage "https://argoproj.io"
   url "https://github.com/argoproj-labs/argocd-autopilot.git",
-      tag:      "v0.2.6",
-      revision: "e11f3030ec2eeb84cee39826c648d2ff7ad962d1"
+      tag:      "v0.2.24",
+      revision: "442e6c2dd70b093aa860b49de3626916107b9824"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "45bc7e86329e34e10d248707af246228e7722162011684203952fd781e6c56e3"
-    sha256 cellar: :any_skip_relocation, big_sur:       "10c9e200f09c3ed331287aa4f1a95d43124da3a3ba9bb77e6faaf2da0616a76c"
-    sha256 cellar: :any_skip_relocation, catalina:      "10558c5ab35910ed48e46168441278e0dd81e2f7fccb92ccff6873381abd5608"
-    sha256 cellar: :any_skip_relocation, mojave:        "db6c0e4a0c6fca9031a3690fe4f8a9895a87866533cb1f23df42491e7c8c4bfe"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "6eb2ecdd7846092bf312c0dab8259886f7ad3c45b11c80ce1ec106eae0a63203"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "1061392ccc083aac4c58bcdfbe679f869971deb7443104b8f97f529a9aa78bd2"
+    sha256 cellar: :any_skip_relocation, monterey:       "33fe59edebce64ebc24cf29ebaedfeb462f761e7171b616a130d48d75b25db3c"
+    sha256 cellar: :any_skip_relocation, big_sur:        "5b39e57d996bce80f2212223b344ceaf8dedaf018cad707a505def051f9d1804"
+    sha256 cellar: :any_skip_relocation, catalina:       "7577531b6d6fcff7ae83a8e71bfc4a22e18dc3ac284ec2c75c6e11b307d6629d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "e5fe76d446ac20ac6182387144aee43218ba9655a07ae6fd9b25dacec02ccdd0"
   end
 
   depends_on "go" => :build
@@ -22,7 +24,8 @@ class ArgocdAutopilot < Formula
 
   test do
     assert_match version.to_s, shell_output("#{bin}/argocd-autopilot version")
-    assert_match "authentication failed",
-                 shell_output("#{bin}/argocd-autopilot repo create -o foo -n bar -t dummy 2>&1", 1)
+
+    assert_match "required flag(s) \\\"git-token\\\" not set\"",
+      shell_output("#{bin}/argocd-autopilot repo bootstrap --repo https://github.com/example/repo 2>&1", 1)
   end
 end

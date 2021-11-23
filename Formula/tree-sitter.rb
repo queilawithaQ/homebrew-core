@@ -3,16 +3,18 @@ require "language/node"
 class TreeSitter < Formula
   desc "Parser generator tool and incremental parsing library"
   homepage "https://tree-sitter.github.io/"
-  url "https://github.com/tree-sitter/tree-sitter/archive/v0.19.5.tar.gz"
-  sha256 "953edda5a21423cbfd916dbb1b1552a12f7ab649728846b5a1fb49483672e82b"
+  url "https://github.com/tree-sitter/tree-sitter/archive/v0.20.1.tar.gz"
+  sha256 "12a3f7206af3028dbe8a0de50d8ebd6d7010bf762db918acae76fc7585f1258d"
   license "MIT"
-  head "https://github.com/tree-sitter/tree-sitter.git"
+  head "https://github.com/tree-sitter/tree-sitter.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "0603c56e132ccd652a5eb07ebf951315590aa970e4d8a8571f884ac02ddf614f"
-    sha256 cellar: :any, big_sur:       "613460d86e0ed0472d024a0f9cf2fabb7da11f2487e96f00d1a9030f1bb29a55"
-    sha256 cellar: :any, catalina:      "5fe4891129581e6e910a6a4a6e9d57a163a0a06a25db66e84db65a367144a6e9"
-    sha256 cellar: :any, mojave:        "d76b4f8b94b91201d2e95de5254964ea4ca66421f3e801947a5bff31ddd6baf8"
+    sha256 cellar: :any,                 arm64_monterey: "97339409b6fc51f5db33633fa563f60de778b5bce732ab2079e43cd2fcbc2132"
+    sha256 cellar: :any,                 arm64_big_sur:  "a2de5338a614bea1152bab80d9545fc43681a422c84bb69520a8bbefc35b8d1d"
+    sha256 cellar: :any,                 monterey:       "ec802e84633532f8524b56c68956d6e5fb8bca8e06eb8340e2d8b04a6174d12b"
+    sha256 cellar: :any,                 big_sur:        "d4c89927faf3a4cc8bdff8a610728286f364a874db4779a87b9a6954dac246a4"
+    sha256 cellar: :any,                 catalina:       "1b0b0a0b17deee94650445012f00e38cc53bb8bab01c95343f5efded43343c92"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "ef83da037ec0ae5d47d57d50d3bed4903b4691184caa04e8a378cd1b808d4617"
   end
 
   depends_on "emscripten" => [:build, :test]
@@ -20,7 +22,7 @@ class TreeSitter < Formula
   depends_on "rust" => :build
 
   def install
-    system "make"
+    system "make", "AMALGAMATED=1"
     system "make", "install", "PREFIX=#{prefix}"
 
     # NOTE: This step needs to be done *before* `cargo install`

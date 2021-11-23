@@ -4,7 +4,7 @@ class Dynare < Formula
   url "https://www.dynare.org/release/source/dynare-4.6.4.tar.xz"
   sha256 "3c2e0069a3e5c23866130d5c73c3da840a38612baa2aa3d90f42e3d984abad80"
   license "GPL-3.0-or-later"
-  revision 1
+  revision 3
 
   livecheck do
     url "https://www.dynare.org/download/"
@@ -12,9 +12,8 @@ class Dynare < Formula
   end
 
   bottle do
-    sha256 cellar: :any, big_sur:  "a0770121a50b112cb0150b87d01ca88eabb3fa124def357e6e1e23286cd84d03"
-    sha256 cellar: :any, catalina: "896a6815d1108c078fbe7d2553b8b427bdc10d5d1f24ca1e9454b157be52c316"
-    sha256 cellar: :any, mojave:   "348711581bac6ec005d46668875e4087cccef16ed57af7165d32522d6b5b5ed7"
+    sha256 cellar: :any, big_sur:  "ccfeee1a456201d0cd60616f8f4b7e4ccb169206b83444ec7d727d60832f4a79"
+    sha256 cellar: :any, catalina: "d68b211968f201691d94ce012def75c2b1a7c0dd1b67bed8bfb5df134ceb3f9f"
   end
 
   head do

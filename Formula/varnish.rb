@@ -1,10 +1,11 @@
 class Varnish < Formula
   desc "High-performance HTTP accelerator"
   homepage "https://www.varnish-cache.org/"
-  url "https://varnish-cache.org/_downloads/varnish-6.6.0.tgz"
-  mirror "https://fossies.org/linux/www/varnish-6.6.0.tgz"
-  sha256 "d5ff82f2041276dfaeb9a652a88b6d7287cfcf7ca345bb02c438fb65d2bca2e5"
+  url "https://varnish-cache.org/_downloads/varnish-7.0.0.tgz"
+  mirror "https://fossies.org/linux/www/varnish-7.0.0.tgz"
+  sha256 "8c7a5c0b1f36bc70bcbc9a48830835249e895fb8951f0363110952148cbae087"
   license "BSD-2-Clause"
+  revision 1
 
   livecheck do
     url "https://varnish-cache.org/releases/"
@@ -12,10 +13,10 @@ class Varnish < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "f7f9fbe170b82b63e47a6357e9ccc66af7a89571b3e96b61d1b87b6a0b37dac3"
-    sha256 big_sur:       "83994fe56e798d944b1d216ecf91e1474f2d254b34f79af531b0bf2d4f2e0b21"
-    sha256 catalina:      "07b78fb097f6d78bb92d1915a71d8bd91ec1c6519166e6e2c960aebe97c41fab"
-    sha256 mojave:        "05757e6f285bc5180ff096b2c3c91105b75cd179ba7b6946d58c3a1ff63c481d"
+    rebuild 1
+    sha256 arm64_big_sur: "f3430a0d15dcf0f3c49901d836df00802e07e49e50cf843cc60797932105aef6"
+    sha256 big_sur:       "04dab009e3b61c2339cf91324869ac28d48643f24bfb6e7de35fdb714eacc36a"
+    sha256 catalina:      "04a13eafe484743944404dbbe132ba7148bb1a4a44f30a4d6df55e94d709dd89"
   end
 
   depends_on "docutils" => :build
@@ -23,7 +24,13 @@ class Varnish < Formula
   depends_on "pkg-config" => :build
   depends_on "python@3.9" => :build
   depends_on "sphinx-doc" => :build
-  depends_on "pcre"
+  depends_on "pcre2"
+
+  # Fix -flat_namespace being used on Big Sur and later.
+  patch do
+    url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff"
+    sha256 "35acd6aebc19843f1a2b3a63e880baceb0f5278ab1ace661e57a502d9d78c93c"
+  end
 
   def install
     ENV["PYTHON"] = Formula["python@3.9"].opt_bin/"python3"
@@ -31,52 +38,44 @@ class Varnish < Formula
     system "./configure", "--disable-dependency-tracking",
                           "--prefix=#{prefix}",
                           "--localstatedir=#{var}"
-    system "make", "install"
+
+    # flags to set the paths used by varnishd to load VMODs and VCL,
+    # pointing to the ${HOMEBREW_PREFIX}/ shared structure so other packages
+    # can install VMODs and VCL.
+    ENV.append_to_cflags "-DVARNISH_VMOD_DIR='\"#{HOMEBREW_PREFIX}/lib/varnish/vmods\"'"
+    ENV.append_to_cflags "-DVARNISH_VCL_DIR='\"#{pkgetc}:#{HOMEBREW_PREFIX}/share/varnish/vcl\"'"
+
+    system "make", "install", "CFLAGS=#{ENV.cflags}"
+
     (etc/"varnish").install "etc/example.vcl" => "default.vcl"
     (var/"varnish").mkpath
+
+    (pkgshare/"tests").install buildpath.glob("bin/varnishtest/tests/*.vtc")
+    (pkgshare/"tests/vmod").install buildpath.glob("vmod/tests/*.vtc")
   end
 
-  plist_options manual: "#{HOMEBREW_PREFIX}/sbin/varnishd -n #{HOMEBREW_PREFIX}/var/varnish -f #{HOMEBREW_PREFIX}/etc/varnish/default.vcl -s malloc,1G -T 127.0.0.1:2000 -a 0.0.0.0:8080 -F"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_sbin}/varnishd</string>
-          <string>-n</string>
-          <string>#{var}/varnish</string>
-          <string>-f</string>
-          <string>#{etc}/varnish/default.vcl</string>
-          <string>-s</string>
-          <string>malloc,1G</string>
-          <string>-T</string>
-          <string>127.0.0.1:2000</string>
-          <string>-a</string>
-          <string>0.0.0.0:8080</string>
-          <string>-F</string>
-        </array>
-        <key>KeepAlive</key>
-        <true/>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>WorkingDirectory</key>
-        <string>#{HOMEBREW_PREFIX}</string>
-        <key>StandardErrorPath</key>
-        <string>#{var}/varnish/varnish.log</string>
-        <key>StandardOutPath</key>
-        <string>#{var}/varnish/varnish.log</string>
-      </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_sbin/"varnishd", "-n", var/"varnish", "-f", etc/"varnish/default.vcl", "-s", "malloc,1G", "-T",
+         "127.0.0.1:2000", "-a", "0.0.0.0:8080", "-F"]
+    keep_alive true
+    working_dir HOMEBREW_PREFIX
+    log_path var/"varnish/varnish.log"
+    error_log_path var/"varnish/varnish.log"
   end
 
   test do
     assert_match version.to_s, shell_output("#{sbin}/varnishd -V 2>&1")
+
+    # run a subset of the varnishtest tests:
+    # - b*.vtc (basic functionality)
+    # - m*.vtc (VMOD modules, including loading), but skipping m00000.vtc which is known to fail
+    #   but is "nothing of concern" (see varnishcache/varnish-cache#3710)
+    # - u*.vtc (utilities and background processes)
+    testpath = pkgshare/"tests"
+    tests = testpath.glob("[bmu]*.vtc") - [testpath/"m00000.vtc"]
+    # -j: run the tests (using up to half the cores available)
+    # -q: only report test failures
+    # varnishtest will exit early if a test fails (use -k to continue and find all failures)
+    system bin/"varnishtest", "-j", [Hardware::CPU.cores / 2, 1].max, "-q", *tests
   end
 end

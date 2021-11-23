@@ -1,8 +1,8 @@
 class Gping < Formula
   desc "Ping, but with a graph"
   homepage "https://github.com/orf/gping"
-  url "https://github.com/orf/gping/archive/v1.2.1.tar.gz"
-  sha256 "ca11655f4357278a152476373cbc131b4183990e431196889c366706aedf6787"
+  url "https://github.com/orf/gping/archive/gping-v1.2.6.tar.gz"
+  sha256 "e36d5bc02157708c803d1855be4b2a9daa27d077fffe86c58b12c746fdc04c8f"
   license "MIT"
   head "https://github.com/orf/gping.git"
 
@@ -12,20 +12,24 @@ class Gping < Formula
   # https://github.com/Homebrew/homebrew-core/pull/66366#discussion_r537339032
   livecheck do
     url :stable
-    regex(/^v?(\d+(?:\.\d+)+)$/i)
+    regex(/^gping[._-]v?(\d+(?:\.\d+)+)$/i)
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "fc164e14a50a5dc25400542b55cc403051f70bf87f11dc3ea0a4d19d48943b3a"
-    sha256 cellar: :any_skip_relocation, big_sur:       "8574a0fd314ddfd911b85dc9a1cf4463e15cb470f867eab5eae9f9ccaa4af7a4"
-    sha256 cellar: :any_skip_relocation, catalina:      "3346653e1695fd5eaa23d8b62ab16292e25b143679ef8f8effb61b3b82cfc8ae"
-    sha256 cellar: :any_skip_relocation, mojave:        "1511dcaf2f0eaad03a622d04ec8c6dbfc1fcff831aa10e8faea836b19995cc3a"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "9a9b6784037c831bb6274931d1bada920ef5d763dcb7b0160aa267ce1c520725"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "b7e1e08ebe385455747070b11e9f73c2cf3cbe3ce96860443ba7a709d125ed31"
+    sha256 cellar: :any_skip_relocation, monterey:       "bd5c500528152cf1d4f3bcd5a67d9c7331bfc66058d3052a124b3c30c9e79e6a"
+    sha256 cellar: :any_skip_relocation, big_sur:        "232fc5425ac0ea4de4860786ffb795a9cc6e1f1e4fe4ce00edbc65c45657164b"
+    sha256 cellar: :any_skip_relocation, catalina:       "0d555937efeae1474a1a187ddeb0db14ba078dd012b4918d262d2e3f569369f9"
+    sha256 cellar: :any_skip_relocation, mojave:         "ce0e519142ae3da1d3d4c9eecce6971bd6fd582c77c0eb8858dc49413d352395"
   end
 
   depends_on "rust" => :build
 
   def install
-    system "cargo", "install", *std_cargo_args
+    cd "gping" do
+      system "cargo", "install", *std_cargo_args
+    end
   end
 
   test do

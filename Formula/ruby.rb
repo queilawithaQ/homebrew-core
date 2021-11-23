@@ -1,9 +1,10 @@
 class Ruby < Formula
   desc "Powerful, clean, object-oriented scripting language"
   homepage "https://www.ruby-lang.org/"
-  url "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.1.tar.xz"
-  sha256 "d06bccd382d03724b69f674bc46cd6957ba08ed07522694ce44b9e8ffc9c48e2"
+  url "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.2.tar.xz"
+  sha256 "570e7773100f625599575f363831166d91d49a1ab97d3ab6495af44774155c40"
   license "Ruby"
+  revision 1
 
   livecheck do
     url "https://www.ruby-lang.org/en/downloads/"
@@ -11,10 +12,13 @@ class Ruby < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "860b8b8d1642a66577df16a442ade6d7b21c0d66c14f8963c9bd4ad11bae790a"
-    sha256 big_sur:       "00daa93e4b30d3bbeac5089c1c34355315774e0d9fd1d9588402b2e755089c53"
-    sha256 catalina:      "1af6edba23ff9aa12fcab0fee9246cf46110263bf962e46e800152096b0c7017"
-    sha256 mojave:        "c3e943ccbe925a3c624952e249b06083947e5025dcca09511ec85a88bd47ac3c"
+    sha256 arm64_monterey: "06ffbddcfc573a3403d33bc127b60a53e5d6b5442819f21f0d44868209018090"
+    sha256 arm64_big_sur:  "86f9be3f7ac26e69e3c856776569b1c10039716f5787821944645c6d0f10fe87"
+    sha256 monterey:       "a96e512f8f9e3b8b76be15aedf258df8ce7b2d0a54c67d9324801b9ef4d223c9"
+    sha256 big_sur:        "b11776c7e7209ddbfee2085de7027a6f987657045171dddb0692c18ea07f4bc5"
+    sha256 catalina:       "7929b11c278737feca268f8b3ad8a7174f6e7b6034248f0c743debfea3708ab8"
+    sha256 mojave:         "435dd2553367df11b8619cc7428362a633229e3c198d701ab399413c548bcf75"
+    sha256 x86_64_linux:   "122e95641ce5f32a78814e3b9f753f8504ab513f42016c0f6dd78825e05051fe"
   end
 
   head do
@@ -36,8 +40,8 @@ class Ruby < Formula
   # The exception is Rubygem security fixes, which mandate updating this
   # formula & the versioned equivalents and bumping the revisions.
   resource "rubygems" do
-    url "https://rubygems.org/rubygems/rubygems-3.2.15.tgz"
-    sha256 "110f1c8e0d35b5646559b3d8f66a80b7dfdbef6aa736f532a276d1d2be7cf05c"
+    url "https://rubygems.org/rubygems/rubygems-3.2.22.tgz"
+    sha256 "368979ef8103b550a98fc6479543831f0d55c3567d5ee4622d5aa569ee17418b"
   end
 
   def api_version
@@ -52,7 +56,7 @@ class Ruby < Formula
     # otherwise `gem` command breaks
     ENV.delete("SDKROOT")
 
-    system "autoconf" if build.head?
+    system "./autogen.sh" if build.head?
 
     paths = %w[libyaml openssl@1.1 readline].map { |f| Formula[f].opt_prefix }
     args = %W[
@@ -64,9 +68,7 @@ class Ruby < Formula
       --with-opt-dir=#{paths.join(":")}
       --without-gmp
     ]
-    on_macos do
-      args << "--disable-dtrace" unless MacOS::CLT.installed?
-    end
+    args << "--disable-dtrace" if OS.mac? && !MacOS::CLT.installed?
 
     # Correct MJIT_CC to not use superenv shim
     args << "MJIT_CC=/usr/bin/#{DevelopmentTools.default_compiler}"

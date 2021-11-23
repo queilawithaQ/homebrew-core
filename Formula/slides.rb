@@ -1,16 +1,17 @@
 class Slides < Formula
   desc "Terminal based presentation tool"
   homepage "https://github.com/maaslalani/slides"
-  url "https://github.com/maaslalani/slides/archive/refs/tags/v0.2.0.tar.gz"
-  sha256 "c4f441e667c44ed97191be1974ee70d43a0b421104a9f432b9dda300399e0166"
+  url "https://github.com/maaslalani/slides/archive/refs/tags/v0.7.2.tar.gz"
+  sha256 "e93fde699dc3fd8db8bb36b2d89871089f5ba35c8fd407d4f8bdcb4ed4ce6c3b"
   license "MIT"
   head "https://github.com/maaslalani/slides.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "4fb812d67dbe79402be8800b85270c74ccea66981d2f7b8fd82c335e7497eb20"
-    sha256 cellar: :any_skip_relocation, big_sur:       "264c05d4a09f6468c5ccda44101cc3f30450e59e33b2772990eaa1887b7aadb9"
-    sha256 cellar: :any_skip_relocation, catalina:      "ebd1ae81a15ae36093d33ded3d8066df306bf0bd1efd33d1855b248004153f0a"
-    sha256 cellar: :any_skip_relocation, mojave:        "80f804d7ac9fc91fe453be3c303561b266e39b8214d40a73f7faaadd45d47f66"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "2a6e085526f3cfe257b87273e912a147f2400fb563e784ba2e0547293893769b"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "17056f16da03e15f0fb17d0aa52d6e06542b8b4f17ccf4a060904e45ab4e9ec3"
+    sha256 cellar: :any_skip_relocation, monterey:       "fdddd44cf36c91dc6e55a5fbfa97acb40122692572c7cdffdcae642ebf1710ab"
+    sha256 cellar: :any_skip_relocation, big_sur:        "b63ef5fc2d3bdb2412cf338f320624f49026582c02fc789b5d33371a09948bf0"
+    sha256 cellar: :any_skip_relocation, catalina:       "5587929d8f98cf22a246e525abc2b3a6dc45d3b4dbad5f4651f294900a9ae80b"
   end
 
   depends_on "go" => :build

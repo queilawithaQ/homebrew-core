@@ -6,8 +6,8 @@ class Haxe < Formula
 
   stable do
     url "https://github.com/HaxeFoundation/haxe.git",
-        tag:      "4.2.2",
-        revision: "a2f4ba95400edf10195ce2a1c87c56dc0d67111b"
+        tag:      "4.2.4",
+        revision: "ab0c0548ff80fcbbbc140a381a9031af13b5782c"
 
     # Remove when campl5 dependency is bumped to 8.00 in a release
     patch do
@@ -22,23 +22,30 @@ class Haxe < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "74bc5a229f86d345f643054840ca1cbf395c9f5c937acf66f67d445ace61b715"
-    sha256 cellar: :any, big_sur:       "c7ddddb58e535f31e496ffdc78142aa55f1ae30982bbfbdd626914b91fe1bbe0"
-    sha256 cellar: :any, catalina:      "06f2c63317134f8554cf2a7b1c45f774ac341b1a8155fe4fc05b2fc444d4c398"
-    sha256 cellar: :any, mojave:        "a8eca0f220ec10a993c4208508993567c6e9e509611418d5dbd70e00570bc38d"
+    sha256 cellar: :any,                 arm64_monterey: "2a415889b0add6993fe6472bf7618654e9e98c7ffcb8420660743681a66cb843"
+    sha256 cellar: :any,                 arm64_big_sur:  "6b2d4d39cdade8750d98fb9479f9e6cde7750309c17f499dd430409a7f7e2db7"
+    sha256 cellar: :any,                 monterey:       "9f8fdc4af9d7a2e7d445c4acf9aed881ff8b00c2f18892090984b86c30714242"
+    sha256 cellar: :any,                 big_sur:        "a7eb35ca66f6df10e83325635cb7a0ec158cc9428eb7a3a1efa279181bf63566"
+    sha256 cellar: :any,                 catalina:       "d73b00f19195cebc7d5ceb4afb81a02edaf3bddd537c078fdd095eef422d7d05"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "9845b517ea9934165338a1f594e922fa94da0d78ef7a0d3ff0b1175fb0952600"
   end
 
   depends_on "cmake" => :build
   depends_on "ocaml" => :build
   depends_on "opam" => :build
   depends_on "pkg-config" => :build
-  depends_on "mbedtls"
+  depends_on "mbedtls@2"
   depends_on "neko"
   depends_on "pcre"
 
   uses_from_macos "m4" => :build
   uses_from_macos "perl" => :build
+  uses_from_macos "rsync" => :build
   uses_from_macos "unzip" => :build
+
+  on_linux do
+    depends_on "node" => :test
+  end
 
   resource "String::ShellQuote" do
     url "https://cpan.metacpan.org/authors/id/R/RO/ROSCH/String-ShellQuote-1.04.tar.gz"
@@ -67,12 +74,9 @@ class Haxe < Formula
       ENV["OPAMYES"] = "1"
       ENV["ADD_REVISION"] = "1" if build.head?
       system "opam", "init", "--no-setup", "--disable-sandboxing"
-      system "opam", "config", "exec", "--",
-             "opam", "pin", "add", "haxe", buildpath, "--no-action"
-      system "opam", "config", "exec", "--",
-             "opam", "install", "haxe", "--deps-only", "--working-dir"
-      system "opam", "config", "exec", "--",
-             "make"
+      system "opam", "exec", "--", "opam", "pin", "add", "haxe", buildpath, "--no-action"
+      system "opam", "exec", "--", "opam", "install", "haxe", "--deps-only", "--working-dir", "--no-depexts"
+      system "opam", "exec", "--", "make"
     end
 
     # Rebuild haxelib as a valid binary
@@ -108,7 +112,11 @@ class Haxe < Formula
       }
     EOS
     system "#{bin}/haxe", "-js", "out.js", "-main", "HelloWorld"
-    _, stderr, = Open3.capture3("osascript -so -lJavaScript out.js")
-    assert_match "Hello world!", stderr.strip
+
+    cmd = "osascript -so -lJavaScript out.js 2>&1"
+    on_linux do
+      cmd = "node out.js"
+    end
+    assert_equal "Hello world!", shell_output(cmd).strip
   end
 end

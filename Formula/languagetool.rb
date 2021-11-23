@@ -2,8 +2,8 @@ class Languagetool < Formula
   desc "Style and grammar checker"
   homepage "https://www.languagetool.org/"
   url "https://github.com/languagetool-org/languagetool.git",
-      tag:      "v5.3",
-      revision: "cc5c9279b225c10c383398baec2e7f20f2a850a2"
+      tag:      "v5.5",
+      revision: "5e782cc63ab86c9e6c353157dc22f6ea2477c0d7"
   license "LGPL-2.1-or-later"
   head "https://github.com/languagetool-org/languagetool.git"
 
@@ -13,9 +13,10 @@ class Languagetool < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:  "1d3e5613c6ca24afb1b9d0a75b6eed4e5257a6e0803ffc4608f0b73474a66aff"
-    sha256 cellar: :any_skip_relocation, catalina: "e89a739b4bb27bfa1973f2f4697b98d6edac3247bfa00dbbba7bac35c3e5b007"
-    sha256 cellar: :any_skip_relocation, mojave:   "5e2671b1326068e5b4b572148e4fc202cb13c1af137d266a1f796016e9845415"
+    sha256 cellar: :any_skip_relocation, big_sur:      "b4ce087e229010a40944175a2a26fc6411f48adba76ea6fbba779270dee065f4"
+    sha256 cellar: :any_skip_relocation, catalina:     "ac41ce087286dd11421a77324bbf80a43b3ada72f2e1469087982f3dc3310a75"
+    sha256 cellar: :any_skip_relocation, mojave:       "88fcbe3f245913ab116db15b38409d7c309f1a5f3f49344ae774d441f87e991f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "3cb6cc220af4bb9f7d363e3c1c2de30b7e4d3316124f383c94cfc33dac5e4319"
   end
 
   depends_on "maven" => :build
@@ -44,8 +45,9 @@ class Languagetool < Formula
 
   test do
     (testpath/"test.txt").write <<~EOS
-      Homebrew, the missing package manager for macOS.
+      Homebrew, this is an test
     EOS
-    assert_match "Homebrew", shell_output("#{bin}/languagetool -l en-US test.txt")
+    output = shell_output("#{bin}/languagetool -l en-US test.txt 2>&1")
+    assert_match(/Message: Use \Wa\W instead of \Wan\W/, output)
   end
 end

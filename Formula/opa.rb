@@ -1,16 +1,18 @@
 class Opa < Formula
   desc "Open source, general-purpose policy engine"
   homepage "https://www.openpolicyagent.org"
-  url "https://github.com/open-policy-agent/opa/archive/v0.29.4.tar.gz"
-  sha256 "f9b1926d9149aab07b19f3f558f698c96db39216b166b7a4ca45dbf3471e2f08"
+  url "https://github.com/open-policy-agent/opa/archive/v0.34.2.tar.gz"
+  sha256 "99799081fb227ef79255c04b8c49d299bfd57c277105092e406d7be3331c1581"
   license "Apache-2.0"
-  head "https://github.com/open-policy-agent/opa.git"
+  head "https://github.com/open-policy-agent/opa.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "1b0f699e0dbd5b7259ad0061909a6f2e6ae7db77f62152721238cda2c0dc8e2f"
-    sha256 cellar: :any_skip_relocation, big_sur:       "e7223cb375b1f7108325ff126341b3d4642e019468993aaaa9789916d233a19a"
-    sha256 cellar: :any_skip_relocation, catalina:      "28d1149bf4040790b7a4af3c0d647cb36a529304fa6debd502135c76d7990b2a"
-    sha256 cellar: :any_skip_relocation, mojave:        "046d4d3fe898d1decf4a7014f39721f9b09f35e59f2e747832bb32eaa61087e8"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "4877847e744dd7a7a4e8a071fbd45464ce87d28be21368240e317962542ca154"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "3e5045effe47b5abca293fce624b11a802748cc175a4e3bdb182811e5ed19ceb"
+    sha256 cellar: :any_skip_relocation, monterey:       "313e9a3b2246f5f888a9060a65ab9bd11951f22cd32a36f54adf38f6dc127bc2"
+    sha256 cellar: :any_skip_relocation, big_sur:        "e05bf0dd17a8f7695c07ee192b35c16f4272db0b6386f70326076079f290df0d"
+    sha256 cellar: :any_skip_relocation, catalina:       "670b527a76b547ccf5b3f2c7107cdb3d30a4eba8c923d17f48f2b19ec2c06d45"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "160fc8c3772b3028a071325781ec0ee236c2c7ca5e14706c45ee21d256c961a9"
   end
 
   depends_on "go" => :build

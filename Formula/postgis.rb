@@ -1,9 +1,10 @@
 class Postgis < Formula
   desc "Adds support for geographic objects to PostgreSQL"
   homepage "https://postgis.net/"
-  url "https://download.osgeo.org/postgis/source/postgis-3.1.2.tar.gz"
-  sha256 "2cdd3760176926704b4eb25ff3357543c9637dee74425a49082906857c7e0732"
+  url "https://download.osgeo.org/postgis/source/postgis-3.1.4.tar.gz"
+  sha256 "dc8e3fe8bc532e422f5d724c5a7c437f6555511716f6410d4d2db9762e1a3796"
   license "GPL-2.0-or-later"
+  revision 1
 
   livecheck do
     url "https://download.osgeo.org/postgis/source/"
@@ -11,10 +12,10 @@ class Postgis < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "d024f9c9da0d07b0dfab7f90f888798bb692cd3ba8a4aad18073f36472561d69"
-    sha256 cellar: :any, big_sur:       "a70b062b0c3d6da8b86af146d292d063ff0d042b63f84c54df2a76a3e8072c00"
-    sha256 cellar: :any, catalina:      "39124e1f7788988510215185cc04354a1b490f3fc0f24bd1e411d4fd01f23a2f"
-    sha256 cellar: :any, mojave:        "9f3543c449d002372c6c52c3b82a832b37b3157ff1691d34e929b67fd952fe37"
+    sha256 cellar: :any, arm64_big_sur: "514c752c2b48150b312e276f5955745180263c75b3f1a498c8f6e0a49a6154a3"
+    sha256 cellar: :any, big_sur:       "0531be5a6e8c0bfc00047149f45daeeb2562b8f556f9786b49f7605f91ab6c32"
+    sha256 cellar: :any, catalina:      "4bda3d7aa8a02bb24e4f13de6eb1b3eefcb7d1c57bdd622c3a5bf07f0e5350a7"
+    sha256 cellar: :any, mojave:        "577d3091a205f8ce726a6d1da06315cc770f88fc2a22945d29b9758e14d27bf8"
   end
 
   head do
@@ -82,6 +83,10 @@ class Postgis < Formula
   end
 
   test do
+    pg_version = Formula["postgresql"].version.major
+    expected = /'PostGIS built for PostgreSQL % cannot be loaded in PostgreSQL %',\s+#{pg_version}\.\d,/
+    assert_match expected, (share/"postgis/postgis.sql").read
+
     require "base64"
     (testpath/"brew.shp").write ::Base64.decode64 <<~EOS
       AAAnCgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoOgDAAALAAAAAAAAAAAAAAAA
@@ -115,7 +120,7 @@ class Postgis < Formula
       igAAABI=
     EOS
     result = shell_output("#{bin}/shp2pgsql #{testpath}/brew.shp")
-    assert_match(/Point/, result)
-    assert_match(/AddGeometryColumn/, result)
+    assert_match "Point", result
+    assert_match "AddGeometryColumn", result
   end
 end

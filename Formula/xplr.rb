@@ -1,16 +1,18 @@
 class Xplr < Formula
   desc "Hackable, minimal, fast TUI file explorer"
   homepage "https://github.com/sayanarijit/xplr"
-  url "https://github.com/sayanarijit/xplr/archive/v0.14.2.tar.gz"
-  sha256 "a51e6b43601530b79d306a9248387ad804f1b20158b2df376aa3a3d112e8de6e"
+  url "https://github.com/sayanarijit/xplr/archive/v0.16.4.tar.gz"
+  sha256 "06fb3afecfc3afe0971bf66f2ff80e293ab8b6b670fea5991c4dfc74bc7c67f4"
   license "MIT"
   head "https://github.com/sayanarijit/xplr.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "b972ee2d9494020b11ad14aaf74150f2e169070140a0df323ed862a65495de46"
-    sha256 cellar: :any_skip_relocation, big_sur:       "f97af0aa6300c7414cf06d7838ac42c06623b4b327016a7a4ea9d25329507c1b"
-    sha256 cellar: :any_skip_relocation, catalina:      "2da666107723354eb591f3ff3d4eefef204f20a6b63c6f72acc3730c2ab8a544"
-    sha256 cellar: :any_skip_relocation, mojave:        "b05509fa0da87553272d8e35419cb38a12d1057c410f7238b5745625d5794326"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "0e094711e15cc5a834485447b2d84ff63b83a011128eefd56d66cebf808687b2"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "236e42d90550c7948337589d9be17c2721211c191b9698937256e4ff72dcf0d3"
+    sha256 cellar: :any_skip_relocation, monterey:       "c93067f88895c914e6136ed316d84ea10c3045717d1188f8d97f4aaa5aaa3e47"
+    sha256 cellar: :any_skip_relocation, big_sur:        "04a52ba4c826624c9fd3ddc3d73b898bd080e5bca11763ce560584142b72a940"
+    sha256 cellar: :any_skip_relocation, catalina:       "feb6ed13d78eab9aa0edb9511b2142fe2e21ea3745f756e63163dc64929da87a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "fe1838f941d4b052aecdcf5a3a6c52ed31df28ec567b34df5b876e3e1e9ed166"
   end
 
   depends_on "rust" => :build

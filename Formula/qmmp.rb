@@ -1,62 +1,85 @@
 class Qmmp < Formula
   desc "Qt-based Multimedia Player"
   homepage "https://qmmp.ylsoftware.com/"
+  url "https://qmmp.ylsoftware.com/files/qmmp/2.0/qmmp-2.0.0.tar.bz2"
+  sha256 "c631d69c8bfcd77746bb94e2fc4cb7186d16cd29598de08d9771a45c212c6519"
   license "GPL-2.0-or-later"
-  head "https://svn.code.sf.net/p/qmmp-dev/code/branches/qmmp-1.5/"
-
-  stable do
-    url "https://downloads.sourceforge.net/project/qmmp-dev/qmmp/qmmp-1.5.0.tar.bz2"
-    sha256 "2f796bdbfeee4c1226541e746bcfea3d5b983a559081529e4c86a2c792026be7"
-
-    # Fix build without mpg123
-    # See https://sourceforge.net/p/qmmp-dev/tickets/1082/
-    # Remove in the next release
-    patch :DATA
-  end
 
   livecheck do
-    url :stable
-    regex(%r{url=.*?/qmmp[._-]v?(\d+(?:\.\d+)+)\.t}i)
+    url "https://qmmp.ylsoftware.com/downloads.php"
+    regex(/href=.*?qmmp[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
   bottle do
-    sha256 big_sur:  "9dee25c49a89bedc44b8a45cce9c1eee237f0d04b2765a930e2482baed663f3c"
-    sha256 catalina: "3a59c33536865917e8426e7076d6e33aa465add0f0d89a60edb1dded6ef475ab"
-    sha256 mojave:   "7ff2b3f1d2b6adb30d9a8051e1c19e822eaac3643483d16150a15116d0179879"
+    sha256 big_sur:  "06d9a6cd5339d519d2a01549496c679a40e70cff241c2da8ebe728a5a29a5c1c"
+    sha256 catalina: "ab9a6e9d2613a9f27c706c969d2053f917c67e8137890ba7a370344c1c60035e"
+    sha256 mojave:   "8bdc18b507fc1336db6cfd1d430038467b7244f6c901b52ffe765f9de7338c90"
   end
 
-  depends_on "cmake" => :build
+  depends_on "cmake"      => :build
+  depends_on "pkg-config" => :build
+
+  # TODO: on linux: pipewire
   depends_on "faad2"
   depends_on "ffmpeg"
   depends_on "flac"
+  depends_on "game-music-emu"
+  depends_on "jack"
+  depends_on "libarchive"
   depends_on "libbs2b"
+  depends_on "libcddb"
+  depends_on "libcdio"
   depends_on "libmms"
+  depends_on "libmodplug"
   depends_on "libogg"
   depends_on "libsamplerate"
+  depends_on "libshout"
   depends_on "libsndfile"
   depends_on "libsoxr"
   depends_on "libvorbis"
+  depends_on "libxcb"
+  depends_on "libxmp"
   depends_on "mad"
   depends_on "mplayer"
   depends_on "musepack"
   depends_on "opus"
   depends_on "opusfile"
-  depends_on "qt@5"
+  depends_on "projectm"
+  depends_on "pulseaudio"
+  depends_on "qt"
   depends_on "taglib"
+  depends_on "wavpack"
+  depends_on "wildmidi"
+
+  uses_from_macos "curl"
+
+  resource "qmmp-plugin-pack" do
+    url "https://qmmp.ylsoftware.com/files/qmmp-plugin-pack/2.0/qmmp-plugin-pack-2.0.0.tar.bz2"
+    sha256 "dd10362e42804e604d216a79e9a8b1d4851be0da72d7c6ee0ad9ddb1166f69dc"
+  end
 
   def install
-    system "cmake", "./", "-USE_SKINNED", "-USE_ENCA", "-USE_QMMP_DIALOG", *std_cmake_args
-    system "make", "install"
+    cmake_args = std_cmake_args + %W[
+      -DCMAKE_STAGING_PREFIX=#{prefix}
+      -DUSE_SKINNED=ON
+      -DUSE_ENCA=ON
+      -DUSE_QMMP_DIALOG=ON
+      -DCMAKE_EXE_LINKER_FLAGS=-Wl,-undefined,dynamic_lookup
+      -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-undefined,dynamic_lookup
+      -DCMAKE_MODULE_LINKER_FLAGS=-Wl,-undefined,dynamic_lookup
 
-    # fix linkage
-    cd (lib.to_s) do
-      Dir["*.dylib", "qmmp/*/*.so"].select { |f| File.ftype(f) == "file" }.each do |f|
-        MachO::Tools.dylibs(f).select { |d| d.start_with?("/tmp") }.each do |d|
-          bname = File.dirname(d)
-          d_new = d.sub(bname, opt_lib.to_s)
-          MachO::Tools.change_install_name(f, d, d_new)
-        end
-      end
+      -S .
+    ]
+
+    system "cmake", *cmake_args
+    system "cmake", "--build", "."
+    system "cmake", "--install", "."
+
+    ENV.append_path "PKG_CONFIG_PATH", lib/"pkgconfig"
+    resource("qmmp-plugin-pack").stage do
+      system "cmake", ".", *std_cmake_args
+      system "cmake", "--build", "."
+      system "cmake", "--install", "."
     end
   end
 
@@ -64,18 +87,3 @@ class Qmmp < Formula
     system bin/"qmmp", "--version"
   end
 end
-
-__END__
---- a/src/plugins/Input/mpeg/decodermpegfactory.cpp
-+++ b/src/plugins/Input/mpeg/decodermpegfactory.cpp
-@@ -204,7 +204,9 @@
-         d = new DecoderMAD(crc, input);
-     }
- #elif defined(WITH_MAD)
--    d = new DecoderMAD(input);
-+    QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
-+    bool crc = settings.value("MPEG/enable_crc", false).toBool();
-+    d = new DecoderMAD(crc, input);
- #elif defined(WITH_MPG123)
-     d = new DecoderMPG123(input);
- #endif

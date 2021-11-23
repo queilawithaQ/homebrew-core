@@ -1,19 +1,20 @@
 class Pgbouncer < Formula
   desc "Lightweight connection pooler for PostgreSQL"
   homepage "https://www.pgbouncer.org/"
-  url "https://www.pgbouncer.org/downloads/files/1.15.0/pgbouncer-1.15.0.tar.gz"
-  sha256 "e05a9e158aa6256f60aacbcd9125d3109155c1001a1d1c15d33a37c685d31380"
+  url "https://www.pgbouncer.org/downloads/files/1.16.1/pgbouncer-1.16.1.tar.gz"
+  sha256 "087477e9e4766d032b04b7b006c0c8d64160a54141a7bfc2c6e5ae7ae11bf7fc"
 
   livecheck do
     url "https://github.com/pgbouncer/pgbouncer"
   end
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any, arm64_big_sur: "8107249d240e1a53f6ae84587c08129acf5c294c4022f92d5f1c731ea6956ea3"
-    sha256 cellar: :any, big_sur:       "09f21ff3e7b2c125d793da2ba64110392227650ae8157ef987f041959af8fe7c"
-    sha256 cellar: :any, catalina:      "fad76f523bac43aaf7859fa0085ab7c6582f9d4aeb682e677db8f5acd9c4159a"
-    sha256 cellar: :any, mojave:        "4187ceded551fad5801a26f790e61dd7d654acc675de73a1b4bf2858920d0734"
+    sha256 cellar: :any,                 arm64_monterey: "6265ece64ed901a2646b09af720353630e645342a785ae9561c25d65fc11892f"
+    sha256 cellar: :any,                 arm64_big_sur:  "bc48b321d3f1f2e4b8a4c6c9665c55945d83ae3975287888460e5e6eb5d5b71f"
+    sha256 cellar: :any,                 monterey:       "acf061f094b6d05ca5e2224e114dd50f75dc921bfb43c21a69aa680b419c919c"
+    sha256 cellar: :any,                 big_sur:        "63ed65039f2fcd7884a7b163c92747837adb19c2f680a449e1a026d0934bec1a"
+    sha256 cellar: :any,                 catalina:       "b929b536892a66052c5da82d02c6fe56dbfd5df79317e0b8508fbca24ef781e7"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "b3cc2d2fa16d3a53f452eb38e82d78159a42ae5b205147e47f9f090653e18199"
   end
 
   depends_on "pkg-config" => :build
@@ -49,31 +50,10 @@ class Pgbouncer < Formula
     EOS
   end
 
-  plist_options manual: "pgbouncer -q #{HOMEBREW_PREFIX}/etc/pgbouncer.ini"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-        <key>KeepAlive</key>
-        <true/>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_bin}/pgbouncer</string>
-          <string>-q</string>
-          <string>#{etc}/pgbouncer.ini</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>WorkingDirectory</key>
-        <string>#{HOMEBREW_PREFIX}</string>
-      </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"pgbouncer", "-q", etc/"pgbouncer.ini"]
+    keep_alive true
+    working_dir HOMEBREW_PREFIX
   end
 
   test do

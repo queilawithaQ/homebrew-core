@@ -2,16 +2,18 @@ class GolangciLint < Formula
   desc "Fast linters runner for Go"
   homepage "https://golangci-lint.run/"
   url "https://github.com/golangci/golangci-lint.git",
-      tag:      "v1.41.0",
-      revision: "eed344f619dea041f87bcbaf200cdba1af2c859e"
+      tag:      "v1.43.0",
+      revision: "861262b71f42542304a28afe0b396e788e6e4638"
   license "GPL-3.0-only"
   head "https://github.com/golangci/golangci-lint.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "9407cdd9a41caf6bed5ef4674d14825ac0e87410cabc34a7c5b19020317995f4"
-    sha256 cellar: :any_skip_relocation, big_sur:       "c185c2cb32fc1ef8a09da2ad0df40c87f4b510de38024b1a36b7d5f4d6ea69b8"
-    sha256 cellar: :any_skip_relocation, catalina:      "a319374ef532e97a4e1234c0e5e32a18068d2d27589e12cdd63cb4a512e1d441"
-    sha256 cellar: :any_skip_relocation, mojave:        "cc680acd695547a5a00ff6c201ffc374196a61a080568eadd821d97d00496bb0"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "a935b9b430bc899543fe6dd374c7e5624af57fda3e49098c61f9882b62eb641b"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "c090e8d091cb302aea16871dfa409256a9e0d27c58040c2de9e91940a531495b"
+    sha256 cellar: :any_skip_relocation, monterey:       "6a980f7ea6b0e0b8f975e23851971d53608e652d82777d02b49a6835642ea0c4"
+    sha256 cellar: :any_skip_relocation, big_sur:        "a1ba5745eecd393c4cc48b67beef04be690ff05e12b47a6973d5342452c992d3"
+    sha256 cellar: :any_skip_relocation, catalina:       "e0209be1eb5db379cec6e45658fc3f0a30211c025d99ee50bfa41f5a165522a1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "ad31ae03a4266eaf19e60777d93bf34f8e38728c2a681c6cea78305acfc093fb"
   end
 
   depends_on "go"
@@ -21,10 +23,10 @@ class GolangciLint < Formula
       -s -w
       -X main.version=#{version}
       -X main.commit=#{Utils.git_short_head(length: 7)}
-      -X main.date=#{Time.now.utc.rfc3339}
+      -X main.date=#{time.rfc3339}
     ].join(" ")
 
-    system "go", "build", *std_go_args, "-ldflags", ldflags, "./cmd/golangci-lint"
+    system "go", "build", *std_go_args(ldflags: ldflags), "./cmd/golangci-lint"
 
     output = Utils.safe_popen_read("#{bin}/golangci-lint", "completion", "bash")
     (bash_completion/"golangci-lint").write output

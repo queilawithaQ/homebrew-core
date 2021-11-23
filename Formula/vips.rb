@@ -1,8 +1,8 @@
 class Vips < Formula
   desc "Image processing library"
   homepage "https://github.com/libvips/libvips"
-  url "https://github.com/libvips/libvips/releases/download/v8.11.0/vips-8.11.0.tar.gz"
-  sha256 "6351dfb99836274a0d74d8054506bf6dc9a8c38bacf208a9c566889dd1ebba0b"
+  url "https://github.com/libvips/libvips/releases/download/v8.12.0/vips-8.12.0.tar.gz"
+  sha256 "8abe9364990b64a95cd4cbe36614b1f8b5d5f0b480e6118128f83ffc2a9ae19d"
   license "LGPL-2.1-or-later"
 
   livecheck do
@@ -11,20 +11,20 @@ class Vips < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "f02e86850a6e0a75ac3b2b9f223094e9d21fa98f861b19c86b0e2bb1350e2080"
-    sha256 big_sur:       "97b8d2090bbff8e80b6e685e50c2281672d7dd34846842cbf6d07bd5247f3010"
-    sha256 catalina:      "21453fde3d085df134c2a3e1a0e2d03ee1926b338a12ba4aee94323de63cfa56"
-    sha256 mojave:        "cbc16f1486fd3d7aa4b91d9d39eb3ef8b9320f989e529ad1301db679cf0a478c"
+    sha256 arm64_big_sur: "9c206cad02ae934f216167478d5581668eb8cc4d8d8686d87472fe20134db275"
+    sha256 big_sur:       "2d91b5d2d16e652a53d9e899912e53a4a8cbdce1a65f7ec985d7a099da4b36f2"
+    sha256 catalina:      "47f82a66812ae720d142405c5f464104c757cfcd246f5550a19f2af649357dfb"
   end
 
   depends_on "pkg-config" => :build
   depends_on "cfitsio"
+  depends_on "cgif"
   depends_on "fftw"
   depends_on "fontconfig"
   depends_on "gettext"
-  depends_on "giflib"
   depends_on "glib"
   depends_on "imagemagick"
+  depends_on "jpeg-xl"
   depends_on "libexif"
   depends_on "libgsf"
   depends_on "libheif"
@@ -56,7 +56,6 @@ class Vips < Formula
     args = %W[
       --disable-dependency-tracking
       --prefix=#{prefix}
-      --with-magick
     ]
 
     system "./configure", *args

@@ -3,22 +3,31 @@ require "language/node"
 class Apidoc < Formula
   desc "RESTful web API Documentation Generator"
   homepage "https://apidocjs.com"
-  url "https://github.com/apidoc/apidoc/archive/0.28.1.tar.gz"
-  sha256 "f4ed7813ce5e365c9457dfa9414c7750328965963cc9f1a9ef66baad66071677"
+  url "https://github.com/apidoc/apidoc/archive/0.50.2.tar.gz"
+  sha256 "58cfd5bfcc93727d978b1332853c3b0f752aa8e78d29f96e21df87aabfcb95c6"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "691c510e0dacb3e2689f8daa34abe79f7b37d35100bebe354ccdd888cab2a406"
-    sha256 cellar: :any_skip_relocation, big_sur:       "1e192f37c90cf6fcae84119e0e356fa84435274d3bda3fee85b9d24a8f3bf1cd"
-    sha256 cellar: :any_skip_relocation, catalina:      "1e192f37c90cf6fcae84119e0e356fa84435274d3bda3fee85b9d24a8f3bf1cd"
-    sha256 cellar: :any_skip_relocation, mojave:        "1e192f37c90cf6fcae84119e0e356fa84435274d3bda3fee85b9d24a8f3bf1cd"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "da6be743a5bbc3b9d3dd36fc5e8d12eb390dfe5b9149d15d473c52d5925d9f84"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "da6be743a5bbc3b9d3dd36fc5e8d12eb390dfe5b9149d15d473c52d5925d9f84"
+    sha256 cellar: :any_skip_relocation, monterey:       "5976390df06873c40902586ba3895e0ac2c6536f158ad90785e93947f1454716"
+    sha256 cellar: :any_skip_relocation, big_sur:        "5976390df06873c40902586ba3895e0ac2c6536f158ad90785e93947f1454716"
+    sha256 cellar: :any_skip_relocation, catalina:       "5976390df06873c40902586ba3895e0ac2c6536f158ad90785e93947f1454716"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "014a3a1d49ba7d5a7f4fe3d28ed5b6de592e1428bc5b608ca87c0e44ed842318"
   end
 
   depends_on "node"
 
+  on_macos do
+    depends_on "macos-term-size"
+  end
+
   def install
     system "npm", "install", *Language::Node.std_npm_install_args(libexec)
     bin.install_symlink Dir["#{libexec}/bin/*"]
+
+    # Extract native slices from universal binaries
+    deuniversalize_machos
   end
 
   test do
@@ -37,14 +46,12 @@ class Apidoc < Formula
     EOS
     (testpath/"apidoc.json").write <<~EOS
       {
-        "name": "example",
+        "name": "brew test example",
         "version": "#{version}",
         "description": "A basic apiDoc example"
       }
     EOS
-    system bin/"apidoc", "-o", "out"
-    api_data_json = (testpath/"out/api_data.json").read
-    api_data = JSON.parse api_data_json
-    assert_equal api_data.first["version"], version
+    system bin/"apidoc", "-i", ".", "-o", "out"
+    assert_predicate testpath/"out/assets/main.bundle.js", :exist?
   end
 end

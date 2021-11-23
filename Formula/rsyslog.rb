@@ -1,20 +1,22 @@
 class Rsyslog < Formula
   desc "Enhanced, multi-threaded syslogd"
   homepage "https://www.rsyslog.com/"
-  url "https://www.rsyslog.com/files/download/rsyslog/rsyslog-8.2104.0.tar.gz"
-  sha256 "710981c3c34f88d5d1fb55ecfc042aecad8af69414b2b1602b304f4dedbf9f43"
+  url "https://www.rsyslog.com/files/download/rsyslog/rsyslog-8.2110.0.tar.gz"
+  sha256 "3f904ec137ca6412e8273f7896d962ecb589f7d0c589bdf16b1709ec27e24f31"
   license all_of: ["Apache-2.0", "GPL-3.0-or-later", "LGPL-3.0-or-later"]
 
   livecheck do
-    url :homepage
-    regex(/Current Version.+?v?(\d+(?:\.\d+)+)/im)
+    url "https://www.rsyslog.com/downloads/download-v8-stable/"
+    regex(/href=.*?rsyslog[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
   bottle do
-    sha256 arm64_big_sur: "13b1e937c9c9c3cfeba0b0e57ea39587d23b6162dc19214f9e3913b70cf03af7"
-    sha256 big_sur:       "dd86787cf71a618813d16d0aacf866d8402fdada714050f6f13c6be55911213b"
-    sha256 catalina:      "d3f76c216277d141f713ca6ebe531c82ee58d3573b91a91525c8a74283f6befa"
-    sha256 mojave:        "08c4305668014a2861735ba8d5e468570af66746748a7546876b921c24e0016b"
+    sha256 arm64_monterey: "48e89ef9252a064de42846814a2c40fd195494af3aa74f9371d127bb0700bed5"
+    sha256 arm64_big_sur:  "29a457decc396b03135fff75be382f5d7457b1323998c2a859ae2cd6d316eaf1"
+    sha256 monterey:       "ae95e416383a788583587efb27fcb97e7fd43cd36fe6e27b8b5604997aa66662"
+    sha256 big_sur:        "6aa8ba08c656a824f68ca02d720e1410527ea75f8b3656aa3df11518aa968061"
+    sha256 catalina:       "9cad25d665e05db565854957bd9bb18ff430443d6523220d7b68f10a05a907ad"
+    sha256 x86_64_linux:   "a3e183feeb6580fe4daafccd7db73735d95195dcdf9638866aa4c80288c2d4b0"
   end
 
   depends_on "pkg-config" => :build
@@ -38,19 +40,22 @@ class Rsyslog < Formula
 
     ENV.prepend_path "PKG_CONFIG_PATH", libexec/"lib/pkgconfig"
 
-    args = %W[
-      --prefix=#{prefix}
-      --disable-dependency-tracking
-      --enable-imfile
-      --enable-usertools
-      --enable-diagtools
-      --disable-uuid
-      --disable-libgcrypt
-    ]
-
-    system "./configure", *args
+    system "./configure", "--prefix=#{prefix}",
+                          "--disable-dependency-tracking",
+                          "--enable-imfile",
+                          "--enable-usertools",
+                          "--enable-diagtools",
+                          "--disable-uuid",
+                          "--disable-libgcrypt"
     system "make"
     system "make", "install"
+
+    (etc/"rsyslog.conf").write <<~EOS
+      # minimal config file for receiving logs over UDP port 10514
+      $ModLoad imudp
+      $UDPServerRun 10514
+      *.* /usr/local/var/log/rsyslog-remote.log
+    EOS
   end
 
   def post_install
@@ -59,31 +64,15 @@ class Rsyslog < Formula
 
   plist_options manual: "rsyslogd -f #{HOMEBREW_PREFIX}/etc/rsyslog.conf -i #{HOMEBREW_PREFIX}/var/run/rsyslogd.pid"
 
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>KeepAlive</key>
-          <true/>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{opt_sbin}/rsyslogd</string>
-            <string>-n</string>
-            <string>-f</string>
-            <string>#{etc}/rsyslog.conf</string>
-            <string>-i</string>
-            <string>#{var}/run/rsyslogd.pid</string>
-          </array>
-          <key>StandardErrorPath</key>
-          <string>#{var}/log/rsyslogd.log</string>
-          <key>StandardOutPath</key>
-          <string>#{var}/log/rsyslogd.log</string>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_sbin/"rsyslogd", "-n", "-f", etc/"rsyslog.conf", "-i", var/"run/rsyslogd.pid"]
+    keep_alive true
+    error_log_path var/"log/rsyslogd.log"
+    log_path var/"log/rsyslogd.log"
+  end
+
+  test do
+    result = shell_output("#{opt_sbin}/rsyslogd -f #{etc}/rsyslog.conf -N 1 2>&1")
+    assert_match "End of config validation run", result
   end
 end

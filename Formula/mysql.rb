@@ -1,10 +1,9 @@
 class Mysql < Formula
   desc "Open source relational database management system"
   homepage "https://dev.mysql.com/doc/refman/8.0/en/"
-  url "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-boost-8.0.25.tar.gz"
-  sha256 "93c5f57cbd69573a8d9798725edec52e92830f70c398a1afaaea2227db331728"
+  url "https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-boost-8.0.27.tar.gz"
+  sha256 "74b5bc6ff88fe225560174a24b7d5ff139f4c17271c43000dbcf3dcc9507b3f9"
   license "GPL-2.0-only" => { with: "Universal-FOSS-exception-1.0" }
-  revision 1
 
   livecheck do
     url "https://dev.mysql.com/downloads/mysql/?tpl=files&os=src"
@@ -12,10 +11,11 @@ class Mysql < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "2e4b10e541bb3bdd076139c13bf6df3f729280c795552dd0d2b478de59631d1a"
-    sha256 big_sur:       "db388d333de4224dcc9ca54917069c75805801f00bc1355c9dcfe5bf518c4045"
-    sha256 catalina:      "a20b72150ec1de16c23f749c4dfa65785d5d271b2597d9555f3f355848d02007"
-    sha256 mojave:        "12ec5589ad0cfa9bae8922d10d72671eca10eef0785397f9ec2a92eb9b6a0a9d"
+    sha256 arm64_big_sur: "193e3eed782b0200217dee216d54be860a55e93edd89f5b3ef4686a56c32ed56"
+    sha256 big_sur:       "c9e0edee036bc06a5b8c73f8e483cf9731401253058a60ff230667e5af866328"
+    sha256 catalina:      "e7bb052589e7bcf05ba647190be0d38be8c9f2be83936c19f6365bfd0b21bbb9"
+    sha256 mojave:        "66bb243acf7532b7c16cde86419390872756d71d68beee2089095585fd268229"
+    sha256 x86_64_linux:  "148a853686c00e9c32b41c2b8e6ddfdd7498c63894c76e343033bd682675c70f"
   end
 
   depends_on "cmake" => :build
@@ -34,17 +34,25 @@ class Mysql < Formula
 
   on_linux do
     depends_on "patchelf" => :build
+    depends_on "gcc" # for C++17
+
+    ignore_missing_libraries "metadata_cache.so"
+
+    # Disable ABI checking
+    patch :DATA
   end
 
   conflicts_with "mariadb", "percona-server",
     because: "mysql, mariadb, and percona install the same binaries"
+
+  fails_with gcc: "5"
 
   def datadir
     var/"mysql"
   end
 
   def install
-    on_linux do
+    if OS.linux?
       # Fix libmysqlgcs.a(gcs_logging.cc.o): relocation R_X86_64_32
       # against `_ZN17Gcs_debug_options12m_debug_noneB5cxx11E' can not be used when making
       # a shared object; recompile with -fPIC
@@ -153,30 +161,10 @@ class Mysql < Formula
     s
   end
 
-  plist_options manual: "mysql.server start"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-        <key>KeepAlive</key>
-        <true/>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_bin}/mysqld_safe</string>
-          <string>--datadir=#{datadir}</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>WorkingDirectory</key>
-        <string>#{datadir}</string>
-      </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"mysqld_safe", "--datadir=#{var}/mysql"]
+    keep_alive true
+    working_dir var/"mysql"
   end
 
   test do
@@ -195,3 +183,18 @@ class Mysql < Formula
     system "#{bin}/mysqladmin", "--port=#{port}", "--user=root", "--password=", "shutdown"
   end
 end
+
+__END__
+diff --git a/cmake/abi_check.cmake b/cmake/abi_check.cmake
+index 0e1886bb..87b7aff7 100644
+--- a/cmake/abi_check.cmake
++++ b/cmake/abi_check.cmake
+@@ -30,7 +30,7 @@
+ # (Solaris) sed or diff might act differently from GNU, so we run only 
+ # on systems we can trust.
+ IF(LINUX)
+-  SET(RUN_ABI_CHECK 1)
++  SET(RUN_ABI_CHECK 0)
+ ELSE()
+   SET(RUN_ABI_CHECK 0)
+ ENDIF()

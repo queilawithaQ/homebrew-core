@@ -1,16 +1,19 @@
 class Nnn < Formula
   desc "Tiny, lightning fast, feature-packed file manager"
   homepage "https://github.com/jarun/nnn"
-  url "https://github.com/jarun/nnn/archive/v4.1.1.tar.gz"
-  sha256 "f0e02668da6324c12c39db35fe5c26bd45f3e02e5684a351b8ce8a357419ceba"
+  url "https://github.com/jarun/nnn/archive/v4.3.tar.gz"
+  sha256 "b6df8e262e5613dd192bac610a6da711306627d56573f1a770a173ef078953bb"
   license "BSD-2-Clause"
-  head "https://github.com/jarun/nnn.git"
+  head "https://github.com/jarun/nnn.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "cb56c6154458ccdf3ae64561deceb4ed9bbcad6a4f3780ea3ced54c338e55208"
-    sha256 cellar: :any, big_sur:       "aa36cd7119f453030b9f22491161591d2829d84323b2c0b48a6943f43c696c1c"
-    sha256 cellar: :any, catalina:      "74b507cd2385f85cabaabb1f0bc552908266e6fe1b69053c38920ed173a8b86f"
-    sha256 cellar: :any, mojave:        "b9a20a6da7f9dcbaaa7605602df38df2d826d1118e01b9bdba40eccfa628900c"
+    sha256 cellar: :any,                 arm64_monterey: "012dfd0469540bf5683cad24b8a5146d6966faf95e965be5400e61dd9de03a6a"
+    sha256 cellar: :any,                 arm64_big_sur:  "6d072778621d10a72e476f50c8a24f376d2959dae78e186bb3c11d69f1a7a7f7"
+    sha256 cellar: :any,                 monterey:       "7e598373bd481a32a6ef6869cba7cb27568cd448a5689a49e062f0776cbb9907"
+    sha256 cellar: :any,                 big_sur:        "9f99a0bd00d1f224d7a357941e419fadbf6385f6316505108e7592a1b76403fc"
+    sha256 cellar: :any,                 catalina:       "63cd86d85ab2464ca084fe671784cf8228b65b6fb6026375845940e8d1827f77"
+    sha256 cellar: :any,                 mojave:         "f1aa16087e160457a96cf549135b0f9c4fe875a6a888064fa8bd92cda5c1b6f0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "8b431bf5a86d696c6784e9faa375c249d5456bbf5c101606e949a840ed7b6471"
   end
 
   depends_on "gnu-sed"
@@ -37,11 +40,9 @@ class Nnn < Formula
     require "pty"
 
     (testpath/"testdir").mkdir
-    cd testpath/"testdir" do
-      PTY.spawn(bin/"nnn") do |r, w, _pid|
-        w.write "q"
-        assert_match "~/testdir", r.read
-      end
+    PTY.spawn(bin/"nnn", testpath/"testdir") do |r, w, _pid|
+      w.write "q"
+      assert_match "~/testdir", r.read
     end
   end
 end

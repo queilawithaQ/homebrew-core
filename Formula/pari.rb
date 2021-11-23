@@ -1,8 +1,8 @@
 class Pari < Formula
   desc "Computer algebra system designed for fast computations in number theory"
   homepage "https://pari.math.u-bordeaux.fr/"
-  url "https://pari.math.u-bordeaux.fr/pub/pari/unix/pari-2.13.1.tar.gz"
-  sha256 "81ecf7d70ccdaae230165cff627c9ce2ec297b8f22f9f40742279d85f86dfcb1"
+  url "https://pari.math.u-bordeaux.fr/pub/pari/unix/pari-2.13.3.tar.gz"
+  sha256 "ccba7f1606c6854f1443637bb57ad0958d41c7f4753f8ae8459f1d64c267a1ca"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -11,10 +11,12 @@ class Pari < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "bce28f4a6d89eccbed6c8a2a314c1eda9e600eaf924d56c45fe3e219974d59f6"
-    sha256 big_sur:       "683db9ffc99f148aa417d3679b8a2f4fa1e9c35ea0e9d657eac258a3b3ddcba7"
-    sha256 catalina:      "40b9dcb1426e44c03657c10af167be08c1ff1d1e1cbfe99d5c3ac724801b3e2e"
-    sha256 mojave:        "d7f12a7d997767b7eca8e93a29b5e82f5bb00a7ffd4c4b341968e1442b563872"
+    sha256 cellar: :any,                 arm64_monterey: "4953a24a3d70dd39a57c987aef382c0e150bb185ce35c25c4410cb8685a8e059"
+    sha256 cellar: :any,                 arm64_big_sur:  "96c77a5772be062e5f819af0526ad34c9060de50d8017b2ca0946e883f6e0c56"
+    sha256 cellar: :any,                 monterey:       "ebee4731dc1f7a83c27e7d15af51bcf130330f5ebc59726cf632a29f65b7fff6"
+    sha256 cellar: :any,                 big_sur:        "1425bcb4a39b7ce00dcd17ff0adf6180f51efe71b320bb2e8c0d082a45945cb3"
+    sha256 cellar: :any,                 catalina:       "c107ebaa7fbadf071954735b41ca3f56764db05b80da3d7bef4277a3fb517fc4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "5b505207b83024ef3997c9ed4fe380a5d2e0c98b2b97db619821d82403fb8b91"
   end
 
   depends_on "gmp"
@@ -26,13 +28,20 @@ class Pari < Formula
     system "./Configure", "--prefix=#{prefix}",
                           "--with-gmp=#{gmp}",
                           "--with-readline=#{readline}",
-                          "--graphic=ps"
+                          "--graphic=ps",
+                          "--mt=pthread"
+
+    # Explicitly set datadir to HOMEBREW_PREFIX/share/pari to allow for external packages to be found
+    # We do this here rather than in configure because we still want the actual files to be installed to the Cellar
+    objdir = Utils.safe_popen_read("./config/objdir").chomp
+    inreplace %W[#{objdir}/pari.cfg #{objdir}/paricfg.h], pkgshare, "#{HOMEBREW_PREFIX}/share/pari"
+
     # make needs to be done in two steps
     system "make", "all"
     system "make", "install"
 
     # Avoid references to Homebrew shims
-    inreplace lib/"pari/pari.cfg", HOMEBREW_LIBRARY/"Homebrew/shims/mac/super/", "/usr/bin/"
+    inreplace lib/"pari/pari.cfg", Superenv.shims_path, "/usr/bin"
   end
 
   def caveats

@@ -1,17 +1,19 @@
 class Libpulsar < Formula
   desc "Apache Pulsar C++ library"
   homepage "https://pulsar.apache.org/"
-  url "https://www.apache.org/dyn/closer.lua?path=pulsar/pulsar-2.7.2/apache-pulsar-2.7.2-src.tar.gz"
-  mirror "https://archive.apache.org/dist/pulsar/pulsar-2.7.2/apache-pulsar-2.7.2-src.tar.gz"
-  sha256 "2e125df2ccf374e237676fb036ca00cb4d076d1683b86c672161888f5a5ef32f"
+  url "https://www.apache.org/dyn/closer.lua?path=pulsar/pulsar-2.8.1/apache-pulsar-2.8.1-src.tar.gz"
+  mirror "https://archive.apache.org/dist/pulsar/pulsar-2.8.1/apache-pulsar-2.8.1-src.tar.gz"
+  sha256 "8e30d0414f840477cad8fc27a09904523f3ff039f7c8570feb6acca047661710"
   license "Apache-2.0"
-  revision 2
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "2e3dffc6ac480c7acfd625c6e3a382c7316f6bbd467ac1c3d12bd3a4a7ddf22b"
-    sha256 cellar: :any, big_sur:       "f5f55678e946fe389898923eba165006ca93e7574518cc52270d1d89960d858a"
-    sha256 cellar: :any, catalina:      "0600145b0af61c4893aa54ad41ca3d6b92ee7fd6906c202f6b9ec405ef4dadcc"
-    sha256 cellar: :any, mojave:        "bc82229be13f8025dfbb39edee256d0771953fea4cd12430ba10b12cbcdc7a4a"
+    sha256 cellar: :any,                 arm64_monterey: "d66af4667d00250e795e34577700b927b3fbeb73d0ac629d466305333ae2b631"
+    sha256 cellar: :any,                 arm64_big_sur:  "f44531771bffaa687d9061132bd83acafd1288cd82b526028366c88ba52a027a"
+    sha256 cellar: :any,                 monterey:       "4b8fca76b83c8d16b07c7d7d2cf3585ecc87f6ec3f317e33b9feda96eaed9759"
+    sha256 cellar: :any,                 big_sur:        "3dd3fd3c00956ed62b9b2fbb91795889fb06b264e1df331fcb58a445cfa0784d"
+    sha256 cellar: :any,                 catalina:       "8538b133cd33c189390d1bcdcaa8d3c41dbac40631697f168f74c415929edf8a"
+    sha256 cellar: :any,                 mojave:         "743de257b0996bcf769a74054fcbee90c24a2a3f77584c34960ba3ffdfa153f2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "8acd3ad68d151b0e698b811d60db8e6eb00d7465c56fe9ac913546c45196dbeb"
   end
 
   depends_on "cmake" => :build

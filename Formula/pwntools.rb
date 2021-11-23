@@ -3,16 +3,19 @@ class Pwntools < Formula
 
   desc "CTF framework used by Gallopsled in every CTF"
   homepage "https://github.com/Gallopsled/pwntools"
-  url "https://files.pythonhosted.org/packages/25/08/d1bb1b92916d012d9597ca13239015bfee20543f625bd2a7280250f55bb7/pwntools-4.5.1.tar.gz"
-  sha256 "97f945aed7ffa9d3e87f8759df83a5eac6dc2112907f35d0aee66a9bf62fd8eb"
+  url "https://files.pythonhosted.org/packages/db/b8/fe3ea322af7401959b33137e61da32bff45d328e5a495bf35c84748a5a75/pwntools-4.7.0.tar.gz"
+  sha256 "74388e28675e7a1929f763df5a1cec6a3d589641049b6cf476bb1c56ec50a88e"
   license "MIT"
-  head "https://github.com/Gallopsled/pwntools.git"
+  head "https://github.com/Gallopsled/pwntools.git", branch: "dev"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "521ebdecb3107b6687b54da241d1ec92e08d909c757d4046c0aa1f6c8f2e6417"
-    sha256 cellar: :any, big_sur:       "b2c10bd2af30d48ada54099cb27524ec77da3b122aa3baba4d97ddc00680143d"
-    sha256 cellar: :any, catalina:      "a2c9a861432ea7d66ceec1cc8a76755c5780c6eb38b83c78ddf92dbe8f363382"
-    sha256 cellar: :any, mojave:        "a6679f44ebd76dc83109dc53e015e133d209c03d69fde22bd51a73ef937f58c1"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_monterey: "abf134f61d284e22cd44501aabccfa7baa5c2adf5faa6d3aaa48fb10cba15919"
+    sha256 cellar: :any,                 arm64_big_sur:  "5cc358992d6177a428a43659fc69cbd397bd603659d846239f6024c133b0761a"
+    sha256 cellar: :any,                 monterey:       "74ce5219ab986e793cb3b9dba4f0f0f666fd517218a80f4565f9e750f822813d"
+    sha256 cellar: :any,                 big_sur:        "966c6739490a9387afefa0d47ebcd6aa8c6ccd884c285c4a4f167880bbafe339"
+    sha256 cellar: :any,                 catalina:       "882c6972ea268aff52a7d04f558bd5fbae620deed690097c7cf3955ac591560c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "8e77978ce54b7e18c9a7eed5e4eb099203a3f0f5caa62fcf572a9353c0cd22fe"
   end
 
   depends_on "rust" => :build
@@ -52,13 +55,13 @@ class Pwntools < Formula
   end
 
   resource "cffi" do
-    url "https://files.pythonhosted.org/packages/a8/20/025f59f929bbcaa579704f443a438135918484fffaacfaddba776b374563/cffi-1.14.5.tar.gz"
-    sha256 "fd78e5fee591709f32ef6edb9a015b4aa1a5022598e36227500c8f4e02328d9c"
+    url "https://files.pythonhosted.org/packages/2e/92/87bb61538d7e60da8a7ec247dc048f7671afe17016cd0008b3b710012804/cffi-1.14.6.tar.gz"
+    sha256 "c9a875ce9d7fe32887784274dd533c57909b7b1dcadcc128a2ac21331a9765dd"
   end
 
-  resource "chardet" do
-    url "https://files.pythonhosted.org/packages/ee/2d/9cdc2b527e127b4c9db64b86647d567985940ac3698eeabc7ffaccb4ea61/chardet-4.0.0.tar.gz"
-    sha256 "0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa"
+  resource "charset-normalizer" do
+    url "https://files.pythonhosted.org/packages/45/ab/74c77cf4590dfc846c101aee617f390ae679500630dd806b07f1a8e27b7b/charset-normalizer-2.0.1.tar.gz"
+    sha256 "ad0da505736fc7e716a8da15bf19a985db21ac6415c26b34d2fafd3beb3d927e"
   end
 
   resource "colored-traceback" do
@@ -72,8 +75,8 @@ class Pwntools < Formula
   end
 
   resource "idna" do
-    url "https://files.pythonhosted.org/packages/ea/b7/e0e3c1c467636186c39925827be42f16fee389dc404ac29e930e9136be70/idna-2.10.tar.gz"
-    sha256 "b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"
+    url "https://files.pythonhosted.org/packages/cb/38/4c4d00ddfa48abe616d7e572e02a04273603db446975ab46bbcd36552005/idna-3.2.tar.gz"
+    sha256 "467fbad99067910785144ce333826c71fb0e63a425657295239737f7ecd125f3"
   end
 
   resource "intervaltree" do
@@ -92,18 +95,13 @@ class Pwntools < Formula
   end
 
   resource "packaging" do
-    url "https://files.pythonhosted.org/packages/86/3c/bcd09ec5df7123abcf695009221a52f90438d877a2f1499453c6938f5728/packaging-20.9.tar.gz"
-    sha256 "5b327ac1320dc863dca72f4514ecc086f31186744b84a230374cc1fd776feae5"
+    url "https://files.pythonhosted.org/packages/df/86/aef78bab3afd461faecf9955a6501c4999933a48394e90f03cd512aad844/packaging-21.0.tar.gz"
+    sha256 "7dc96269f53a4ccec5c0670940a4281106dd0bb343f47b7471f779df49c2fbe7"
   end
 
   resource "paramiko" do
     url "https://files.pythonhosted.org/packages/cf/a1/20d00ce559a692911f11cadb7f94737aca3ede1c51de16e002c7d3a888e0/paramiko-2.7.2.tar.gz"
     sha256 "7f36f4ba2c0d81d219f4595e35f70d56cc94f9ac40a6acdf51d6ca210ce65035"
-  end
-
-  resource "pathlib2" do
-    url "https://files.pythonhosted.org/packages/94/d8/65c86584e7e97ef824a1845c72bbe95d79f5b306364fa778a3c3e401b309/pathlib2-2.3.5.tar.gz"
-    sha256 "6cd9a47b597b37cc57de1c05e56fb1a1c9cc9fab04fe78c29acd090418529868"
   end
 
   resource "plumbum" do
@@ -157,13 +155,13 @@ class Pwntools < Formula
   end
 
   resource "requests" do
-    url "https://files.pythonhosted.org/packages/6b/47/c14abc08432ab22dc18b9892252efaf005ab44066de871e72a38d6af464b/requests-2.25.1.tar.gz"
-    sha256 "27973dd4a904a4f13b263a19c866c13b92a39ed1c964655f025f3f8d3d75b804"
+    url "https://files.pythonhosted.org/packages/e7/01/3569e0b535fb2e4a6c384bdbed00c55b9d78b5084e0fb7f4d0bf523d7670/requests-2.26.0.tar.gz"
+    sha256 "b8aa58f8cf793ffd8782d3d8cb19e66ef36f7aba4353eec859e74678b01b07a7"
   end
 
   resource "ROPGadget" do
-    url "https://files.pythonhosted.org/packages/7a/3a/7f5ca255bc5bf2753afbf363b6fbcdb07a986cc33ed08f820a9165b149fa/ROPGadget-6.5.tar.gz"
-    sha256 "4c0e56f2ba0aef13b2c8ca286aad663525b92020b11bacd16791f5236247905c"
+    url "https://files.pythonhosted.org/packages/41/d1/44cc58e5a22ef46260ba90a9a089b07e481ce86b5829c39b9ee8d5b7e234/ROPGadget-6.6.tar.gz"
+    sha256 "dc61186e0114ec67ec7ce374df8fd2ddc2a7cba129a1242338e900a7483fba22"
   end
 
   resource "six" do
@@ -182,8 +180,8 @@ class Pwntools < Formula
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/94/40/c396b5b212533716949a4d295f91a4c100d51ba95ea9e2d96b6b0517e5a5/urllib3-1.26.5.tar.gz"
-    sha256 "a7acd0977125325f516bda9735fa7142b909a8d01e8b2e4c8108d0984e6e0098"
+    url "https://files.pythonhosted.org/packages/4f/5a/597ef5911cb8919efe4d86206aa8b2658616d676a7088f0825ca08bd7cb8/urllib3-1.26.6.tar.gz"
+    sha256 "f57b4c16c62fa2760b7e3d97c35b255512fb6b59a259730f36ba32ce9f8e342f"
   end
 
   def install

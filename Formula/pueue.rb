@@ -1,16 +1,18 @@
 class Pueue < Formula
   desc "Command-line tool for managing long-running shell commands"
   homepage "https://github.com/Nukesor/pueue"
-  url "https://github.com/Nukesor/pueue/archive/v0.12.2.tar.gz"
-  sha256 "3acd923759d5731b69a9a4a16c83c16a1f33589767da2ab7eb0cbe49ea06eabd"
+  url "https://github.com/Nukesor/pueue/archive/v1.0.4.tar.gz"
+  sha256 "c4ddb496f86ab4c10b322d5a64be4f96f6c8779796983f4500fe341300b65072"
   license "MIT"
-  head "https://github.com/Nukesor/pueue.git"
+  head "https://github.com/Nukesor/pueue.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "a4d2d1c08cf929b069e09aafc633f2d6190f9fc72db7af1a528849c3d96617dd"
-    sha256 cellar: :any_skip_relocation, big_sur:       "2602ff719f66993515cd06408672f4f91c5b79326635688af2f693592e7da447"
-    sha256 cellar: :any_skip_relocation, catalina:      "509da33221a8f04f7bfd9c30dd92b3a1c33e5b28be5f7d8d548a8ce9eea14c5a"
-    sha256 cellar: :any_skip_relocation, mojave:        "2813f83c83e78449efd26656232c4a1745f8f6bca2e97e8eb4e9c45c897747d4"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "d2a92df8647f7ed6882057cb2592aad3d37614991bd78a007dd5390946c48284"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "f9b5b7101590b35413c467ac6b03ed86b256cdbc2832bb2c1c6267c4f168e07b"
+    sha256 cellar: :any_skip_relocation, monterey:       "9f3f898387ad0cccb2d6a2471707df0f3b53b3a8b13b3773b8d26b1904210159"
+    sha256 cellar: :any_skip_relocation, big_sur:        "6d8e111554e48180b9b0ee4d385079fbb6618c9e892441f7056bb7795cff89bd"
+    sha256 cellar: :any_skip_relocation, catalina:       "bed9af0542c44eebb6ab281a3e8022f7e0b5fc6d6fc47006ef8c83db66f47f2d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "6c5e77735cd4e91f30a2c1836edf6494237e2edd189698736a6d5702554ccfcd"
   end
 
   depends_on "rust" => :build
@@ -26,34 +28,12 @@ class Pueue < Formula
     prefix.install_metafiles
   end
 
-  plist_options manual: "pueued"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{opt_bin}/pueued</string>
-            <string>--verbose</string>
-          </array>
-          <key>KeepAlive</key>
-          <false/>
-          <key>RunAtLoad</key>
-          <true/>
-          <key>WorkingDirectory</key>
-          <string>#{var}</string>
-          <key>StandardErrorPath</key>
-          <string>#{var}/log/pueued.log</string>
-          <key>StandardOutPath</key>
-          <string>#{var}/log/pueued.log</string>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"pueued", "--verbose"]
+    keep_alive false
+    working_dir var
+    log_path var/"log/pueued.log"
+    error_log_path var/"log/pueued.log"
   end
 
   test do

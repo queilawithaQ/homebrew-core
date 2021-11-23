@@ -3,17 +3,16 @@ require "language/node"
 class Chronograf < Formula
   desc "Open source monitoring and visualization UI for the TICK stack"
   homepage "https://docs.influxdata.com/chronograf/latest/"
-  url "https://github.com/influxdata/chronograf/archive/1.8.10.tar.gz"
-  sha256 "dbfd73757f1e46534782efb834bb953234a8dd23f79d412708e48998e94ae28d"
+  url "https://github.com/influxdata/chronograf/archive/1.9.1.tar.gz"
+  sha256 "df5600b2bd0b5ed0d3a3c548e5d72038b62fdda1501ad616eb1c1d82b054793a"
   license "AGPL-3.0-or-later"
-  head "https://github.com/influxdata/chronograf.git"
+  head "https://github.com/influxdata/chronograf.git", branch: "master"
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "67ba86d066284a143eb5e0b725c6205d1c35c685dd8218bd143c8ec10963de4e"
-    sha256 cellar: :any_skip_relocation, big_sur:       "4ec58f7ea07930eb1f2b9d4ae90f08c0c0539f2ef1d5391ce3d31006ee319c4d"
-    sha256 cellar: :any_skip_relocation, catalina:      "d8bafeef82c5e75363d5a6b8e08bf4cffdd1e45f15cdbc6ad3aee84576e361d1"
-    sha256 cellar: :any_skip_relocation, mojave:        "f996a2303272bc562164186e126d244a519285428b445cb3b25430ea2e9fbc30"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "035e1ec95c64d5db5d2dc3305ac3f631d50b55f7d402a2ed0a74aa981f3cd9e7"
+    sha256 cellar: :any_skip_relocation, big_sur:       "36287a0454a409f11fcf156310fd5e835818266a8e25121299cc0234afc85f88"
+    sha256 cellar: :any_skip_relocation, catalina:      "3675d74285d934ae45bd86c69d91807accc50d4f31a5e3dd2963097bef49874a"
+    sha256 cellar: :any_skip_relocation, mojave:        "5be98ea883d9df39a4082192cf41044886bf8dfc7c2ea2c82c5f9392df790b15"
   end
 
   depends_on "go" => :build
@@ -33,36 +32,12 @@ class Chronograf < Formula
     bin.install "chronograf"
   end
 
-  plist_options manual: "chronograf"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>KeepAlive</key>
-          <dict>
-            <key>SuccessfulExit</key>
-            <false/>
-          </dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{opt_bin}/chronograf</string>
-          </array>
-          <key>RunAtLoad</key>
-          <true/>
-          <key>WorkingDirectory</key>
-          <string>#{var}</string>
-          <key>StandardErrorPath</key>
-          <string>#{var}/log/chronograf.log</string>
-          <key>StandardOutPath</key>
-          <string>#{var}/log/chronograf.log</string>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run opt_bin/"chronograf"
+    keep_alive true
+    error_log_path var/"log/chronograf.log"
+    log_path var/"log/chronograf.log"
+    working_dir var
   end
 
   test do

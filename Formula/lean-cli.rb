@@ -1,16 +1,18 @@
 class LeanCli < Formula
   desc "Command-line tool to develop and manage LeanCloud apps"
   homepage "https://github.com/leancloud/lean-cli"
-  url "https://github.com/leancloud/lean-cli/archive/v0.25.0.tar.gz"
-  sha256 "b70a1a9fe221582922312c041a4946ca2f3eb0267079ff88e33aa22c9b61875a"
+  url "https://github.com/leancloud/lean-cli/archive/v0.29.0.tar.gz"
+  sha256 "f9eed6fdf6f0e436b481d9f882461bd9e0aed78bdbf77a61b99a9cf66875e549"
   license "Apache-2.0"
   head "https://github.com/leancloud/lean-cli.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "002fd0f9bea63513428f676744b56459609cfa1e09067ae015efc28582b99be5"
-    sha256 cellar: :any_skip_relocation, big_sur:       "a1fda181c01d5c725c0c828af24bac3df4f51b6c2e88eca52e549adbca9c1c89"
-    sha256 cellar: :any_skip_relocation, catalina:      "82b875c2a16ef69e0b9b795b3ad3152f02821e31d51544a1b41e5afc6c816832"
-    sha256 cellar: :any_skip_relocation, mojave:        "c96575eaf75f705e301d3899071c67afa1869ec584dc2c3ed19ef3487ff06306"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "99cae4232fb1996710b8c9d2de984b02f8dbca7ac03774f3d49be1ce952cc265"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "7ff6b1f128a8dd57ff8aa905adc26afef272447d6c7d06953e5723db1389adf6"
+    sha256 cellar: :any_skip_relocation, monterey:       "4b0f82ff4b47d6f44a2e709df95ca207529431fb246730d58e286aae8cd7fbd0"
+    sha256 cellar: :any_skip_relocation, big_sur:        "7b364f6187f8cd12ba7e0d4b9c91abd54b351764a76ed90300595d712be17859"
+    sha256 cellar: :any_skip_relocation, catalina:       "f0ee85989e412dd794c7b5e5be176dd6c06be239db96c2e1ecb8b01d5dd4431d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "f6e4780976395528e0e21c5ac457341621d5f167ed134e6222643823eb5614c7"
   end
 
   depends_on "go" => :build

@@ -5,20 +5,22 @@ class Agda < Formula
   revision 3
 
   stable do
-    url "https://hackage.haskell.org/package/Agda-2.6.1.3/Agda-2.6.1.3.tar.gz"
-    sha256 "bb1bc840cee95eea291bd220ea043b60153a6f7bd8198bc53be2bf3b83c8a1e7"
+    url "https://hackage.haskell.org/package/Agda-2.6.2/Agda-2.6.2.tar.gz"
+    sha256 "072caaad7a405b764423958d2001b68fbfd3fc8f98870cd0a5f0bcaeadfd3095"
 
     resource "stdlib" do
-      url "https://github.com/agda/agda-stdlib/archive/v1.6.tar.gz"
-      sha256 "9dbfb6627d84cdb1db500d69a3ab2aad486e058e42c3ceddb8d9047fc74a84dc"
+      url "https://github.com/agda/agda-stdlib/archive/v1.7.tar.gz"
+      sha256 "180302df8bdd01fd404ae5ee217d4c04376fcfbab2b70958a87109df531e299d"
     end
   end
 
   bottle do
-    sha256 arm64_big_sur: "8791de9da2d33e6e3411907a3e46ff5a53525c22a695a16c99e31118d345b712"
-    sha256 big_sur:       "a17b2a185083a45a26f4c8cfbc49561f2d3f0d90b1e4d069dd0ecab4b10fd2af"
-    sha256 catalina:      "2856aebd3cc86c88c55f2445982670ae2494eae9521995dc8dd8da1fc43776f2"
-    sha256 mojave:        "1c3a40bd0ec48c5963b3b5a140f3bb203abd42d6101389c7f6ac69723b334335"
+    sha256 arm64_monterey: "55cdf17997c733ff0ae3016e2d57f44cb88236d8d6a9d5a20c82be88b74d7f51"
+    sha256 arm64_big_sur:  "3b5eae987128fc6e4e4b0b12a62090fc09fea5c1c1154c352cb2c30f11675cda"
+    sha256 monterey:       "2ba3ec42d514b8076415b3193f01ef73471be8a9ed4bd29ad3948c10d568436f"
+    sha256 big_sur:        "3a61aafe0161b54464aa9fb51a3f32815580eb265d70a41c90167e76f6755f1e"
+    sha256 catalina:       "93124085f0bd4fc9e84bf162e308523f37cda6252660f9804e746ea4ed2d02cd"
+    sha256 x86_64_linux:   "510a98c8671655ae944de5f74b06507bad58e13c1e0fe81609432197e944008d"
   end
 
   head do

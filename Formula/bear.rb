@@ -1,18 +1,18 @@
 class Bear < Formula
-  include Language::Python::Shebang
-
   desc "Generate compilation database for clang tooling"
   homepage "https://github.com/rizsotto/Bear"
-  url "https://github.com/rizsotto/Bear/archive/3.0.12.tar.gz"
-  sha256 "a057b8b7795ff32d4f68241ad734d4c6e1327b70a105b93a838dd442a1582c1d"
+  url "https://github.com/rizsotto/Bear/archive/3.0.17.tar.gz"
+  sha256 "107f94e045d930e88f5f5b4b484c8df1bf4834722943525765c271e0b5b34b78"
   license "GPL-3.0-or-later"
-  head "https://github.com/rizsotto/Bear.git"
+  head "https://github.com/rizsotto/Bear.git", branch: "master"
 
   bottle do
-    sha256 arm64_big_sur: "7696bcb190b151eb15331bd405508917a7df1f5ebea32eb5dfd50ba545a4e3fc"
-    sha256 big_sur:       "31105f0895a316ef201af65656c0031caf2ddd27de35b262809a0e77d0095e41"
-    sha256 catalina:      "f7e7bac55d31364ce2dcf73c08d116569d7967c4dfdd4c32f488c69779bd1193"
-    sha256 mojave:        "59295fb4890c4fd8eecf54533cac791b5277c39d1b20f7cac3a154f36d64e3a8"
+    sha256 arm64_monterey: "a7ded40583edfd8ea52d61bd821359776a8de125d826d33e9e83d32a10db8f09"
+    sha256 arm64_big_sur:  "720582c6ee523fc17f690db866659829128ebc24d20717801991390b56e8f993"
+    sha256 monterey:       "b745a7b686b0b75190cf43c40016c633fd5d18344354a112697136f682858035"
+    sha256 big_sur:        "a4e4715478a6cc09a680009fceb401a0e6686ffb864aee6aebfc3f51140a233e"
+    sha256 catalina:       "267487257cbd591eedabf247f1953e447959f7f42b3ded0d5b5d596e6eb26772"
+    sha256 x86_64_linux:   "f0f4c2fa516db884046ac36061f4f894c6a099f973b93109f657045b4dd16492"
   end
 
   depends_on "cmake" => :build
@@ -20,9 +20,7 @@ class Bear < Formula
   depends_on "fmt"
   depends_on "grpc"
   depends_on "nlohmann-json"
-  depends_on "python@3.9"
   depends_on "spdlog"
-  depends_on "sqlite"
 
   uses_from_macos "llvm" => :test
 
@@ -45,22 +43,18 @@ class Bear < Formula
   end
 
   def install
-    on_macos do
-      ENV.llvm_clang if DevelopmentTools.clang_build_version <= 1100
-    end
+    ENV.llvm_clang if OS.mac? && (DevelopmentTools.clang_build_version <= 1100)
 
-    args = std_cmake_args + %w[
+    args = %w[
       -DENABLE_UNIT_TESTS=OFF
       -DENABLE_FUNC_TESTS=OFF
     ]
 
     mkdir "build" do
-      system "cmake", "..", *args
+      system "cmake", "..", *args, *std_cmake_args
       system "make", "all"
       system "make", "install"
     end
-
-    rewrite_shebang detected_python_shebang, bin/"bear"
   end
 
   test do
@@ -71,7 +65,7 @@ class Bear < Formula
         return 0;
       }
     EOS
-    system "#{bin}/bear", "--", "clang", "test.c"
+    system bin/"bear", "--", "clang", "test.c"
     assert_predicate testpath/"compile_commands.json", :exist?
   end
 end

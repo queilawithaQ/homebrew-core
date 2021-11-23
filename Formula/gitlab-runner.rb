@@ -2,8 +2,8 @@ class GitlabRunner < Formula
   desc "Official GitLab CI runner"
   homepage "https://gitlab.com/gitlab-org/gitlab-runner"
   url "https://gitlab.com/gitlab-org/gitlab-runner.git",
-      tag:      "v13.12.0",
-      revision: "7a6612da06043f908b740629bbe3f0d9c59a5dad"
+      tag:      "v14.4.0",
+      revision: "4b9e985ab8986c344903898ef682a122718f9632"
   license "MIT"
   head "https://gitlab.com/gitlab-org/gitlab-runner.git"
 
@@ -13,64 +13,34 @@ class GitlabRunner < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "dabcbd0806e9f9ded128e461240e28ae5a33fd4ae4ea9e0ec58eda669ba8a8ac"
-    sha256 cellar: :any_skip_relocation, big_sur:       "8713cc4d2e3e99189d9f0c36c7083772c149060002dee8e3f550afae3d2b8d44"
-    sha256 cellar: :any_skip_relocation, catalina:      "65fa61b110abf9e37dd30d9cfd561f75409ef19b3939ec1ebcd293cfa1c34cbe"
-    sha256 cellar: :any_skip_relocation, mojave:        "e1a302677e341ffd22b7ee09041f4598e9d1821c64ea1eb99d5d403590749516"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "ff7fcb67c66534a36b32d043c573005421ebc26fe87fe09937cdc9164708b900"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "1313bb413961d78b9fde57a3a14dc8642dee3f7d3ddf4fefb354dc95fe49ea76"
+    sha256 cellar: :any_skip_relocation, monterey:       "4f997780c8add77429da13d9bf3cbdfb51f44c042f8e27cbbf3a4a88b3f684fc"
+    sha256 cellar: :any_skip_relocation, big_sur:        "d20050b6390ae734ba30c7dce568323ea9714b9b0c9eff7154268a1028a73aa7"
+    sha256 cellar: :any_skip_relocation, catalina:       "e5302f85731f53752c309fcc8f1157ea58e7aac8453fcd4a331a9e35e5a18b4c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "1a565ac79ccb691a2af326e15c3d10ae92c4355cbcfa8687b1b88a176dcf815f"
   end
 
   depends_on "go" => :build
 
   def install
     proj = "gitlab.com/gitlab-org/gitlab-runner"
-    ldflags = [
-      "-X #{proj}/common.NAME=gitlab-runner",
-      "-X #{proj}/common.VERSION=#{version}",
-      "-X #{proj}/common.REVISION=#{Utils.git_short_head(length: 8)}",
-      "-X #{proj}/common.BRANCH=#{version.major}-#{version.minor}-stable",
-      "-X #{proj}/common.BUILT=#{Time.new.strftime("%Y-%m-%dT%H:%M:%S%:z")}",
-    ]
-
-    system "go", "build", *std_go_args(ldflags: ldflags.join(" "))
+    ldflags = %W[
+      -X #{proj}/common.NAME=gitlab-runner
+      -X #{proj}/common.VERSION=#{version}
+      -X #{proj}/common.REVISION=#{Utils.git_short_head(length: 8)}
+      -X #{proj}/common.BRANCH=#{version.major}-#{version.minor}-stable
+      -X #{proj}/common.BUILT=#{time.strftime("%Y-%m-%dT%H:%M:%S%:z")}
+    ].join(" ")
+    system "go", "build", *std_go_args(ldflags: ldflags)
   end
 
-  plist_options manual: "gitlab-runner start"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>SessionCreate</key><false/>
-          <key>KeepAlive</key><true/>
-          <key>RunAtLoad</key><true/>
-          <key>Disabled</key><false/>
-          <key>LegacyTimers</key><true/>
-          <key>ProcessType</key>
-          <string>Interactive</string>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{opt_bin}/gitlab-runner</string>
-            <string>run</string>
-            <string>--working-directory</string>
-            <string>#{ENV["HOME"]}</string>
-            <string>--config</string>
-            <string>#{ENV["HOME"]}/.gitlab-runner/config.toml</string>
-            <string>--service</string>
-            <string>gitlab-runner</string>
-            <string>--syslog</string>
-          </array>
-          <key>EnvironmentVariables</key>
-            <dict>
-              <key>PATH</key>
-              <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-          </dict>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"gitlab-runner", "run", "--syslog"]
+    environment_variables PATH: std_service_path_env
+    working_dir ENV["HOME"]
+    keep_alive true
+    macos_legacy_timers true
   end
 
   test do

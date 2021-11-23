@@ -1,12 +1,12 @@
 class Lammps < Formula
   desc "Molecular Dynamics Simulator"
   homepage "https://lammps.sandia.gov/"
-  url "https://github.com/lammps/lammps/archive/stable_29Oct2020.tar.gz"
+  url "https://github.com/lammps/lammps/archive/stable_29Sep2021_update1.tar.gz"
   # lammps releases are named after their release date. We transform it to
   # YYYY-MM-DD (year-month-day) so that we get a sane version numbering.
   # We only track stable releases as announced on the LAMMPS homepage.
-  version "2020-10-29"
-  sha256 "759705e16c1fedd6aa6e07d028cc0c78d73c76b76736668420946a74050c3726"
+  version "20210929-update1"
+  sha256 "5000b422c9c245b92df63507de5aa2ea4af345ea1f00180167aaa084b711c27c"
   license "GPL-2.0-only"
 
   # The `strategy` block below is used to massage upstream tags into the
@@ -14,18 +14,24 @@ class Lammps < Formula
   # to be able to do proper `Version` comparison.
   livecheck do
     url :stable
-    regex(%r{href=.*?/tag/stable[._-](\d{1,2}\w+\d{2,4})["' >]}i)
-    strategy :github_latest do |page, regex|
-      date_str = page[regex, 1]
-      date_str.present? ? Date.parse(date_str).to_s : []
+    regex(/^stable[._-](\d{1,2}\w+\d{2,4})(?:[._-](update\d*))?$/i)
+    strategy :git do |tags, regex|
+      tags.map do |tag|
+        match = tag.match(regex)
+        next if match.blank? || match[1].blank?
+
+        date_str = Date.parse(match[1]).strftime("%Y%m%d")
+        match[2].present? ? "#{date_str}-#{match[2]}" : date_str
+      end
     end
   end
 
   bottle do
-    sha256 arm64_big_sur: "cd8e88f101776028e6859211611d5f581f7020b3e806f53e98b831ab3d0eb9f5"
-    sha256 big_sur:       "9bd87a2b72f291229de3d436f8fc7b0706ab5fc245587936943284287457d1c0"
-    sha256 catalina:      "4cb389466954f5fdafc8a05a06eff9c8a17886b69e2ea6cc38c55cf3912980d0"
-    sha256 mojave:        "e1ef047d6c3155e5a8bb704a5f141beb7427194c61e6d16885610bdfd20ecf5c"
+    sha256 cellar: :any,                 arm64_big_sur: "d70926aca441eb764f2bb06fc24ea6668e192d977d938f80d03e36d0ca7edcd0"
+    sha256 cellar: :any,                 monterey:      "5ca9669e6ed7ecacf6071abd43f8864a3255e0bc20b413135e5ca3138513bb3d"
+    sha256 cellar: :any,                 big_sur:       "f76682e33b45cf0a0ce399e15ec84f13c26a43e51ab7ccecc823ac3edc1265b4"
+    sha256 cellar: :any,                 catalina:      "4b875ec8c8e097e9827c81a828f2c6d2c0a0f498060d0238dcff7ed136911170"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "218af2d8d0296d555f87dd1cd28ca62a07b8b3f8733c476844b2e1adaf808248"
   end
 
   depends_on "pkg-config" => :build
@@ -45,12 +51,11 @@ class Lammps < Formula
 
     %w[serial mpi].each do |variant|
       cd "src" do
-        system "make", "clean-all"
-        system "make", "yes-standard"
-
         disabled_packages.each do |package|
           system "make", "no-#{package}"
         end
+
+        system "make", "yes-basic"
 
         system "make", variant,
                        "LMP_INC=-DLAMMPS_GZIP",
@@ -63,6 +68,7 @@ class Lammps < Formula
                        "JPG_LIB=-ljpeg -lpng"
 
         bin.install "lmp_#{variant}"
+        system "make", "clean-all"
       end
     end
 

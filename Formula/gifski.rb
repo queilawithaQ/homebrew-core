@@ -1,23 +1,34 @@
 class Gifski < Formula
   desc "Highest-quality GIF encoder based on pngquant"
   homepage "https://gif.ski/"
-  url "https://github.com/ImageOptim/gifski/archive/1.2.6.tar.gz"
-  sha256 "60af3329dfb8e86626e3251f57e13b4cfc0db79c4324ffbdbae3a9d7462cd1ed"
+  url "https://github.com/ImageOptim/gifski/archive/1.5.1.tar.gz"
+  sha256 "88beeb896b6a1138046f665c3495f85670a74a527e34743080d8976d3f1b73b7"
   license "AGPL-3.0-only"
+  revision 1
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "5a4a8e2702fda194cfb372519d7740f2d82ccb5c1d165672210ed2c21fbeef80"
-    sha256 cellar: :any, big_sur:       "b0269f2aa746e8a4dcdeb5f27a7b91c0e894d73c2b5d8b3a4df1b1bf8aaa115f"
-    sha256 cellar: :any, catalina:      "ac9547281d15c75a5725aa21fa3d8b974c7b8b08e580d00c72e5d8058d1b696d"
-    sha256 cellar: :any, mojave:        "e06d9be5f774a40f746b99046ac7e7c8c517c9a84a9b15ca2b1231fbe6287e09"
+    sha256 cellar: :any,                 arm64_monterey: "2ffc2bc0e39598db641205b5bc890d73b7732ddc7bf423c047e1ff98557911a3"
+    sha256 cellar: :any,                 arm64_big_sur:  "517f8d4c5a645597e7a7766a1ba9e74d56ec6981471adb094b7e507d70b10d49"
+    sha256 cellar: :any,                 monterey:       "3120bccc885a4f6162a9a8f96d242ccd42d742e91a2968dd17d8358bbbb0b913"
+    sha256 cellar: :any,                 big_sur:        "50eac7eb295237c2962591c65d00359073d01c9df48bfb222da2c107185ef32e"
+    sha256 cellar: :any,                 catalina:       "fb579482e70e738cca521cfc3a47d5369a5354f281c7889b93a2fa78e85de40a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "8c58d0b0830a267a73fb438d4fec4b1c9306d87f0522f83899749b062f28c0ae"
   end
 
   depends_on "pkg-config" => :build
   depends_on "rust" => :build
   depends_on "ffmpeg"
 
+  uses_from_macos "llvm" => :build
+
+  on_linux do
+    depends_on "gcc"
+  end
+
+  fails_with gcc: "5" # rubberband is built with GCC
+
   def install
-    system "cargo", "install", "--features=video", *std_cargo_args
+    system "cargo", "install", "--features", "video", *std_cargo_args
   end
 
   test do

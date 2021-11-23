@@ -1,8 +1,8 @@
 class Elektra < Formula
   desc "Framework to access config settings in a global key database"
   homepage "https://libelektra.org/"
-  url "https://www.libelektra.org/ftp/elektra/releases/elektra-0.9.6.tar.gz"
-  sha256 "c8e75f4d21bf3bd6b1028e776af9ff644a17a7dfbb1f2052f50392767deea197"
+  url "https://www.libelektra.org/ftp/elektra/releases/elektra-0.9.8.tar.gz"
+  sha256 "b1e8908c138b84e788fdff25eab1c2b07e0b422a5fd1667814539ea02f151c58"
   license "BSD-3-Clause"
   head "https://github.com/ElektraInitiative/libelektra.git"
 
@@ -12,10 +12,13 @@ class Elektra < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "b246eb7351b10188c76762094e9e6bd08a8a6119cb8589fd244b304c54355608"
-    sha256 big_sur:       "4bcef10484817f1cad4335703c2714f6e5dac109766bb7f403fc3ed16103b5f9"
-    sha256 catalina:      "be7504905eaae104e3f59fc90adad96c2ea845d8f4f95ca0fbb261760afe45f1"
-    sha256 mojave:        "18dc59bc3c7dbbea60eae22d88f89157413c35fe285ea46fe0cbd884e5d3535d"
+    sha256 arm64_monterey: "8e1d59c5be2d3130f43d06b1b3f9d5903024bea0ee9ba5e3c028af1c51ec224e"
+    sha256 arm64_big_sur:  "7e1dd629af27f13b6bfe769c221f4c976cb22ad1ac9716601be0c37371633490"
+    sha256 monterey:       "34466435979b032bc07256a5b3f0a2fd0c2b7d4e3fd75e56c641019dceb2a09c"
+    sha256 big_sur:        "aab3adfe2c4413d61a9b817e32e6eb9f8a13066f219bb4e889601db6a81871ff"
+    sha256 catalina:       "08adc201df239e698550c10cc565cba877b4a29656cc120c372e474567dd48f8"
+    sha256 mojave:         "3dbb5277e94c3b9e8cc2ad2e1304b8cbe37938f47727a643adf47ff3303bb8f6"
+    sha256 x86_64_linux:   "bcc445acf471321f69e511e11b03a3222119f9de1082e98c620991fa3d6e13f5"
   end
 
   depends_on "cmake" => :build

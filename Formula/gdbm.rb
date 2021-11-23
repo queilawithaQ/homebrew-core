@@ -1,16 +1,24 @@
 class Gdbm < Formula
   desc "GNU database manager"
   homepage "https://www.gnu.org/software/gdbm/"
-  url "https://ftp.gnu.org/gnu/gdbm/gdbm-1.19.tar.gz"
-  mirror "https://ftpmirror.gnu.org/gdbm/gdbm-1.19.tar.gz"
-  sha256 "37ed12214122b972e18a0d94995039e57748191939ef74115b1d41d8811364bc"
+  url "https://ftp.gnu.org/gnu/gdbm/gdbm-1.22.tar.gz"
+  mirror "https://ftpmirror.gnu.org/gdbm/gdbm-1.22.tar.gz"
+  sha256 "f366c823a6724af313b6bbe975b2809f9a157e5f6a43612a72949138d161d762"
   license "GPL-3.0-or-later"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "2eea26ad3d3d013c3ed2e2b985d4749719e8be327bc53b615a1ffbe484264599"
-    sha256 cellar: :any, big_sur:       "3581501b051db1c0d1acccc710fe04453b61777e4d67110485ceca69f30d6d1a"
-    sha256 cellar: :any, catalina:      "a3e43170a1d8413e6817e57b7218828af22a20b2221d804ad529a68248840a51"
-    sha256 cellar: :any, mojave:        "996020d1bc3e8a8060a9fe49b992cd66e7404346a339ae98ef92090724f36fda"
+    sha256 cellar: :any, arm64_monterey: "25cfaedb0fd8f973835f30754e0838747b01da48071d6cbb9c94add907287fea"
+    sha256 cellar: :any, arm64_big_sur:  "ee9c72472b2e910435fcd2410c299cf784471132decba1e6945a68e29b0c5ddf"
+    sha256 cellar: :any, monterey:       "b5f3343eef068c75c152fa0c2a4e8fdec033dc90f072f686bcff0298c6c4857b"
+    sha256 cellar: :any, big_sur:        "7e9737ec99942ede2bb0c522f0e0c4f7c22a31aa94afa9fbab9c8bc81d2ea9d0"
+    sha256 cellar: :any, catalina:       "f7e29005a4a9232965f67ef89364193e3ab95b249b169164be10db9e56f7f22e"
+    sha256               x86_64_linux:   "5942379d8543bf2780fc6ac1ddd96ea5eff267ce1a4af541c85b70efb3b2721c"
+  end
+
+  # Fix -flat_namespace being used on Big Sur and later.
+  patch do
+    url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff"
+    sha256 "35acd6aebc19843f1a2b3a63e880baceb0f5278ab1ace661e57a502d9d78c93c"
   end
 
   # --enable-libgdbm-compat for dbm.h / gdbm-ndbm.h compatibility:

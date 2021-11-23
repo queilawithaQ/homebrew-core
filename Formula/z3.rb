@@ -1,10 +1,11 @@
 class Z3 < Formula
   desc "High-performance theorem prover"
   homepage "https://github.com/Z3Prover/z3"
-  url "https://github.com/Z3Prover/z3/archive/z3-4.8.10.tar.gz"
-  sha256 "12cce6392b613d3133909ce7f93985d2470f0d00138837de06cf7eb2992886b4"
+  url "https://github.com/Z3Prover/z3/archive/z3-4.8.12.tar.gz"
+  sha256 "e3aaefde68b839299cbc988178529535e66048398f7d083b40c69fe0da55f8b7"
   license "MIT"
-  head "https://github.com/Z3Prover/z3.git"
+  revision 1
+  head "https://github.com/Z3Prover/z3.git", branch: "develop"
 
   livecheck do
     url :stable
@@ -13,23 +14,30 @@ class Z3 < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "05119bd5f8a125823a9809ec6cc5bed54b426a7778832f3022b91edbde24b2d6"
-    sha256 cellar: :any, big_sur:       "2b644db19e5e4b40ab46040c845141cf484ed7a61a4405e26a2e7ee849e7fc8e"
-    sha256 cellar: :any, catalina:      "97099b1c125112e2a7b783dc7a568e34e1b43b8bce16fc6bb5697c7fd69da514"
-    sha256 cellar: :any, mojave:        "c16751c07a66eb9aaeaa0d2aa1b59182ac3ee37dfcd475286260637d69260e42"
+    sha256 cellar: :any,                 arm64_monterey: "62a6cb735ea7e7744489aeb1d486c6786284c886978cc9a61dafb5aa3b17a413"
+    sha256 cellar: :any,                 arm64_big_sur:  "04f6d69eb686b83e9f3caf7f99a9fdaa5a1239c30167c7c69fa8148a14fecb62"
+    sha256 cellar: :any,                 monterey:       "0d32a039fb63abd2c1b71a2e74e239e32c3d2d94d3b742af6636b0f4753625a5"
+    sha256 cellar: :any,                 big_sur:        "661c6b788fb0e3f285e510cc5a6fb6b07c1955f82e8d23115c634b617d495b3e"
+    sha256 cellar: :any,                 catalina:       "8ad4662447d7452272499dff0405a75e6d45cef841d1e4345e17747d1555a864"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "26cffb39e9388f3ee2521301019fe567b6a6b45bd65af3a6bed10256a588f672"
   end
 
   # Has Python bindings but are supplementary to the main library
   # which does not need Python.
-  depends_on "python@3.9" => :build
+  depends_on "python@3.10" => :build
+
+  on_linux do
+    depends_on "gcc" # For C++17
+  end
+
+  fails_with gcc: "5"
 
   def install
-    python3 = Formula["python@3.9"].opt_bin/"python3"
-    xy = Language::Python.major_minor_version python3
+    python3 = Formula["python@3.10"].opt_bin/"python3"
     system python3, "scripts/mk_make.py",
                      "--prefix=#{prefix}",
                      "--python",
-                     "--pypkgdir=#{lib}/python#{xy}/site-packages",
+                     "--pypkgdir=#{prefix/Language::Python.site_packages(python3)}",
                      "--staticlib"
 
     cd "build" do

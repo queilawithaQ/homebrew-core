@@ -1,16 +1,19 @@
 class YleDl < Formula
   desc "Download Yle videos from the command-line"
   homepage "https://aajanki.github.io/yle-dl/index-en.html"
-  url "https://github.com/aajanki/yle-dl/archive/20210502.tar.gz"
-  sha256 "172c6b3f819dc9d6df340f9bf55ffbeee8763f49d5a275f38835582be0b8299a"
+  url "https://files.pythonhosted.org/packages/c0/71/c24158ee110712569f2a4ff995a8b37d834c686474c11c95389b1d506b74/yle-dl-20210917.tar.gz"
+  sha256 "22e3a1417fdfbfe788d59cf608e131d7f0b90c799d0dd129a6d98f019f100776"
   license "GPL-3.0-or-later"
-  head "https://github.com/aajanki/yle-dl.git"
+  head "https://github.com/aajanki/yle-dl.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "fb9308ba39404b4e2e48b2118eab73a6001088957baac9f359e08bab7e2d3d18"
-    sha256 cellar: :any_skip_relocation, big_sur:       "21c8e4e7aad27b2f8c88ee3c75ed4a67da4a80a1c02c086964c663b2e534de30"
-    sha256 cellar: :any_skip_relocation, catalina:      "51b872d7498eff38d926bc67886a53348e6fd5236354f4b6acb757d250ea7c0a"
-    sha256 cellar: :any_skip_relocation, mojave:        "2dce4ec8b32677abf57e72ece6ebb411ce645331d40a6e93ac2cc38810ba01de"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "c873de356c76031225898cfc91952dc308167590c5e5cb5b713f26f932063ddb"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "0227df9cc74fa2378e5f96d3cf021a1b242840621d21d1891e3448d470f76d12"
+    sha256 cellar: :any_skip_relocation, monterey:       "3ffb0952253e74d74b236b1ba0c8b261ebac5d3bd38599687911e8411d05eab9"
+    sha256 cellar: :any_skip_relocation, big_sur:        "74de7ba58e7fb1acac55cc45315c7ec39b60ec060349374c81baff6c0282af7b"
+    sha256 cellar: :any_skip_relocation, catalina:       "e2c69ab631d4248163131a3f52f5e4807768066d17f26df0245cea49c5cbc0be"
+    sha256 cellar: :any_skip_relocation, mojave:         "b6dac24972fca38490b5e18dfa37d926b597b05bc68ecb0a8c3bf82e50028014"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "c42bf1e861338903291495ff808cef49fd4c4ebb00f082adfec6011a692c82fb"
   end
 
   depends_on "ffmpeg"
@@ -39,23 +42,23 @@ class YleDl < Formula
   end
 
   resource "certifi" do
-    url "https://files.pythonhosted.org/packages/06/a9/cd1fd8ee13f73a4d4f491ee219deeeae20afefa914dfb4c130cfc9dc397a/certifi-2020.12.5.tar.gz"
-    sha256 "1a4995114262bffbc2413b159f2a1a480c969de6e6eb13ee966d470af86af59c"
+    url "https://files.pythonhosted.org/packages/6d/78/f8db8d57f520a54f0b8a438319c342c61c22759d8f9a1cd2e2180b5e5ea9/certifi-2021.5.30.tar.gz"
+    sha256 "2bbf76fd432960138b3ef6dda3dde0544f27cbf8546c458e60baf371917ba9ee"
   end
 
-  resource "chardet" do
-    url "https://files.pythonhosted.org/packages/ee/2d/9cdc2b527e127b4c9db64b86647d567985940ac3698eeabc7ffaccb4ea61/chardet-4.0.0.tar.gz"
-    sha256 "0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa"
+  resource "charset-normalizer" do
+    url "https://files.pythonhosted.org/packages/eb/7f/a6c278746ddbd7094b019b08d1b2187101b1f596f35f81dc27f57d8fcf7c/charset-normalizer-2.0.6.tar.gz"
+    sha256 "5ec46d183433dcbd0ab716f2d7f29d8dee50505b3fdb40c6b985c7c4f5a3591f"
   end
 
   resource "ConfigArgParse" do
-    url "https://files.pythonhosted.org/packages/fa/c2/986a0692857b25d6c7998060b21d40068bfb08a510dcf1bf4b0d161745b6/ConfigArgParse-1.4.1.tar.gz"
-    sha256 "6df537158f28c5ef2e8a8146781833abbc6cb7fca81b1b55d18808ce3439235e"
+    url "https://files.pythonhosted.org/packages/42/1c/3e40ae017361f30b01b391b1ee263ec93e4c2666221c69ebba297ff33be6/ConfigArgParse-1.5.2.tar.gz"
+    sha256 "c39540eb4843883d526beeed912dc80c92481b0c13c9787c91e614a624de3666"
   end
 
   resource "idna" do
-    url "https://files.pythonhosted.org/packages/ea/b7/e0e3c1c467636186c39925827be42f16fee389dc404ac29e930e9136be70/idna-2.10.tar.gz"
-    sha256 "b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"
+    url "https://files.pythonhosted.org/packages/cb/38/4c4d00ddfa48abe616d7e572e02a04273603db446975ab46bbcd36552005/idna-3.2.tar.gz"
+    sha256 "467fbad99067910785144ce333826c71fb0e63a425657295239737f7ecd125f3"
   end
 
   resource "lxml" do
@@ -64,13 +67,13 @@ class YleDl < Formula
   end
 
   resource "requests" do
-    url "https://files.pythonhosted.org/packages/6b/47/c14abc08432ab22dc18b9892252efaf005ab44066de871e72a38d6af464b/requests-2.25.1.tar.gz"
-    sha256 "27973dd4a904a4f13b263a19c866c13b92a39ed1c964655f025f3f8d3d75b804"
+    url "https://files.pythonhosted.org/packages/e7/01/3569e0b535fb2e4a6c384bdbed00c55b9d78b5084e0fb7f4d0bf523d7670/requests-2.26.0.tar.gz"
+    sha256 "b8aa58f8cf793ffd8782d3d8cb19e66ef36f7aba4353eec859e74678b01b07a7"
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/cb/cf/871177f1fc795c6c10787bc0e1f27bb6cf7b81dbde399fd35860472cecbc/urllib3-1.26.4.tar.gz"
-    sha256 "e7b021f7241115872f92f43c6508082facffbd1c048e3c6e2bb9c2a157e28937"
+    url "https://files.pythonhosted.org/packages/4f/5a/597ef5911cb8919efe4d86206aa8b2658616d676a7088f0825ca08bd7cb8/urllib3-1.26.6.tar.gz"
+    sha256 "f57b4c16c62fa2760b7e3d97c35b255512fb6b59a259730f36ba32ce9f8e342f"
   end
 
   def install
@@ -96,6 +99,7 @@ class YleDl < Formula
 
   test do
     output = shell_output("#{bin}/yle-dl --showtitle https://areena.yle.fi/1-1570236")
-    assert_equal "Traileri: 1 minuutti-2012-05-30T10:51\n", output
+    assert_match "Traileri:", output
+    assert_match "2012-05-30T10:51", output
   end
 end

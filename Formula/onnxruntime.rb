@@ -2,8 +2,8 @@ class Onnxruntime < Formula
   desc "Cross-platform, high performance scoring engine for ML models"
   homepage "https://github.com/microsoft/onnxruntime"
   url "https://github.com/microsoft/onnxruntime.git",
-      tag:      "v1.8.0",
-      revision: "d4106deeb65c21eed3ed40df149efefeb72fe9a4"
+      tag:      "v1.9.1",
+      revision: "2a96b73a1afa9aaafb510749627e267c4e8dee63"
   license "MIT"
 
   livecheck do
@@ -12,14 +12,23 @@ class Onnxruntime < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "45a4521a6931f7dfb76d0f3bf6e297aff4e014d1f40d54fb4bc5bcd71d246ce6"
-    sha256 cellar: :any, big_sur:       "5648048c5d41d3b093d74297379e7ceb4bd762d7103e1ccd9efb1addf687ee1d"
-    sha256 cellar: :any, catalina:      "f1a8b759da014e3aff32c6c1412d6831ecb2d6dff100492379ddad0e5d8ec146"
-    sha256 cellar: :any, mojave:        "c457425070ed99f7ebcdd0078f1025063d884ed4c8e19fad7c7f20ce8a532e8f"
+    sha256 cellar: :any,                 arm64_monterey: "1df38efbb3dabf25c4a8a66f0703576a9bd68030a33956cdea6f75701b84f9f0"
+    sha256 cellar: :any,                 arm64_big_sur:  "b201b295f91bb36ea1ddd9a1fc369698466e790d2db462c74adf07cb5a7bd764"
+    sha256 cellar: :any,                 monterey:       "8dcd8c225b6d6947c9fcf6417df6372b975f125237a5fc55496260c78abbc3a9"
+    sha256 cellar: :any,                 big_sur:        "9df210ba239c623f6c0270db7c3e75089007422156be6c35867c37f060ede8f7"
+    sha256 cellar: :any,                 catalina:       "ff4acf5025be335fbb577682f2ba438f749a64d12b6f7167a11c1aff29235dcc"
+    sha256 cellar: :any,                 mojave:         "be2ce9d531cdc938a4587126364fa4fd7b237bc50d183d9aa3359969913e7b77"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "469682bee07c34a201802ba90f228893035f8f16d58ad3a7d9a58f06d4a64427"
   end
 
   depends_on "cmake" => :build
   depends_on "python@3.9" => :build
+
+  on_linux do
+    depends_on "gcc" => :build
+  end
+
+  fails_with gcc: "5" # GCC version < 7 is no longer supported
 
   def install
     cmake_args = %W[
@@ -46,8 +55,8 @@ class Onnxruntime < Formula
         return 0;
       }
     EOS
-    system ENV.cc, "-I#{include}", "-L#{lib}", "-lonnxruntime",
-           testpath/"test.c", "-o", testpath/"test"
+    system ENV.cc, "-I#{include}", testpath/"test.c",
+           "-L#{lib}", "-lonnxruntime", "-o", testpath/"test"
     assert_equal version, shell_output("./test").strip
   end
 end

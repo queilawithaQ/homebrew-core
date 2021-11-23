@@ -12,9 +12,10 @@ class GccAT9 < Formula
   end
 
   bottle do
-    sha256 big_sur:  "ef05afedb14a945c18e8ab08af9e96293a8ef285af2df365a676b9df0be9c93f"
-    sha256 catalina: "01e1eb5be5910cd743653c25de299ac7614ca3910de50b0ae3c25f9ba89c108d"
-    sha256 mojave:   "c480dc44d4a5e568077e452c49c7c8e8daa61a924e7137fbeefc8821449d7d10"
+    sha256 big_sur:      "ef05afedb14a945c18e8ab08af9e96293a8ef285af2df365a676b9df0be9c93f"
+    sha256 catalina:     "01e1eb5be5910cd743653c25de299ac7614ca3910de50b0ae3c25f9ba89c108d"
+    sha256 mojave:       "c480dc44d4a5e568077e452c49c7c8e8daa61a924e7137fbeefc8821449d7d10"
+    sha256 x86_64_linux: "4534a693580cebb9f091bb50cd1e99018c8b59af8d1181123b3d02145295cc98"
   end
 
   # The bottles are built on systems with the CLT installed, and do not work
@@ -72,7 +73,7 @@ class GccAT9 < Formula
       --with-bugurl=#{tap.issues_url}
     ]
 
-    on_macos do
+    if OS.mac?
       args << "--build=x86_64-apple-darwin#{OS.kernel_version.major}"
       args << "--with-system-zlib"
 
@@ -93,9 +94,7 @@ class GccAT9 < Formula
       # Ensure correct install names when linking against libgcc_s;
       # see discussion in https://github.com/Homebrew/legacy-homebrew/pull/34303
       inreplace "libgcc/config/t-slibgcc-darwin", "@shlib_slibdir@", "#{HOMEBREW_PREFIX}/lib/gcc/#{version_suffix}"
-    end
-
-    on_linux do
+    else
       # Fix Linux error: gnu/stubs-32.h: No such file or directory.
       args << "--disable-multilib"
 
@@ -107,15 +106,13 @@ class GccAT9 < Formula
     mkdir "build" do
       system "../configure", *args
 
-      on_macos do
+      if OS.mac?
         # Use -headerpad_max_install_names in the build,
         # otherwise updated load commands won't fit in the Mach-O header.
         # This is needed because `gcc` avoids the superenv shim.
         system "make", "BOOT_LDFLAGS=-Wl,-headerpad_max_install_names"
         system "make", "install"
-      end
-
-      on_linux do
+      else
         system "make"
         system "make", "install-strip"
       end
@@ -130,7 +127,7 @@ class GccAT9 < Formula
   end
 
   def post_install
-    on_linux do
+    if OS.linux?
       gcc = bin/"gcc-#{version_suffix}"
       libgcc = Pathname.new(Utils.safe_popen_read(gcc, "-print-libgcc-file-name")).parent
       raise "command failed: #{gcc} -print-libgcc-file-name" if $CHILD_STATUS.exitstatus.nonzero?

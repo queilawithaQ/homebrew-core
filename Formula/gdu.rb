@@ -1,15 +1,17 @@
 class Gdu < Formula
   desc "Disk usage analyzer with console interface written in Go"
   homepage "https://github.com/dundee/gdu"
-  url "https://github.com/dundee/gdu/archive/v5.1.0.tar.gz"
-  sha256 "d51b1204f7d2132ef8d9d5dd20327630b6c9d8ab45d9f9c1c131334c73f28fe4"
+  url "https://github.com/dundee/gdu/archive/v5.10.0.tar.gz"
+  sha256 "c3c4973e621066aef23115710379953c5f59142d495c69c9b102ce98faf2291b"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "c1bb073ba694200133eec22b7e8caea02c36cbc02850451b158b09224ccb3f7d"
-    sha256 cellar: :any_skip_relocation, big_sur:       "2d3a1fc4cd727289edd0fbb5ba63857c88314e747490b8481e1c10928922837a"
-    sha256 cellar: :any_skip_relocation, catalina:      "375286e89b02a3126b57e3598da324bed92165c16f7df29bd3b4440480140f07"
-    sha256 cellar: :any_skip_relocation, mojave:        "047919911280071e977dbdd540eab08de1450e0b2517b23fa5f0656cdca2fd78"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "26b6707064002db32f41618df178c985f386b9477064fb00b99873d49a72e197"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "7134a168c10288600640e4543985e0f33cdfd19e857f69b8beee414afdcd46cd"
+    sha256 cellar: :any_skip_relocation, monterey:       "7fa3e89429ae71dba52da97bf75126f1c74a8f6002d3b50c48acbb17f66548b5"
+    sha256 cellar: :any_skip_relocation, big_sur:        "b0ed8858d929c7affefb4e52f9338f957774c69e035020acf2af7c3d9d818c7d"
+    sha256 cellar: :any_skip_relocation, catalina:       "4600b82cab5d17ac5313e2029e2bac217306948ab9b436a1ead187edb19e9f8b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "7be0d435ac140482794486cd44aee8b728816ff398fb603722d0444abdf7f82e"
   end
 
   depends_on "go" => :build
@@ -17,8 +19,6 @@ class Gdu < Formula
   conflicts_with "coreutils", because: "both install `gdu` binaries"
 
   def install
-    ENV["TZ"] = "UTC"
-    time = Time.at(ENV["SOURCE_DATE_EPOCH"].to_i)
     user = Utils.safe_popen_read("id", "-u", "-n")
     major = version.major
 
@@ -27,9 +27,9 @@ class Gdu < Formula
       -X "github.com/dundee/gdu/v#{major}/build.Version=v#{version}"
       -X "github.com/dundee/gdu/v#{major}/build.Time=#{time}"
       -X "github.com/dundee/gdu/v#{major}/build.User=#{user}"
-    ]
+    ].join(" ")
 
-    system "go", "build", *std_go_args(ldflags: ldflags.join(" ")), "github.com/dundee/gdu/v#{major}/cmd/gdu"
+    system "go", "build", *std_go_args(ldflags: ldflags), "./cmd/gdu"
   end
 
   test do

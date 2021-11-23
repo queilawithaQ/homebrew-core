@@ -1,15 +1,17 @@
 class SqlxCli < Formula
   desc "Command-line utility for SQLx, the Rust SQL toolkit"
   homepage "https://github.com/launchbadge/sqlx"
-  url "https://github.com/launchbadge/sqlx/archive/v0.5.5.tar.gz"
-  sha256 "4e51566090a23dd5c9e1fabb70f3b15db8e2e25303f3fc9074ae81bfc7e48276"
+  url "https://github.com/launchbadge/sqlx/archive/v0.5.9.tar.gz"
+  sha256 "47d2e35110c117681f267fe5ad543b0105a09434b38101c5ce2441f4cfd2ba7c"
   license any_of: ["Apache-2.0", "MIT"]
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "e41d0e307e9d17e8966aed83c29fad8373e82bb9d5a6a3dc6f37a133032277b8"
-    sha256 cellar: :any_skip_relocation, big_sur:       "11f11e3eda3869c7cd10e8fd10625f6db88b558e9bc631727dd2b41b6ae6ac7e"
-    sha256 cellar: :any_skip_relocation, catalina:      "cbbc676a115e5d2ddf94ec8c78fc83e50898a3189c51079608baa72f039792d4"
-    sha256 cellar: :any_skip_relocation, mojave:        "5ce17dc84ca3c80c39e379d2f3e9d7f6bf8d612af07850dc3188d1bfd7edcb10"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "c79b1800a71eaf3aef1e461b4105d6f1bdbcba919e6232911ec8926800ed18cb"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "fdebbfe79a45af7785c58f8cbfa3e9ca0e76835b9bc00d651510d0219635787d"
+    sha256 cellar: :any_skip_relocation, monterey:       "76250987011fbf62e624e48542cd1aee38ad0482479a8257f47f5e5c684535b1"
+    sha256 cellar: :any_skip_relocation, big_sur:        "851d67fa337bb014d0dde1b906249762f16a9ea592e5f210223e4ee83d24fac6"
+    sha256 cellar: :any_skip_relocation, catalina:       "e2b4fa3f70a85aae39d586cb221c10270ac7d1ea83598f433b238bd8d9770159"
+    sha256 cellar: :any_skip_relocation, mojave:         "e082233ec21cccc714ce75f4d3bea950ea078592cf7ac67228df49544c82e9fd"
   end
 
   depends_on "rust" => :build
@@ -21,7 +23,8 @@ class SqlxCli < Formula
   end
 
   test do
-    assert_match "error: The DATABASE_URL environment variable", shell_output("#{bin}/sqlx prepare 2>&1", 1)
+    assert_match "error: The following required arguments were not provided",
+      shell_output("#{bin}/sqlx prepare 2>&1", 2)
 
     ENV["DATABASE_URL"] = "postgres://postgres@localhost/my_database"
     assert_match "error: while resolving migrations: No such file or directory",

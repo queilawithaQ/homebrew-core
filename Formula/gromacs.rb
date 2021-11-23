@@ -1,8 +1,8 @@
 class Gromacs < Formula
   desc "Versatile package for molecular dynamics calculations"
   homepage "https://www.gromacs.org/"
-  url "https://ftp.gromacs.org/pub/gromacs/gromacs-2021.2.tar.gz"
-  sha256 "d940d865ea91e78318043e71f229ce80d32b0dc578d64ee5aa2b1a4be801aadb"
+  url "https://ftp.gromacs.org/pub/gromacs/gromacs-2021.4.tar.gz"
+  sha256 "cb708a3e3e83abef5ba475fdb62ef8d42ce8868d68f52dafdb6702dc9742ba1d"
   license "LGPL-2.1-or-later"
 
   livecheck do
@@ -11,10 +11,11 @@ class Gromacs < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "4999db93029325282056050232bc89c6f0261df9bff405d676631c326da75a6d"
-    sha256 big_sur:       "48af6ab3affcfc57a701744ea904c8f942f2ab34554ba6aeeee6ab87c1197a90"
-    sha256 catalina:      "517993a760552b80638aa56b057a5128cf6536d6ee25a469ea4dd7613c701d62"
-    sha256 mojave:        "a4ad5635279fe7f15a7c9809f4d9ddd1bb2cf9e8836329f1baa8021bbe0e8065"
+    sha256 arm64_big_sur: "6d44ead96dff4f78c2c7e31a6862786a96079f310643c8e04e0557379ddecfbc"
+    sha256 monterey:      "fb13ce47fa8f22941e92495cbcbcc6a2bd629ccfb282dfc005d6e32d0cbf8776"
+    sha256 big_sur:       "fd89af8cd2ebd8f6d782464377118d5183c67b88892a315967a164d4a133e490"
+    sha256 catalina:      "bfc7d70c8556de5421a3203a5c44b653e4fcc24940fe520f53651eb0497a3b08"
+    sha256 x86_64_linux:  "a7bc30f7ad8c3c42a1045326e3b369b64baa639c8711e32a2561e73e6ce9229e"
   end
 
   depends_on "cmake" => :build
@@ -25,19 +26,6 @@ class Gromacs < Formula
   fails_with :clang
   fails_with gcc: "5"
   fails_with gcc: "6"
-
-  # https://gitlab.com/gromacs/gromacs/-/merge_requests/1494
-  # Fix build with CMake 3.20+. Remove at next release
-  patch do
-    url "https://gitlab.com/gromacs/gromacs/-/commit/e4e1263776844d660c471e3d1203acf54cdc855f.diff"
-    sha256 "984cfd741bdabf83b54f19e8399b5b75ee20994804bd18299c36a918fbdae8b0"
-  end
-
-  # Fix build with CMake 3.20+. Remove at next release
-  patch do
-    url "https://gitlab.com/gromacs/gromacs/-/commit/5771842a06f483ad52781f4f2cdf5311ddb5cfa1.diff"
-    sha256 "2c30d00404b76421c13866cc42afa5e63276f7926c862838751b158df8727b1b"
-  end
 
   def install
     # Non-executable GMXRC files should be installed in DATADIR
@@ -62,7 +50,8 @@ class Gromacs < Formula
     inreplace "src/gromacs/gromacs-config.cmake.cmakein", "@GROMACS_CXX_COMPILER@", cxx
 
     mkdir "build" do
-      system "cmake", "..", *std_cmake_args, "-DGROMACS_CXX_COMPILER=#{cxx}"
+      system "cmake", "..", *std_cmake_args, "-DGROMACS_CXX_COMPILER=#{cxx}",
+                                             "-DGMX_VERSION_STRING_OF_FORK=#{tap.user}"
       system "make", "install"
     end
 

@@ -3,15 +3,17 @@ require "language/node"
 class Nativefier < Formula
   desc "Wrap web apps natively"
   homepage "https://github.com/nativefier/nativefier"
-  url "https://registry.npmjs.org/nativefier/-/nativefier-44.0.4.tgz"
-  sha256 "a81e8ee5ce1bbdb20466ef0d3ea6dae4c08e5b2083b2c8327db887c49671b159"
+  url "https://registry.npmjs.org/nativefier/-/nativefier-45.0.6.tgz"
+  sha256 "2c56fd89067cf44ee15c9952976f6b2e46a27a1051599ba20207545229f812ca"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "f90d331648e43c656ddbd882fd3f9f70f78984dd364144f7693fd3a09673efda"
-    sha256 cellar: :any_skip_relocation, big_sur:       "cda057e052ea53f7e66f871942ec1061eb122f1470bf25596cbadfca57d1700d"
-    sha256 cellar: :any_skip_relocation, catalina:      "cda057e052ea53f7e66f871942ec1061eb122f1470bf25596cbadfca57d1700d"
-    sha256 cellar: :any_skip_relocation, mojave:        "cda057e052ea53f7e66f871942ec1061eb122f1470bf25596cbadfca57d1700d"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "3f4028faab54472ab0646ef3128f24445c50c055ca816fb942cd3bcd1ad1d2f4"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "3f4028faab54472ab0646ef3128f24445c50c055ca816fb942cd3bcd1ad1d2f4"
+    sha256 cellar: :any_skip_relocation, monterey:       "5e7611a421a65cf462f4285562a12be72a3f6553b49a1cf39e3eea1c1fa1cb7e"
+    sha256 cellar: :any_skip_relocation, big_sur:        "5e7611a421a65cf462f4285562a12be72a3f6553b49a1cf39e3eea1c1fa1cb7e"
+    sha256 cellar: :any_skip_relocation, catalina:       "5e7611a421a65cf462f4285562a12be72a3f6553b49a1cf39e3eea1c1fa1cb7e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "3f4028faab54472ab0646ef3128f24445c50c055ca816fb942cd3bcd1ad1d2f4"
   end
 
   depends_on "node"

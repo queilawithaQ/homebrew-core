@@ -1,10 +1,10 @@
 class Rdkit < Formula
   desc "Open-source chemoinformatics library"
   homepage "https://rdkit.org/"
-  url "https://github.com/rdkit/rdkit/archive/Release_2021_03_3.tar.gz"
-  sha256 "e95f07adaee9280df077cb147210ee75e16957d81687ab0836d62ebf1f6f715f"
+  url "https://github.com/rdkit/rdkit/archive/Release_2021_09_2.tar.gz"
+  sha256 "1a6b41e4c5e2f1a98acfc9c0aa46aa32a97323f0531457d69fcdc70c4a964140"
   license "BSD-3-Clause"
-  head "https://github.com/rdkit/rdkit.git"
+  head "https://github.com/rdkit/rdkit.git", branch: "master"
 
   livecheck do
     url :stable
@@ -15,10 +15,11 @@ class Rdkit < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "f065b2f947c24fe8b52fc84766f511dd9a695546933597c4fe5df1844e4f1588"
-    sha256 cellar: :any, big_sur:       "e786992d134187bff83938ee4d2b05ee7cbc75d13ab41470e808fc7a12e4ee4c"
-    sha256 cellar: :any, catalina:      "24283966e3001e25b283e917d2ad4b0619563560991814864e9192b2c8093673"
-    sha256 cellar: :any, mojave:        "bd83ea1458265dfb3141cf3644db8c50579668c8ee317f0c4b53115a195cb617"
+    sha256 cellar: :any,                 arm64_big_sur: "28c1c33143235bb0fd8976b09cd9401d5a8017eb0eecdf1c3b7e8160a76899ea"
+    sha256 cellar: :any,                 monterey:      "70011ed02c38c974ed6b3af724ee1f9a47af6f40c6c2bcabc87202acd3993c9f"
+    sha256 cellar: :any,                 big_sur:       "ab6b59afc8867d96437797a740359f87bb0c821f76e06c35a11f3759a784e87e"
+    sha256 cellar: :any,                 catalina:      "9ef1cd7eb9dab750ce12dcc66af8b04b0552562c25d86e24535625f2a6e5efb4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "07bc3a29f7e719d700ec3e57fc7446900b665d1663181d15ae694dc7782ea74f"
   end
 
   depends_on "cmake" => :build
@@ -41,9 +42,10 @@ class Rdkit < Formula
     # Get Python location
     python_executable = Formula["python@3.9"].opt_bin/"python3"
     py3ver = Language::Python.major_minor_version Formula["python@3.9"].opt_bin/"python3"
-    py3prefix = Formula["python@3.9"].opt_frameworks/"Python.framework/Versions/#{py3ver}"
-    on_linux do
-      py3prefix = Formula["python@3.9"].opt_prefix
+    py3prefix = if OS.mac?
+      Formula["python@3.9"].opt_frameworks/"Python.framework/Versions/#{py3ver}"
+    else
+      Formula["python@3.9"].opt_prefix
     end
     py3include = "#{py3prefix}/include/python#{py3ver}"
     numpy_include = Formula["numpy"].opt_lib/"python#{py3ver}/site-packages/numpy/core/include"

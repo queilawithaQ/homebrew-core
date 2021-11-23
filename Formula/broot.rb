@@ -1,20 +1,24 @@
 class Broot < Formula
   desc "New way to see and navigate directory trees"
   homepage "https://dystroy.org/broot/"
-  url "https://github.com/Canop/broot/archive/v1.6.0.tar.gz"
-  sha256 "40d54dcd67abab02a50415de0c6d352a51293b28c3e08b29c97138c8d9e8259c"
+  url "https://github.com/Canop/broot/archive/v1.7.2.tar.gz"
+  sha256 "66fab966f3bbb2b37d0b0b5842835e20ddd6dbd6423061a850d58571ca9116ef"
   license "MIT"
-  head "https://github.com/Canop/broot.git"
+  head "https://github.com/Canop/broot.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "c3c5fc41395f318814fedca2e43ce647246d1de68df200a25d6b91c3308a1aaa"
-    sha256 cellar: :any_skip_relocation, big_sur:       "28a0833e38089d1642ad48b3d62225b63ce5a366a55df12e4d25df6723a41cde"
-    sha256 cellar: :any_skip_relocation, catalina:      "71f881ecbfc812bd6eaeb0836df7110b258f4a4e8d4441d5bf633f62bec5a648"
-    sha256 cellar: :any_skip_relocation, mojave:        "ae00e63839e34e5fd65b3c48382d2737d89c4659b073c55d13192ddfa0c3a4ce"
+    sha256 cellar: :any,                 arm64_monterey: "8da47ba3b6ed80196c115e94dadf820bf16a8c132ebd7070387116570afbfde2"
+    sha256 cellar: :any,                 arm64_big_sur:  "874fb1dd2e8165e427ee467cf0b854249a35f8ad17d6e1d1ad7fdc4b8e712035"
+    sha256 cellar: :any,                 monterey:       "af2f19a27a9e4e67358aadeb8807bbdb37eba1efa4b4bd463ab81823ee20d115"
+    sha256 cellar: :any,                 big_sur:        "809504ca67d012ed75f827384a8ab9eee11a71d3a803e1628acd3ec347c63bb5"
+    sha256 cellar: :any,                 catalina:       "3a7d33f67c4538e2cea40227adfbe7f9c7bc1dacd2c40ce3f7ba10cc349c1ae4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "d1c5a06b2664ba3b4493cad537358b5aca19b4c59d7230ee80453677a2146ef5"
   end
 
   depends_on "rust" => :build
+  depends_on "libxcb"
 
+  uses_from_macos "curl" => :build
   uses_from_macos "zlib"
 
   def install
@@ -23,7 +27,7 @@ class Broot < Formula
     # Replace man page "#version" and "#date" based on logic in release.sh
     inreplace "man/page" do |s|
       s.gsub! "#version", version
-      s.gsub! "#date", Time.now.utc.strftime("%Y/%m/%d")
+      s.gsub! "#date", time.strftime("%Y/%m/%d")
     end
     man1.install "man/page" => "broot.1"
 

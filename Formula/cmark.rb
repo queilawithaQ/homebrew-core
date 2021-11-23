@@ -1,17 +1,18 @@
 class Cmark < Formula
   desc "Strongly specified, highly compatible implementation of Markdown"
   homepage "https://commonmark.org/"
-  url "https://github.com/commonmark/cmark/archive/0.29.0.tar.gz"
-  sha256 "2558ace3cbeff85610de3bda32858f722b359acdadf0c4691851865bb84924a6"
+  url "https://github.com/commonmark/cmark/archive/0.30.2.tar.gz"
+  sha256 "6c7d2bcaea1433d977d8fed0b55b71c9d045a7cdf616e3cd2dce9007da753db3"
   license "BSD-2-Clause"
-  revision 2
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "ca089ca505933fd9e99555cbb8674994e622300a772a602edc31b670cabd6a50"
-    sha256 cellar: :any, big_sur:       "ebd4950efccf01f8289486df7fa7ccb4af6fa851f3780d8684089015ca312fe4"
-    sha256 cellar: :any, catalina:      "bac8513461f194c42c622ad7ec947e29c12ad297e7d8a484e1fbe85ebc34e68b"
-    sha256 cellar: :any, mojave:        "1a539a85b286c90328c6369631229e479129587b2fe7787dc023d983b9773788"
-    sha256 cellar: :any, high_sierra:   "08672a685877aab6625cb400fc56b73cc370f0006eb9b0befbd7e6a11569ceae"
+    sha256 cellar: :any,                 arm64_monterey: "e1fa03a664d685aef0da9a3aa66df403618a037dbf3e633ce2b9c1216d38808a"
+    sha256 cellar: :any,                 arm64_big_sur:  "b5c6f7afba617f9886ba3f16fed0aeccee9f2c72d105236f995986f8ed5daaa6"
+    sha256 cellar: :any,                 monterey:       "0a53b1a9645e2b45e8e109d51d65f044d109ecc23b97b4c63ae2fc6b8f030165"
+    sha256 cellar: :any,                 big_sur:        "957b224ea8c9f23b3260013bf9f60d475cd9a0577ed9fede5ff096ed6035a9b1"
+    sha256 cellar: :any,                 catalina:       "59254ee4c9602976612648c361ccc1288e4af8caca6a1ec5f12b263be1f0944d"
+    sha256 cellar: :any,                 mojave:         "a4ec36e7473ba3fb80859464f712b9848c86fbd7979137d063ae3f1e7458784e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "a519030b76311ae6e1a5772b9e19aad6e3e80ed9edc48b520946e58ab9d5320b"
   end
 
   depends_on "cmake" => :build

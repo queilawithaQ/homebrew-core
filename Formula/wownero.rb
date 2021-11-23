@@ -2,16 +2,19 @@ class Wownero < Formula
   desc "Official wallet and node software for the Wownero cryptocurrency"
   homepage "https://wownero.org"
   url "https://git.wownero.com/wownero/wownero.git",
-      tag:      "v0.9.3.3",
-      revision: "e2d2b9a447502e22467af9df20e0732b3dd4ac4c"
+      tag:      "v0.10.1.0",
+      revision: "8ab87421d9321d0b61992c924cfa6e3918118ad0"
   license "BSD-3-Clause"
   revision 1
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "71d3fe6d4c0736cc7105242ae739105f1ace548de3c685d47c7c7b22d4992689"
-    sha256 cellar: :any, big_sur:       "52132bd354e8e20487628a30ba539a6a1bd4a1a1c0ddf7962ec6979d9505e2d8"
-    sha256 cellar: :any, catalina:      "3237f37e93216a467d63f916466a9f7a4bc8e70feb49f1e19a60bff853d7182b"
-    sha256 cellar: :any, mojave:        "9aad2bb430ded851f20ad8580754ad5c4f8cd38e80d8a31e5e73227d3cf00d34"
+    sha256 cellar: :any,                 arm64_monterey: "7fa636de1095aa610a6b995263ed7ef1d55864bc72f9bbb58093b7cf849dccfd"
+    sha256 cellar: :any,                 arm64_big_sur:  "ef39a53fc330916136257fa2f8e2019063e544770789b09503b53e4505bea918"
+    sha256 cellar: :any,                 monterey:       "33a39bf46590eb74990762f5ad929d0925fecba366a42ef1571e513e164a9eed"
+    sha256 cellar: :any,                 big_sur:        "2a7dc81fcfa03e22dfc74d069ccc505a249823ab116ca2f6eabc3e14d25f28f2"
+    sha256 cellar: :any,                 catalina:       "2713015081577274b00955f18eca366944e1557cd89ec00d852470c40a543ded"
+    sha256 cellar: :any,                 mojave:         "549739d9edb69887b6661b5daa670ac310693c44ff8462ece01629277b6aa263"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "b25b0804cff6eb8b88df6ecb0c72e836b22fd2bde9e78c7426c7c2cdba661abf"
   end
 
   depends_on "cmake" => :build
@@ -25,7 +28,6 @@ class Wownero < Formula
   depends_on "unbound"
   depends_on "zeromq"
 
-  conflicts_with "miniupnpc", because: "wownero ships its own copy of miniupnpc"
   conflicts_with "monero", because: "both install a wallet2_api.h header"
 
   # Boost 1.76 compatibility
@@ -33,7 +35,8 @@ class Wownero < Formula
   patch :DATA
 
   def install
-    system "cmake", ".", *std_cmake_args
+    # Need to help CMake find `readline` when not using /usr/local prefix
+    system "cmake", ".", *std_cmake_args, "-DReadline_ROOT_DIR=#{Formula["readline"].opt_prefix}"
     system "make", "install"
 
     # Fix conflict with miniupnpc.
@@ -41,35 +44,17 @@ class Wownero < Formula
     rm lib/"libminiupnpc.a"
   end
 
-  plist_options manual: "wownerod --non-interactive"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_bin}/wownerod</string>
-          <string>--non-interactive</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-      </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"wownerod", "--non-interactive"]
   end
 
   test do
     cmd = "yes '' | #{bin}/wownero-wallet-cli --restore-deterministic-wallet " \
-      "--password brew-test --restore-height 238084 --generate-new-wallet wallet " \
-      "--electrum-seed 'maze vixen spiders luggage vibrate western nugget older " \
-      "emails oozed frown isolated ledge business vaults budget " \
-      "saucepan faxed aloof down emulate younger jump legion saucepan'" \
-      "--command address"
+          "--password brew-test --restore-height 238084 --generate-new-wallet wallet " \
+          "--electrum-seed 'maze vixen spiders luggage vibrate western nugget older " \
+          "emails oozed frown isolated ledge business vaults budget " \
+          "saucepan faxed aloof down emulate younger jump legion saucepan'" \
+          "--command address"
     address = "Wo3YLuTzJLTQjSkyNKPQxQYz5JzR6xi2CTS1PPDJD6nQAZ1ZCk1TDEHHx8CRjHNQ9JDmwCDGhvGF3CZXmmX1sM9a1YhmcQPJM"
     assert_equal address, shell_output(cmd).lines.last.split[1]
   end

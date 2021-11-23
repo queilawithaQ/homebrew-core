@@ -1,23 +1,25 @@
 class Glab < Formula
   desc "Open-source GitLab command-line tool"
   homepage "https://glab.readthedocs.io/"
-  url "https://github.com/profclems/glab/archive/v1.18.1.tar.gz"
-  sha256 "ce10c93268eb58fa6d277ebd4ed6de254e4365a1a332122f597e295cc11496c3"
+  url "https://github.com/profclems/glab/archive/v1.21.1.tar.gz"
+  sha256 "878c13d064ca6010437de90ca3711962fd87441fcae39bf01cb0af5aa5efd79e"
   license "MIT"
-  revision 1
   head "https://github.com/profclems/glab.git", branch: "trunk"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "b3053ed3b503f358326ee09ece85d31b6659835e7b35c23eb5e5e2e62e0a491a"
-    sha256 cellar: :any_skip_relocation, big_sur:       "9a2f3821984bc6c24571cc7461be8f84cea8bfaecc78f5900ba34bc2b33e8397"
-    sha256 cellar: :any_skip_relocation, catalina:      "c48bbd22fc04d942edc8b0041bbdaf3c095c040d47a33f4f1223da67341f867f"
-    sha256 cellar: :any_skip_relocation, mojave:        "737ba02ba0bf3fb7c6f126b87cf0d3b265b22ba2c282f4ae582b3d2139341720"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "f30115f346654210a5580268de26a0a957193e1296d59db442d52b7854738404"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "c1a989fc60ce6bf9071350d9ce9d48d59858e490d92cb23fed6c979ea3a4dfc8"
+    sha256 cellar: :any_skip_relocation, monterey:       "a33a50438b8d38c0ed7da1e040d820652caf79c60177df1755d5ca4d00d7962a"
+    sha256 cellar: :any_skip_relocation, big_sur:        "82a903f4d6f4866fa55c93250d63467c8f83003389343cec63e8bc70e0e9dc5e"
+    sha256 cellar: :any_skip_relocation, catalina:       "766192bb22eba3e0219aae40b4898d4e0993788154a5885d865ae1e6074ac722"
+    sha256 cellar: :any_skip_relocation, mojave:         "60e7f1b0149b2c767b3324bed1719b573db47db3120250c9c596a372a639a06a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "6c2494a7790d8b3a0391842bc0b70b645a459630a264501becb96d893420768e"
   end
 
   depends_on "go" => :build
 
   def install
-    on_macos { ENV["CGO_ENABLED"] = "1" }
+    ENV["CGO_ENABLED"] = "1" if OS.mac?
 
     system "make", "GLAB_VERSION=#{version}"
     bin.install "bin/glab"

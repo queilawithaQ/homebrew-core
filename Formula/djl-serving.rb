@@ -1,12 +1,13 @@
 class DjlServing < Formula
   desc "This module contains an universal model serving implementation"
-  homepage "https://github.com/awslabs/djl/tree/master/serving"
-  url "https://djl-ai.s3.amazonaws.com/publish/djl-serving/serving-0.11.0.tar"
-  sha256 "a7bdd3397744e7cca57dc551cca9180ee88f5e630d31cef01a46cfb0dc73f666"
+  homepage "https://github.com/deepjavalibrary/djl-serving"
+  url "https://publish.djl.ai/djl-serving/serving-0.14.0.tar"
+  sha256 "9215201c92273e9843a6ecc0b086d8032bb598220bcb06d5f07ff7bfb90df6f1"
   license "Apache-2.0"
-  revision 1
 
-  bottle :unneeded
+  bottle do
+    sha256 cellar: :any_skip_relocation, all: "f40d2a66de5b7c4669185c65d51f6bea6fdb61d5c097d1a1a7be4fb03033e26e"
+  end
 
   depends_on "openjdk"
 
@@ -20,28 +21,9 @@ class DjlServing < Formula
     (bin/"djl-serving").write_env_script "#{libexec}/bin/djl-serving", env
   end
 
-  plist_options manual: "djl-serving"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>Disabled</key>
-          <false/>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{bin}/djl-serving</string>
-            <string>run</string>
-          </array>
-          <key>KeepAlive</key>
-          <true/>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"djl-serving", "run"]
+    keep_alive true
   end
 
   test do

@@ -2,8 +2,8 @@ class KubernetesCli < Formula
   desc "Kubernetes command-line interface"
   homepage "https://kubernetes.io/"
   url "https://github.com/kubernetes/kubernetes.git",
-      tag:      "v1.21.1",
-      revision: "5e58841cce77d4bc13713ad2b91fa0d961e69192"
+      tag:      "v1.22.4",
+      revision: "b695d79d4f967c403a96986f1750a35eb75e75f1"
   license "Apache-2.0"
   head "https://github.com/kubernetes/kubernetes.git"
 
@@ -13,15 +13,17 @@ class KubernetesCli < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "d6d7f52dddb3c2e7bd357014e353941fe904c050405d5a131531a95606625d48"
-    sha256 cellar: :any_skip_relocation, big_sur:       "ae61a1b396a5ee1b8559f21405acfd891ae7c33e08b42b5e04cc7d3ad5a8f4da"
-    sha256 cellar: :any_skip_relocation, catalina:      "88e926b2baf29ebee630b98f128b0bebac35dcbefabea4921fbf19b5ccf40602"
-    sha256 cellar: :any_skip_relocation, mojave:        "02989940e3a8622495e5a00c3c1f766e5563a899c5f5bcc36d10f23b2e08a79a"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "5b3bb446d2bbd86075c7ca8498c24d7cf6548d5ff84ee664db66c166b2174fd3"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "caae26867c0fec1afe36fc215a8b8001abdaa34dd04b5841575e37a4a8d620bf"
+    sha256 cellar: :any_skip_relocation, monterey:       "4d0ce9724fe4f4056a78b105d3b9bd4479b70a9925a985698cf67fd67332a178"
+    sha256 cellar: :any_skip_relocation, big_sur:        "abb79038d5ec2d067bd4530c237b2e81021adfe6311de732b15eb16d481f368b"
+    sha256 cellar: :any_skip_relocation, catalina:       "a1f2683e96b7a1acbfbff353d0bd74b347c836360351f57321558dace70852de"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "31dcccdfcba0ee62d713610c1302130f4cc1fb4fe581730f8766aaeddf152e7a"
   end
 
   depends_on "bash" => :build
   depends_on "coreutils" => :build
-  depends_on "go" => :build
+  depends_on "go@1.16" => :build
 
   uses_from_macos "rsync" => :build
 
@@ -30,6 +32,10 @@ class KubernetesCli < Formula
     rm_rf ".brew_home"
 
     # Make binary
+    # Deparallelize to avoid race conditions in creating symlinks, creating an error like:
+    #   ln: failed to create symbolic link: File exists
+    # See https://github.com/kubernetes/kubernetes/issues/106165
+    ENV.deparallelize
     ENV.prepend_path "PATH", Formula["coreutils"].libexec/"gnubin" # needs GNU date
     system "make", "WHAT=cmd/kubectl"
     bin.install "_output/bin/kubectl"

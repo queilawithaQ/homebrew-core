@@ -1,8 +1,8 @@
 class Kumactl < Formula
   desc "Kuma control plane command-line utility"
   homepage "https://kuma.io/"
-  url "https://github.com/kumahq/kuma/archive/1.2.0.tar.gz"
-  sha256 "898410d11d6b905bf010832a02b6b16bfe94e57205be736188130329404e6fb2"
+  url "https://github.com/kumahq/kuma/archive/1.4.0.tar.gz"
+  sha256 "c066dda527fd0717ec3188bb1576b4013ab1b23141df15fd58d4650b6c575089"
   license "Apache-2.0"
 
   livecheck do
@@ -11,10 +11,12 @@ class Kumactl < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "4097fa948ca7e4ade21154b3a3fab634fa6246e660fd43e17f394884d01f1510"
-    sha256 cellar: :any_skip_relocation, big_sur:       "280fcc2a498ef63eb8c7819b837c85e7886b99400687a2daa386eae4ae074122"
-    sha256 cellar: :any_skip_relocation, catalina:      "a4d492b6a3bcdf9dd545f55535769674f1bfd321ba38a9579841da1f2cfee0c0"
-    sha256 cellar: :any_skip_relocation, mojave:        "01c86cf43ef4a8b37f5f7ec4dd2c1db96f87f48908a07315092e26074f83c4b3"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "1b91dbd3a57d62686022e9ddb34c6b7e2ec91168e69ac700bbcaa1c11d0b1bc3"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "79c91bbd57ea5bda1db8f6eb7d110fe2f1c68c04743220428c511700f35c5768"
+    sha256 cellar: :any_skip_relocation, monterey:       "3c52f0a133217dc8b3d791801419f3199ab8a20e531e19331ada93c79f8540fb"
+    sha256 cellar: :any_skip_relocation, big_sur:        "d57a7e7b90d3d1cb883a5b10e8d58fa46ee575b4ea1e73803e2afc37ebbcc33c"
+    sha256 cellar: :any_skip_relocation, catalina:       "ada6229907c23b5c61ab321701104e65e03f0a212bea27efdeced64d8f9d7381"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "39905e3d9ff86a5dd5d580558fbd90cff08b0168471b5395460fed739e899854"
   end
 
   depends_on "go" => :build
@@ -23,7 +25,8 @@ class Kumactl < Formula
     ldflags = %W[
       -s -w
       -X github.com/kumahq/kuma/pkg/version.version=#{version}
-      -X github.com/kumahq/kuma/pkg/version.buildDate=#{Date.today}
+      -X github.com/kumahq/kuma/pkg/version.gitTag=#{version}
+      -X github.com/kumahq/kuma/pkg/version.buildDate=#{time.strftime("%F")}
     ].join(" ")
 
     system "go", "build", *std_go_args(ldflags: ldflags), "./app/kumactl"

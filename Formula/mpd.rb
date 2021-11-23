@@ -1,16 +1,18 @@
 class Mpd < Formula
   desc "Music Player Daemon"
   homepage "https://www.musicpd.org/"
-  url "https://www.musicpd.org/download/mpd/0.22/mpd-0.22.8.tar.xz"
-  sha256 "9617ed08c9ffafcf5f925819251f6b90df3f4f73cf2838c41033e1962104286d"
+  url "https://www.musicpd.org/download/mpd/0.23/mpd-0.23.4.tar.xz"
+  sha256 "2f359d30dd980f762d2bc324d916e48b731e8a4d456d01d120c61ad657e4c754"
   license "GPL-2.0-or-later"
-  head "https://github.com/MusicPlayerDaemon/MPD.git"
+  head "https://github.com/MusicPlayerDaemon/MPD.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "246e858d3140b39ef7c628ea4ec26da926519e7f933dc59298797a67ee8f9d8e"
-    sha256 cellar: :any, big_sur:       "7c8bbe79789bc8c2b870cd1adc36364f01fbb240465c976e6f7049b4740439e4"
-    sha256 cellar: :any, catalina:      "294a0ac898cbb3a3885e923b6bf618d52c9735585f93a22f766d4e709f090a14"
-    sha256 cellar: :any, mojave:        "0e0291c0e5a514f57d079e704d83f1fb975cd142b2d2ad151e91bca764a1fddd"
+    sha256 cellar: :any, arm64_monterey: "7c37f27fda23ed47609f51669ca54000a011112590ec4f5959264f15f3c87f75"
+    sha256 cellar: :any, arm64_big_sur:  "d24a93c81553513d129b5d7d7f063d745328795f8703ae01c2924d154394db1d"
+    sha256 cellar: :any, monterey:       "d4cb02ca7df349401494f1c41fc1c2b6476e83f4d1e264ac32f7b308a26f7c90"
+    sha256 cellar: :any, big_sur:        "288a171cecb73c33ab2dd502d42b60bc9e1aa68e83b58a46690e9a28679d5fa4"
+    sha256 cellar: :any, catalina:       "eba00ac5c931084bd8d9530c6bf09e0502dbebb7a19f2135425f600960419c03"
+    sha256               x86_64_linux:   "77eeba729835eb55eb304368e8ab50dd525cfdff8d28f3fd213b92fac0187877"
   end
 
   depends_on "boost" => :build
@@ -22,6 +24,7 @@ class Mpd < Formula
   depends_on "ffmpeg"
   depends_on "flac"
   depends_on "fluid-synth"
+  depends_on "fmt"
   depends_on "glib"
   depends_on "icu4c"
   depends_on "lame"
@@ -54,7 +57,6 @@ class Mpd < Formula
 
     args = std_meson_args + %W[
       --sysconfdir=#{etc}
-      -Dlibwrap=disabled
       -Dmad=disabled
       -Dmpcdec=disabled
       -Dsoundcloud=disabled
@@ -65,7 +67,7 @@ class Mpd < Formula
       -Dfluidsynth=enabled
       -Dnfs=enabled
       -Dshout=enabled
-      -Dupnp=enabled
+      -Dupnp=pupnp
       -Dvorbisenc=enabled
     ]
 
@@ -87,32 +89,11 @@ class Mpd < Formula
     EOS
   end
 
-  plist_options manual: "mpd"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>WorkingDirectory</key>
-          <string>#{HOMEBREW_PREFIX}</string>
-          <key>ProgramArguments</key>
-          <array>
-              <string>#{opt_bin}/mpd</string>
-              <string>--no-daemon</string>
-          </array>
-          <key>RunAtLoad</key>
-          <true/>
-          <key>KeepAlive</key>
-          <true/>
-          <key>ProcessType</key>
-          <string>Interactive</string>
-      </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"mpd", "--no-daemon"]
+    keep_alive true
+    process_type :interactive
+    working_dir HOMEBREW_PREFIX
   end
 
   test do

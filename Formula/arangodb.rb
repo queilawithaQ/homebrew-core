@@ -1,16 +1,19 @@
 class Arangodb < Formula
   desc "Multi-Model NoSQL Database"
   homepage "https://www.arangodb.com/"
-  url "https://download.arangodb.com/Source/ArangoDB-3.7.11.tar.gz"
-  sha256 "1921be165ee846cbcf6b9b4370db5b0ac8d0681045d8f3b4bff00040ac509fad"
+  url "https://download.arangodb.com/Source/ArangoDB-3.8.3.tar.bz2"
+  sha256 "d7c6e705d59412eb5a87457c7f88a96a655af87845a201d5bf7e62fadcd50f78"
   license "Apache-2.0"
-  revision 1
   head "https://github.com/arangodb/arangodb.git", branch: "devel"
 
+  livecheck do
+    url "https://www.arangodb.com/download-major/source/"
+    regex(/href=.*?ArangoDB[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
+
   bottle do
-    sha256 big_sur:  "df108f4cc57cf4db306da13b629b5d52bb40f70361deb7277f5b42b746734da1"
-    sha256 catalina: "30cd203239844f16ebb571b2a2a93de7abb185f16385f9f0a61babdd3b955f3a"
-    sha256 mojave:   "d895596dccb6ec69a4d9ab7e7984ff876302379d5ef2870601e2e75f94b5884e"
+    sha256 big_sur:  "edcde31b2fd366c7d758ffc0b77aa884f31730e936917515a7a4cd6cc9a51feb"
+    sha256 catalina: "a3d03ffa2a2164a2d88aff4ed462f4b08c5bbd9bc13d674e91fe1ad1cc436898"
   end
 
   depends_on "ccache" => :build
@@ -25,14 +28,12 @@ class Arangodb < Formula
   # with a unified CLI
   resource "starter" do
     url "https://github.com/arangodb-helper/arangodb.git",
-        tag:      "0.15.0",
-        revision: "74b0760828c3b84b63267184ec8eb8492cdf4c6b"
+        tag:      "0.15.3",
+        revision: "814f8be9e5cc613a63ac1dc161b879ccb7ec23e0"
   end
 
   def install
-    on_macos do
-      ENV["MACOSX_DEPLOYMENT_TARGET"] = MacOS.version
-    end
+    ENV["MACOSX_DEPLOYMENT_TARGET"] = MacOS.version if OS.mac?
 
     resource("starter").stage do
       ENV["GO111MODULE"] = "on"
@@ -101,7 +102,7 @@ class Arangodb < Formula
               "--server.arangod", "#{sbin}/arangod",
               "--server.js-dir", "#{share}/arangodb3/js") do |r, _, pid|
       loop do
-        available = IO.select([r], [], [], 60)
+        available = r.wait_readable(60)
         refute_equal available, nil
 
         line = r.readline.strip

@@ -8,11 +8,11 @@ class Bind < Formula
   # "version_scheme" because someone upgraded to 9.15.0, and required a
   # downgrade.
 
-  url "https://downloads.isc.org/isc/bind9/9.16.16/bind-9.16.16.tar.xz"
-  sha256 "6c913902adf878e7dc5e229cea94faefc9d40f44775a30213edd08860f761d7b"
+  url "https://downloads.isc.org/isc/bind9/9.16.23/bind-9.16.23.tar.xz"
+  sha256 "dedb5e27aa9cb6a9ce3e872845887ff837b99e4e9a91a5e2fcd67cf6e1ef173c"
   license "MPL-2.0"
   version_scheme 1
-  head "https://gitlab.isc.org/isc-projects/bind9.git"
+  head "https://gitlab.isc.org/isc-projects/bind9.git", branch: "main"
 
   # BIND indicates stable releases with an even-numbered minor (e.g., x.2.x)
   # and the regex below only matches these versions.
@@ -22,10 +22,12 @@ class Bind < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "1760d6ca4c7828dba00ee1e08d8e5aa29c45e8b6989909e376a6c5addec1cb49"
-    sha256 big_sur:       "d461b3f29beff84605e9de44c3f28bdc5c3623e532c8123c36120c8ea042cf5b"
-    sha256 catalina:      "c92e452d281ea1e8007c398f705c403b186ea2d855250282dd0d7dc43586db35"
-    sha256 mojave:        "574b9afb50b52e8530968ddb03958c156692138943491de472354605c4dd4142"
+    sha256 arm64_monterey: "22638377ac6447aeb514e847af603b666a4e4e4c497e56e4a3f6da942e25613a"
+    sha256 arm64_big_sur:  "35e21939e97396585a53df0d6d8e378149256c5ac267afc3a58947f1eff3fbf6"
+    sha256 monterey:       "7690d9647fe222253d69e235f99eba877311419f1f8ad4097365175091f97665"
+    sha256 big_sur:        "fa3ab286974188c2539646cd13e9408302eb5ece8918aaf3264c989618278f42"
+    sha256 catalina:       "e1cb285a18c2e0feb4d4280966b75751574b402384c9bb2e1e299849760c7a70"
+    sha256 x86_64_linux:   "611a17a95d0273824aa3c9ce87dd5eed13544c6da7c1ce3abfe4c6f5cbf6dc85"
   end
 
   depends_on "pkg-config" => :build
@@ -33,7 +35,7 @@ class Bind < Formula
   depends_on "libidn2"
   depends_on "libuv"
   depends_on "openssl@1.1"
-  depends_on "python@3.9"
+  depends_on "python@3.10"
 
   resource "ply" do
     url "https://files.pythonhosted.org/packages/e5/69/882ee5c9d017149285cab114ebeab373308ef0f874fcdac9beb90e0ac4da/ply-3.11.tar.gz"
@@ -41,12 +43,12 @@ class Bind < Formula
   end
 
   def install
-    xy = Language::Python.major_minor_version Formula["python@3.9"].opt_bin/"python3"
+    xy = Language::Python.major_minor_version Formula["python@3.10"].opt_bin/"python3"
     vendor_site_packages = libexec/"vendor/lib/python#{xy}/site-packages"
     ENV.prepend_create_path "PYTHONPATH", vendor_site_packages
     resources.each do |r|
       r.stage do
-        system Formula["python@3.9"].opt_bin/"python3", *Language::Python.setup_install_args(libexec/"vendor")
+        system Formula["python@3.10"].opt_bin/"python3", *Language::Python.setup_install_args(libexec/"vendor")
       end
     end
 
@@ -60,13 +62,11 @@ class Bind < Formula
       "--with-openssl=#{Formula["openssl@1.1"].opt_prefix}",
       "--with-libjson=#{Formula["json-c"].opt_prefix}",
       "--with-python-install-dir=#{vendor_site_packages}",
-      "--with-python=#{Formula["python@3.9"].opt_bin}/python3",
+      "--with-python=#{Formula["python@3.10"].opt_bin}/python3",
       "--without-lmdb",
       "--with-libidn2=#{Formula["libidn2"].opt_prefix}",
     ]
-    on_linux do
-      args << "--disable-linux-caps"
-    end
+    args << "--disable-linux-caps" if OS.linux?
     system "./configure", *args
 
     system "make"
@@ -103,30 +103,8 @@ class Bind < Formula
 
   plist_options startup: true
 
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-        <key>EnableTransactions</key>
-        <true/>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_sbin}/named</string>
-          <string>-f</string>
-          <string>-L</string>
-          <string>#{var}/log/named/named.log</string>
-        </array>
-        <key>ServiceIPC</key>
-        <false/>
-      </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_sbin/"named", "-f", "-L", var/"log/named/named.log"]
   end
 
   test do

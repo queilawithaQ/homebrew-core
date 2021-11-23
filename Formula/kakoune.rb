@@ -1,10 +1,10 @@
 class Kakoune < Formula
   desc "Selection-based modal text editor"
   homepage "https://github.com/mawww/kakoune"
-  url "https://github.com/mawww/kakoune/releases/download/v2020.09.01/kakoune-2020.09.01.tar.bz2"
-  sha256 "861a89c56b5d0ae39628cb706c37a8b55bc289bfbe3c72466ad0e2757ccf0175"
+  url "https://github.com/mawww/kakoune/releases/download/v2021.11.08/kakoune-2021.11.08.tar.bz2"
+  sha256 "aa30889d9da11331a243a8f40fe4f6a8619321b19217debac8f565e06eddb5f4"
   license "Unlicense"
-  head "https://github.com/mawww/kakoune.git"
+  head "https://github.com/mawww/kakoune.git", branch: "master"
 
   livecheck do
     url :stable
@@ -12,11 +12,12 @@ class Kakoune < Formula
   end
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any, arm64_big_sur: "6a6af6d41f893e851691984867efeee176098f47c881d5fe77d8534bc4086375"
-    sha256 cellar: :any, big_sur:       "61064437727a2eb062b89941b25fb46c017d350e8947e867e72f51f591d030ad"
-    sha256 cellar: :any, catalina:      "9cb8ffd67651eab6f269daab2bbf4e66adf4f7dad4029a3285631a3615cf1514"
-    sha256 cellar: :any, mojave:        "00c9127f14d643eee79fc64d02874bc131dad426fb11580b5d4fa43a3a51007c"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "04ba0d6fed5371d8f5012cb0731be90a011cf05dabcffaa51b467117dcf62275"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "edc941221942a73d79767e254798319842b1849988706e0c41deaaa65c0f3407"
+    sha256 cellar: :any_skip_relocation, monterey:       "6361db56b495a4be2855981c95bcfa0ed81ec0e63aace99b6fa06e9340d4ca28"
+    sha256 cellar: :any_skip_relocation, big_sur:        "95949d504b4b3d6c87bd4e3cf0e391b3a346ee0166187cf8b43945dd3e6cb826"
+    sha256 cellar: :any_skip_relocation, catalina:       "0bf1d69af4e88dd3e7c441c77bbc9ea5f211205883f9a02914b4590035f616e2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "2fa06946316f28a0375d5d883b45c899775f9aacff98e13bc8bca7d4721d336e"
   end
 
   depends_on macos: :high_sierra # needs C++17
@@ -26,7 +27,7 @@ class Kakoune < Formula
 
   on_linux do
     depends_on "binutils" => :build
-    depends_on "linux-headers" => :build
+    depends_on "linux-headers@4.4" => :build
     depends_on "pkg-config" => :build
     depends_on "gcc"
   end

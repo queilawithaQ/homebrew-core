@@ -1,36 +1,61 @@
 class Envoy < Formula
   desc "Cloud-native high-performance edge/middle/service proxy"
-  homepage "https://www.envoyproxy.io"
+  homepage "https://www.envoyproxy.io/index.html"
+  # Switch to a tarball when the following issue is resolved:
+  # https://github.com/envoyproxy/envoy/issues/2181
   url "https://github.com/envoyproxy/envoy.git",
-      tag:      "v1.18.3",
-      revision: "98c1c9e9a40804b93b074badad1cdf284b47d58b"
+      tag:      "v1.20.0",
+      revision: "96701cb24611b0f3aac1cc0dd8bf8589fbdf8e9e"
   license "Apache-2.0"
 
+  # Apple M1/arm64 is pending envoyproxy/envoy#16482
   bottle do
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, big_sur:  "d03fb86b48336c8d3c0f3711cfc3df3557f9fb33c966ceb1caecae1653935e90"
-    sha256 cellar: :any_skip_relocation, catalina: "b2decfc5dea341e47d5460719f53723b81b26b167c051513d080b3857b44705a"
+    sha256 cellar: :any_skip_relocation, big_sur:      "5d3c90329a1c5b7db6189ac8303616b0e6bc80840ecaa9d3f493a333f4f70f58"
+    sha256 cellar: :any_skip_relocation, catalina:     "f1f2d674693b2ddc193287090801689231f2e0f1197eb941c45fe711e1632e60"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "3ad1a49852a40f5ab5365f71a43be9c9554b3ae8b47c1df5475a5324decdbfdc"
   end
 
   depends_on "automake" => :build
   depends_on "bazelisk" => :build
   depends_on "cmake" => :build
   depends_on "coreutils" => :build
-  depends_on "go" => :build
   depends_on "libtool" => :build
   depends_on "ninja" => :build
   depends_on macos: :catalina
 
+  on_linux do
+    # GCC added as a test dependency to work around Homebrew issue. Otherwise `brew test` fails.
+    # CompilerSelectionError: envoy cannot be built with any available compilers.
+    depends_on "gcc@9" => [:build, :test]
+    depends_on "python@3.9" => :build
+  end
+
+  # https://github.com/envoyproxy/envoy/tree/main/bazel#supported-compiler-versions
+  fails_with gcc: "5"
+  fails_with gcc: "6"
+  # GCC 10 build fails at external/com_google_absl/absl/container/internal/inlined_vector.h:469:5:
+  # error: '<anonymous>.absl::inlined_vector_internal::Storage<char, 128, std::allocator<char> >::data_'
+  # is used uninitialized in this function [-Werror=uninitialized]
+  fails_with gcc: "10"
+  # GCC 11 build fails at external/boringssl/src/crypto/curve25519/curve25519.c:503:57:
+  # error: argument 2 of type 'const uint8_t[32]' with mismatched bound [-Werror=array-parameter=]
+  fails_with gcc: "11"
+
   def install
-    args = %w[
-      -c
-      opt
+    env_path = if OS.mac?
+      "#{HOMEBREW_PREFIX}/bin:/usr/bin:/bin"
+    else
+      "#{Formula["python@3.9"].opt_libexec}/bin:#{HOMEBREW_PREFIX}/bin:/usr/bin:/bin"
+    end
+    args = %W[
+      --compilation_mode=opt
       --curses=no
       --show_task_finish
       --verbose_failures
-      --action_env=PATH=/usr/local/bin:/opt/local/bin:/usr/bin:/bin
-      --test_output=all
+      --action_env=PATH=#{env_path}
+      --host_action_env=PATH=#{env_path}
     ]
+
     system Formula["bazelisk"].opt_bin/"bazelisk", "build", *args, "//source/exe:envoy-static"
     bin.install "bazel-bin/source/exe/envoy-static" => "envoy"
     pkgshare.install "configs", "examples"

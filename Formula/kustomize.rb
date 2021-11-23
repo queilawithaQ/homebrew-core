@@ -2,8 +2,8 @@ class Kustomize < Formula
   desc "Template-free customization of Kubernetes YAML manifests"
   homepage "https://github.com/kubernetes-sigs/kustomize"
   url "https://github.com/kubernetes-sigs/kustomize.git",
-      tag:      "kustomize/v4.1.3",
-      revision: "0f614e92f72f1b938a9171b964d90b197ca8fb68"
+      tag:      "kustomize/v4.4.1",
+      revision: "b2d65ddc98e09187a8e38adc27c30bab078c1dbf"
   license "Apache-2.0"
   head "https://github.com/kubernetes-sigs/kustomize.git"
 
@@ -13,10 +13,12 @@ class Kustomize < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "c2bc5bcc4b395ba3b3e512a2a9815ae81a5411416380c0520d726db2b8668407"
-    sha256 cellar: :any_skip_relocation, big_sur:       "a5876e31685b13273f268264860af816b4348e8a178d99aea8cf3de01a8d5558"
-    sha256 cellar: :any_skip_relocation, catalina:      "529377a3a884549413e67ff95c159e71d7f62b516009e5c0e8320b3d8a3723ad"
-    sha256 cellar: :any_skip_relocation, mojave:        "1ff7509083a9fefb1d931592318ca1649eb8ed17b28eeec5287a259302a024ec"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "2635754c79a06127bdab258e39b0acf8daf22b84b2611fe8be11a6a72aaaed0d"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "3d3f25b6124ec0bbeae608796fb1c31e23ae22bca528720333b9d5945e358a34"
+    sha256 cellar: :any_skip_relocation, monterey:       "192d3d4c81f8c487bbf99914ea80a667ef72aa2e39707a6bf634b0c53d4f000b"
+    sha256 cellar: :any_skip_relocation, big_sur:        "72db885ba0bb7a5dcebab195f4ab3a9feae6a3caf048345c10454cd2d62393c4"
+    sha256 cellar: :any_skip_relocation, catalina:       "d312dd44c71f16a776da83cac77ece3b465b790163ea15cd191271a4baf21ef8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "b657e3e1a442ee5b77af63fda69cdb8e0e0b4b0b46b19d417e952a129ec382aa"
   end
 
   depends_on "go" => :build
@@ -26,12 +28,13 @@ class Kustomize < Formula
 
     cd "kustomize" do
       ldflags = %W[
-        -s
+        -s -w
         -X sigs.k8s.io/kustomize/api/provenance.version=#{name}/v#{version}
         -X sigs.k8s.io/kustomize/api/provenance.gitCommit=#{commit}
-        -X sigs.k8s.io/kustomize/api/provenance.buildDate=#{Time.now.iso8601}
-      ]
-      system "go", "build", "-ldflags", ldflags.join(" "), "-o", bin/"kustomize"
+        -X sigs.k8s.io/kustomize/api/provenance.buildDate=#{time.iso8601}
+      ].join(" ")
+
+      system "go", "build", *std_go_args(ldflags: ldflags)
     end
 
     output = Utils.safe_popen_read("#{bin}/kustomize", "completion", "bash")

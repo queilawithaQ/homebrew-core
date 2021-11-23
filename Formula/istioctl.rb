@@ -2,42 +2,48 @@ class Istioctl < Formula
   desc "Istio configuration command-line utility"
   homepage "https://istio.io/"
   url "https://github.com/istio/istio.git",
-      tag:      "1.10.1",
-      revision: "845b0465214d059411fc89c16d5e3786f5fd9b30"
+      tag:      "1.12.0",
+      revision: "016bc46f4a5e0ef3fa135b3c5380ab7765467c1a"
   license "Apache-2.0"
   head "https://github.com/istio/istio.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "61efd0ee8af4f7caab646bbbff40e59fc1d2c3a85687f79475dd2cc67a2de06f"
-    sha256 cellar: :any_skip_relocation, big_sur:       "8a6680c6a86b32ff47d4b550f40109637d107bbdcf47df09ad13d553cb775c94"
-    sha256 cellar: :any_skip_relocation, catalina:      "8a6680c6a86b32ff47d4b550f40109637d107bbdcf47df09ad13d553cb775c94"
-    sha256 cellar: :any_skip_relocation, mojave:        "8a6680c6a86b32ff47d4b550f40109637d107bbdcf47df09ad13d553cb775c94"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "3153bd861e0152480ff0239b503b8fddf665d80f8d26e2ced5caff356d47596c"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "3153bd861e0152480ff0239b503b8fddf665d80f8d26e2ced5caff356d47596c"
+    sha256 cellar: :any_skip_relocation, monterey:       "59cdd78e0c1419e58f87408f78f2b799a3a9a7b86a2a132f2f1aba040d0690e6"
+    sha256 cellar: :any_skip_relocation, big_sur:        "59cdd78e0c1419e58f87408f78f2b799a3a9a7b86a2a132f2f1aba040d0690e6"
+    sha256 cellar: :any_skip_relocation, catalina:       "59cdd78e0c1419e58f87408f78f2b799a3a9a7b86a2a132f2f1aba040d0690e6"
   end
 
   depends_on "go" => :build
   depends_on "go-bindata" => :build
 
+  # Fix https://github.com/istio/istio/issues/35831
+  # remove in next release
+  patch do
+    url "https://github.com/istio/istio/commit/6d9c69f10431bca2ee2beefcfdeaad5e5f62071b.patch?full_index=1"
+    sha256 "47e175fc0ac5e34496c6c0858eefbc31e45073dad9683164f7a21c74dbaa6055"
+  end
+
   def install
+    # make parallelization should be fixed in version > 1.12.0
+    ENV.deparallelize
     ENV["VERSION"] = version.to_s
     ENV["TAG"] = version.to_s
     ENV["ISTIO_VERSION"] = version.to_s
     ENV["HUB"] = "docker.io/istio"
     ENV["BUILD_WITH_CONTAINER"] = "0"
 
-    dirpath = nil
-    on_macos do
-      if Hardware::CPU.arm?
-        # Fix missing "amd64" for macOS ARM in istio/common/scripts/setup_env.sh
-        # Can remove when upstream adds logic to detect `$(uname -m) == "arm64"`
-        ENV["TARGET_ARCH"] = "arm64"
+    dirpath = if OS.linux?
+      "linux_amd64"
+    elsif Hardware::CPU.arm?
+      # Fix missing "amd64" for macOS ARM in istio/common/scripts/setup_env.sh
+      # Can remove when upstream adds logic to detect `$(uname -m) == "arm64"`
+      ENV["TARGET_ARCH"] = "arm64"
 
-        dirpath = "darwin_arm64"
-      else
-        dirpath = "darwin_amd64"
-      end
-    end
-    on_linux do
-      dirpath = "linux_amd64"
+      "darwin_arm64"
+    else
+      "darwin_amd64"
     end
 
     system "make", "istioctl", "istioctl.completion"

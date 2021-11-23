@@ -3,23 +3,25 @@ class Principalmapper < Formula
 
   desc "Quickly evaluate IAM permissions in AWS"
   homepage "https://github.com/nccgroup/PMapper"
-  url "https://files.pythonhosted.org/packages/b4/4d/c270b88e05d4b17705936b7a3d05056d67e117b4087c663834d9bbd348d6/principalmapper-1.1.2.tar.gz"
-  sha256 "e36366a603b812de9eaf9c242a421f6982517b236344b9c44a1c509d82c62a26"
+  url "https://files.pythonhosted.org/packages/89/d9/985cfe5c571a27f9933af49c5dd07752586200e104060106ac6937f6bb98/principalmapper-1.1.4.tar.gz"
+  sha256 "742b537c09fac2361cde6465a2408f2390ce9af2c90d1174d645c8d13f72eab5"
   license "AGPL-3.0-or-later"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "3ec153451b85c2516e5c6176af999210c02cd4ac8a4fd81838d4d7e0443949aa"
-    sha256 cellar: :any_skip_relocation, big_sur:       "6b28c5a692ad3d4afc483552caacba94b7d9efc61855b6b89c87454b9e13b493"
-    sha256 cellar: :any_skip_relocation, catalina:      "3d61aeb9896b56bd45befa05ee6c209858088e2630b90360678ed392970299a6"
-    sha256 cellar: :any_skip_relocation, mojave:        "f66592208c17fe6ebfcb0ae0d2b43f5f9b248212a149f1c194b58c642e93c18a"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "57a540d7c14d58a06b4801aac59ee591571d4d9183134ee8c31cd5f9a7416ba7"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "70c568a9c38cac05d9322b896eee1242e595ee249ced25bfbf7f59a04da4d88b"
+    sha256 cellar: :any_skip_relocation, monterey:       "fb97ef56f0680a894e98b0602dbb5080fc73503e01a41322f48d400770072981"
+    sha256 cellar: :any_skip_relocation, big_sur:        "10f7fa907a504870d8111c9c6ea3deab55eb8bce87ec7689b22b9a0a18910d17"
+    sha256 cellar: :any_skip_relocation, catalina:       "7dd91fb6b983f5f4c5a4b56143b22c0def678278ec00b422f15c783a967da5c6"
+    sha256 cellar: :any_skip_relocation, mojave:         "4d10def939d3034a6c6aece9ba80ba596ac9ed73afb7417ed157ee3df5b9bced"
   end
 
   depends_on "python@3.9"
   depends_on "six"
 
   resource "botocore" do
-    url "https://files.pythonhosted.org/packages/03/f3/99f57f59a101268612dd11ae4d34f3ed725394c327f28a94d2be6a510f63/botocore-1.20.84.tar.gz"
-    sha256 "bc59eb748fcb07835613ebea6dcc2600ae1a8be0fae30e40b9c1e81b73262296"
+    url "https://files.pythonhosted.org/packages/0e/db/4ed8004ba94ef2173b943fc644d0e0f715631df1e40c5d60edf5c83d54eb/botocore-1.21.58.tar.gz"
+    sha256 "87e881569c32b218a1b82ecb607a4dddb4dca3b80a5d1016571b99b51cef3158"
   end
 
   resource "jmespath" do
@@ -28,8 +30,8 @@ class Principalmapper < Formula
   end
 
   resource "packaging" do
-    url "https://files.pythonhosted.org/packages/86/3c/bcd09ec5df7123abcf695009221a52f90438d877a2f1499453c6938f5728/packaging-20.9.tar.gz"
-    sha256 "5b327ac1320dc863dca72f4514ecc086f31186744b84a230374cc1fd776feae5"
+    url "https://files.pythonhosted.org/packages/df/86/aef78bab3afd461faecf9955a6501c4999933a48394e90f03cd512aad844/packaging-21.0.tar.gz"
+    sha256 "7dc96269f53a4ccec5c0670940a4281106dd0bb343f47b7471f779df49c2fbe7"
   end
 
   resource "pydot" do
@@ -43,13 +45,13 @@ class Principalmapper < Formula
   end
 
   resource "python-dateutil" do
-    url "https://files.pythonhosted.org/packages/be/ed/5bbc91f03fa4c839c4c7360375da77f9659af5f7086b7a7bdda65771c8e0/python-dateutil-2.8.1.tar.gz"
-    sha256 "73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"
+    url "https://files.pythonhosted.org/packages/4c/c4/13b4776ea2d76c115c1d1b84579f3764ee6d57204f6be27119f13a61d0a9/python-dateutil-2.8.2.tar.gz"
+    sha256 "0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/94/40/c396b5b212533716949a4d295f91a4c100d51ba95ea9e2d96b6b0517e5a5/urllib3-1.26.5.tar.gz"
-    sha256 "a7acd0977125325f516bda9735fa7142b909a8d01e8b2e4c8108d0984e6e0098"
+    url "https://files.pythonhosted.org/packages/80/be/3ee43b6c5757cabea19e75b8f46eaf05a2f5144107d7db48c7cf3a864f73/urllib3-1.26.7.tar.gz"
+    sha256 "4987c65554f7a2dbf30c18fd48778ef124af6fab771a377103da0585e2336ece"
   end
 
   def install

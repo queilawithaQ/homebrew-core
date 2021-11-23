@@ -1,8 +1,8 @@
 class Haproxy < Formula
   desc "Reliable, high performance TCP/HTTP load balancer"
   homepage "https://www.haproxy.org/"
-  url "https://www.haproxy.org/download/2.4/src/haproxy-2.4.0.tar.gz"
-  sha256 "0a6962adaf5a1291db87e3eb4ddf906a72fed535dbd2255b164b7d8394a53640"
+  url "https://www.haproxy.org/download/2.4/src/haproxy-2.4.8.tar.gz"
+  sha256 "e3e4c1ad293bc25e8d8790cc5e45133213dda008bfd0228bf3077259b32ebaa5"
   license "GPL-2.0-or-later" => { with: "openvpn-openssl-exception" }
 
   livecheck do
@@ -11,14 +11,18 @@ class Haproxy < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "3cdc46f82b1c8fbc95f108ed5a342d3173ec9e003d82ceab72241ec10606ad9a"
-    sha256 cellar: :any, big_sur:       "4eea98c884ffbb65ad1765a69046d8885e7d50f7cc202a282a8a75e7610647e9"
-    sha256 cellar: :any, catalina:      "07c90429e84257cc4ef2cbf02ff41e01f6d4a928d4da73312fc8219f21792e7c"
-    sha256 cellar: :any, mojave:        "f44bd38a076a47dae9bd4f6c97937c2b215ef892a8ecd8e97bc7b6a2726901e3"
+    sha256 cellar: :any,                 arm64_monterey: "4d3dc56b786ae357d367d088a4b7ff7d76b485c4659a2904e0e1fa1a4b9e35c0"
+    sha256 cellar: :any,                 arm64_big_sur:  "42958ac6ee14c305fc0da4ea93681be39c19a07e9143ce7e88b58253bf5a8449"
+    sha256 cellar: :any,                 monterey:       "d73895018e1ab5bc47f967a1dbc9dadf5d5a3c8b67fa011e6c8aa5762dced507"
+    sha256 cellar: :any,                 big_sur:        "cf2242232f6dab6a9fe54cc98df31ac1eb0925f8fbbecf159187226a0ea7f84b"
+    sha256 cellar: :any,                 catalina:       "b5e767828ef1d07474f5a7da82495ec04210da5c9e9bc77295c38bdd0a83cc93"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "9fc76f52825a9c8100c058d059e3254eefdac63de11d5ff8d59c8030423e747a"
   end
 
   depends_on "openssl@1.1"
   depends_on "pcre"
+
+  uses_from_macos "zlib"
 
   def install
     args = %w[
@@ -29,46 +33,25 @@ class Haproxy < Formula
       USE_ZLIB=1
       ADDLIB=-lcrypto
     ]
-    on_macos do
+    if OS.mac?
       args << "TARGET=generic"
       # BSD only:
       args << "USE_KQUEUE=1"
-    end
-    on_linux do
+    else
       args << "TARGET=linux-glibc"
     end
 
     # We build generic since the Makefile.osx doesn't appear to work
-    system "make", "CC=#{ENV.cc}", "CFLAGS=#{ENV.cflags}", "LDFLAGS=#{ENV.ldflags}", *args
+    system "make", *args
     man1.install "doc/haproxy.1"
     bin.install "haproxy"
   end
 
-  plist_options manual: "haproxy -f #{HOMEBREW_PREFIX}/etc/haproxy.cfg"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>KeepAlive</key>
-          <true/>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{opt_bin}/haproxy</string>
-            <string>-f</string>
-            <string>#{etc}/haproxy.cfg</string>
-          </array>
-          <key>StandardErrorPath</key>
-          <string>#{var}/log/haproxy.log</string>
-          <key>StandardOutPath</key>
-          <string>#{var}/log/haproxy.log</string>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"haproxy", "-f", etc/"haproxy.cfg"]
+    keep_alive true
+    log_path var/"log/haproxy.log"
+    error_log_path var/"log/haproxy.log"
   end
 
   test do

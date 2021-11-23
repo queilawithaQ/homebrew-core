@@ -1,19 +1,34 @@
 class MariadbAT103 < Formula
   desc "Drop-in replacement for MySQL"
   homepage "https://mariadb.org/"
-  url "https://downloads.mariadb.org/f/mariadb-10.3.28/source/mariadb-10.3.28.tar.gz"
-  sha256 "e8c912cae2e5800d0da364cc23437907ed4be767f2cbdf198cf3afc03db6a6a3"
+  url "https://downloads.mariadb.com/MariaDB/mariadb-10.3.32/source/mariadb-10.3.32.tar.gz"
+  sha256 "948d0cdf2f92c60cff4232af9d724e0a4bbeafbb35762fa429e7ba5c3811c064"
   license "GPL-2.0-only"
 
+  # This uses a placeholder regex to satisfy the `PageMatch` strategy
+  # requirement. In the future, this will be updated to use a `Json` strategy
+  # and we can remove the unused regex at that time.
   livecheck do
-    url "https://downloads.mariadb.org/"
-    regex(/Download v?(10\.3(?:\.\d+)+) Stable Now/i)
+    url "https://downloads.mariadb.org/rest-api/mariadb/all-releases/?olderReleases=false"
+    regex(/unused/i)
+    strategy :page_match do |page|
+      json = JSON.parse(page)
+      json["releases"]&.map do |release|
+        next unless release["release_number"]&.start_with?(version.major_minor)
+        next unless release["status"]&.include?("stable")
+
+        release["release_number"]
+      end
+    end
   end
 
   bottle do
-    sha256 big_sur:  "8a0c8aa99124536d89771c180d9826f6936878377f2826a08ed3a61a131c4ec8"
-    sha256 catalina: "26baf487ebd0277d313655907bbe344fec667540ad17b5ca9b988ae52b3bcd39"
-    sha256 mojave:   "bec90c0b546b96a19674bdd451b09094d2d53fcaba4e7f3092b4906ee38026cf"
+    sha256 arm64_monterey: "818f0d840d9ea1d60dd7e90fa138819ed641cf58e1b2cb8dcd5da24f065cfbd6"
+    sha256 arm64_big_sur:  "b11dafec6866b4b2297c4c584cb60357f70732f9c732e82f1336aa5c5a53e344"
+    sha256 monterey:       "05ee47872fdad7dceb6364a042d4d23da83cd2b32021dc8c3f7e61dcb48922ca"
+    sha256 big_sur:        "2dca333b2b1d57271f3d317b4d56c2d5889fd96238f9e57947b24664cd70d459"
+    sha256 catalina:       "0d8ee6440ee674aba993ae1807903e87f27074d52cd7c359190aa72f5702d1ca"
+    sha256 x86_64_linux:   "123b313ecbbbea3071e5b55f046e8f3b40702b43423210daf730fdaa9ea0b84f"
   end
 
   keg_only :versioned_formula
@@ -21,14 +36,23 @@ class MariadbAT103 < Formula
   # See: https://mariadb.com/kb/en/changes-improvements-in-mariadb-103/
   deprecate! date: "2023-05-01", because: :unsupported
 
+  depends_on "bison" => :build
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
   depends_on "groonga"
   depends_on "openssl@1.1"
+  depends_on "pcre2"
+
+  uses_from_macos "bzip2"
+  uses_from_macos "ncurses"
+  uses_from_macos "zlib"
 
   on_linux do
+    depends_on "gcc"
     depends_on "linux-pam"
   end
+
+  fails_with gcc: "5"
 
   def install
     # Set basedir and ldata so that mysql_install_db can find the server
@@ -50,7 +74,6 @@ class MariadbAT103 < Formula
       -DINSTALL_DOCDIR=share/doc/#{name}
       -DINSTALL_INFODIR=share/info
       -DINSTALL_MYSQLSHAREDIR=share/mysql
-      -DWITH_PCRE=bundled
       -DWITH_READLINE=yes
       -DWITH_SSL=yes
       -DWITH_UNIT_TESTS=OFF
@@ -60,10 +83,17 @@ class MariadbAT103 < Formula
       -DCOMPILATION_COMMENT=Homebrew
     ]
 
+    if OS.linux?
+      args << "-DWITH_NUMA=OFF"
+      args << "-DENABLE_DTRACE=NO"
+      args << "-DCONNECT_WITH_JDBC=OFF"
+    end
+
     # disable TokuDB, which is currently not supported on macOS
     args << "-DPLUGIN_TOKUDB=NO"
 
     system "cmake", ".", *std_cmake_args, *args
+
     system "make"
     system "make", "install"
 
@@ -97,7 +127,7 @@ class MariadbAT103 < Formula
       wsrep_sst_rsync
       wsrep_sst_mariabackup
     ].each do |f|
-      inreplace "#{bin}/#{f}", "$(dirname $0)/wsrep_sst_common",
+      inreplace "#{bin}/#{f}", "$(dirname \"$0\")/wsrep_sst_common",
                                "#{libexec}/wsrep_sst_common"
     end
 

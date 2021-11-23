@@ -1,16 +1,17 @@
 class Pdftoipe < Formula
   desc "Reads arbitrary PDF files and generates an XML file readable by Ipe"
   homepage "https://github.com/otfried/ipe-tools"
-  url "https://github.com/otfried/ipe-tools/archive/v7.2.20.1.tar.gz"
-  sha256 "233f5629986ade3d70de6dd1af85d578d6aa0f92f9bcd1ecd4e8e5a94b508376"
+  url "https://github.com/otfried/ipe-tools/archive/v7.2.24.1.tar.gz"
+  sha256 "561b18fc2a7ae45c37c5d0390443b37f4585549f09cd7765d856456be24e5dbc"
   license "GPL-2.0-or-later"
-  revision 10
+  revision 2
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "4f92fbb31e4351fd4f18de880b11a4f211d9129608e1d69a998065ae6f7c2cf0"
-    sha256 cellar: :any, big_sur:       "e16cd0ace3188156bd07f56073d1670407178662ad6554cdb7c62697807de0d5"
-    sha256 cellar: :any, catalina:      "abc528000696cc93745b45345ad85fb752914a50e85686b9340ad23497a767e1"
-    sha256 cellar: :any, mojave:        "1e5b6d720afc7a4f0cf8eb66b5637d5a9d85bb3512da7449d06cac3aa43a2c70"
+    sha256 cellar: :any, arm64_monterey: "4a6ffbe7e2ef7b51eb07aae9083c85e3a3c4175f32dfbb5555c5795834233d60"
+    sha256 cellar: :any, arm64_big_sur:  "3be78e63e115fd6963b99c9e5a64eb1247055a99e60e7b25c025da6206cccc58"
+    sha256 cellar: :any, monterey:       "d254bd6044997869924cdce8e3e78a03fd669763686d24170bf561be80d97245"
+    sha256 cellar: :any, big_sur:        "8c3553f890fea66f4bd7bb51790ad6dc9ae62fa8f78e43a800a34402ef590953"
+    sha256 cellar: :any, catalina:       "c7d7378e5dba9941098c0649e9919ca40abad31bc9c59a90661252c97cd74bd9"
   end
 
   depends_on "pkg-config" => :build

@@ -1,8 +1,8 @@
 class IpinfoCli < Formula
   desc "Official CLI for the IPinfo IP Address API"
   homepage "https://ipinfo.io/"
-  url "https://github.com/ipinfo/cli/archive/ipinfo-2.0.1.tar.gz"
-  sha256 "86a40d5ea784bbecb1ea570cfaaf3a9924f87b52fda1ef2ef978f2ed95422d67"
+  url "https://github.com/ipinfo/cli/archive/ipinfo-2.6.0.tar.gz"
+  sha256 "1230052f9fa953190c0166c54fa223c778ace69863e216c5c6b69d6aa0495009"
   license "Apache-2.0"
 
   livecheck do
@@ -11,10 +11,12 @@ class IpinfoCli < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "aa19540de7e6a5a07401f87df2a3df232c6464171842cc57c7ff0d4f36c9ff27"
-    sha256 cellar: :any_skip_relocation, big_sur:       "d9aa10ccd5db7e49054624cd5a48a1a1c8299708c496906302d7d993efa2ba48"
-    sha256 cellar: :any_skip_relocation, catalina:      "9bdff53d550c8f26d424ce72a6693a089f55722424fbbf6380be58bf9ed03c77"
-    sha256 cellar: :any_skip_relocation, mojave:        "273baa563315200db6e37a434f2fd270b05256c8fa275bed0449d9eb4a5656ec"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "5aaf1fbe1b39b0e3ba5e7a07c90de12933f4550721f2a0892088fb5c94456470"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "1ba610ff4624d9a091329b01a26727c409daa392aac7b2bbef5633d43a355784"
+    sha256 cellar: :any_skip_relocation, monterey:       "ccb4c0f9bf19f759f97470aa6fc8685c19f4022905e7eb09a74c1cbc4ea8f4d1"
+    sha256 cellar: :any_skip_relocation, big_sur:        "e586c8e69fe3ebb6f83b5e9116259c3f67faeb12c7d2d4871c8e30ec505e0e94"
+    sha256 cellar: :any_skip_relocation, catalina:       "80ba3018deb8fc08b1f71cfee760ccd3b330af89b3bbf10fc1830ba5fade938b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "068bb00cb6da8b819ba11aaf46054cec1d3666e1b119268e2159b00d6ef714ef"
   end
 
   depends_on "go" => :build

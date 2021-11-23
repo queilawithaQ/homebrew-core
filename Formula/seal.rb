@@ -1,15 +1,17 @@
 class Seal < Formula
   desc "Easy-to-use homomorphic encryption library"
   homepage "https://github.com/microsoft/SEAL"
-  url "https://github.com/microsoft/SEAL/archive/v3.6.5.tar.gz"
-  sha256 "77bfcb4a8b785206c419cdf7aff8c200250691518eeddc958f874d1f567b2872"
+  url "https://github.com/microsoft/SEAL/archive/v3.7.2.tar.gz"
+  sha256 "12676de5766b8e2d641d6e45e92114ccdf8debd6f6d44b42a2ecc39a59b0bf13"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "e5ccaddbed669e29b8292259334ff2c4afde42c686b20280e8fa880c2cf281d5"
-    sha256 cellar: :any, big_sur:       "bad0f9c5b418c39bd6c10049575a8982425736276d7fefd3e97edc860d3a2f1a"
-    sha256 cellar: :any, catalina:      "064a106a35037111f229361082fa84a5938f04cd0971c12c331e4777dacf1ec9"
-    sha256 cellar: :any, mojave:        "7fbe04e726b2333d4af8b2aaa41dab5a56643af4df9a1ada7f8dccefec6bee3c"
+    sha256 cellar: :any,                 arm64_monterey: "c0261e67c231e553089da32847512f48f323e65b6b3ea93971ce6c4b425582e0"
+    sha256 cellar: :any,                 arm64_big_sur:  "82b22467391cc77167beaf017991f3998f8898986d7585e59a2431ad7dd4935f"
+    sha256 cellar: :any,                 monterey:       "09c85d9093cb00526fac994d4171f075cc355027bea5880d1b3e89443f8abfeb"
+    sha256 cellar: :any,                 big_sur:        "69838eeb9e678c35c0263cb6f39597384e9d98ffbbd9d23cdf3a21f8b949f62f"
+    sha256 cellar: :any,                 catalina:       "f38ba78c2dfd2f8475519ff1bd5d930d4f8990a72e9b1e3de87bab2b4db0c623"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "d0f6c8d6a438d90b23f42e06c765d088b4ec4b3b02afb58783ff8dd855a97918"
   end
 
   depends_on "cmake" => [:build, :test]
@@ -25,8 +27,8 @@ class Seal < Formula
   fails_with gcc: "5"
 
   resource "hexl" do
-    url "https://github.com/intel/hexl/archive/tags/v1.1.0.tar.gz"
-    sha256 "81965ced20e86b3138fc94dc0c0e41d526c942d654704e3cebc7086171ce497d"
+    url "https://github.com/intel/hexl/archive/v1.2.3.tar.gz"
+    sha256 "f2cf33ee2035d12996d10b69d2f41a586b9954a29b99c70a852495cf5758878c"
   end
 
   def install

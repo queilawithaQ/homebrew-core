@@ -1,18 +1,22 @@
 class Asciidoctor < Formula
   desc "Text processor and publishing toolchain for AsciiDoc"
   homepage "https://asciidoctor.org/"
-  url "https://github.com/asciidoctor/asciidoctor/archive/v2.0.15.tar.gz"
-  sha256 "19e8e2b6ac51221ca617e5d1587675283e0ad6c882a7b6597fc9aacf52c245cc"
+  url "https://github.com/asciidoctor/asciidoctor/archive/v2.0.16.tar.gz"
+  sha256 "8fc1e3947012e22bccabe4d6faa31fee446f3719bb7478c79f45221b64fbd09f"
   license "MIT"
+  revision 1
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "bc6c3e1d9c0f14fbd70d179edb751892dcb1d44b4b8ab05758688ad1a78443d2"
-    sha256 cellar: :any_skip_relocation, big_sur:       "98db0df78c00fe59499f5c5eed17b57f09406c9222b0f83878ac9a12cc5ffb8c"
-    sha256 cellar: :any_skip_relocation, catalina:      "98db0df78c00fe59499f5c5eed17b57f09406c9222b0f83878ac9a12cc5ffb8c"
-    sha256 cellar: :any_skip_relocation, mojave:        "d50077e74c31d0f910fed2352e3ae5eca7c731b9b84752d1e1e8bf7ef3a59f78"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "e738bffee5905b12523ba2efa472071161f879333c1c85e06e856bf69cf990a6"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "fc2493fc3c30964474cbe495313fe66921f1495e72c3fe61381ac6aea70045b6"
+    sha256 cellar: :any_skip_relocation, monterey:       "e447ecfd225140a4d1203f41abab2a527a270e73d91431e1dd672d52da9e539e"
+    sha256 cellar: :any_skip_relocation, big_sur:        "16d6788131428a7fb9207f567061e657176422324da5a5aae3259ed42bd40861"
+    sha256 cellar: :any_skip_relocation, catalina:       "16d6788131428a7fb9207f567061e657176422324da5a5aae3259ed42bd40861"
+    sha256 cellar: :any_skip_relocation, mojave:         "3ee2e170d171c850e25d100c2a47fb2fdda7c3f3ca551bfd2b97896575379277"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "78113a6630aa5287c960805549500b3e047d240db16c6e8752c856f4d97e4b74"
   end
 
-  depends_on "ruby@2.7" if MacOS.version <= :mojave
+  uses_from_macos "ruby", since: :catalina
 
   # All of these resources are for the asciidoctor-pdf, coderay and rouge gems. To update the asciidoctor-pdf
   # resources, check https://rubygems.org/gems/asciidoctor-pdf for the latest dependency versions. Make sure to select

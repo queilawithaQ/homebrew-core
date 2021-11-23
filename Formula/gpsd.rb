@@ -1,9 +1,10 @@
 class Gpsd < Formula
   desc "Global Positioning System (GPS) daemon"
-  homepage "http://catb.org/gpsd/"
-  url "https://download.savannah.gnu.org/releases/gpsd/gpsd-3.21.tar.xz"
-  mirror "https://download-mirror.savannah.gnu.org/releases/gpsd/gpsd-3.21.tar.xz"
-  sha256 "5512a7d3c2e86be83c5555652e5b4cc9049e8878a4320be7f039eb1a7203e5f0"
+  homepage "https://gpsd.gitlab.io/gpsd/"
+  url "https://download.savannah.gnu.org/releases/gpsd/gpsd-3.23.1.tar.xz"
+  mirror "https://download-mirror.savannah.gnu.org/releases/gpsd/gpsd-3.23.1.tar.xz"
+  sha256 "ca2c466df783c57b8a07ad3f5c67943186d05befdc377de938ed111d1358a8c1"
+  license "BSD-2-Clause"
 
   livecheck do
     url "https://download.savannah.gnu.org/releases/gpsd/"
@@ -11,14 +12,20 @@ class Gpsd < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "94c0f86ec9ec850c0fd8f8b3069e6881dd895e57324c5eb46822406441208317"
-    sha256 cellar: :any, big_sur:       "a68031d9cbef4b9cfbdfed566b8d0e556ae8188cedd6f505ca65314588bbc7f4"
-    sha256 cellar: :any, catalina:      "e41f44df2cf96b33b2f62e65ff2ef9154d872bc8fac88b3bdaeb503246d77c2b"
-    sha256 cellar: :any, mojave:        "caafc4aea3632fdbe8df1ce265c025430a816d2ad7c26f973c254887ec6a2a8f"
-    sha256 cellar: :any, high_sierra:   "bc0775e450c0129fd71a4abd163a7645ac9b3e1698009b2735fafeb838e09e79"
+    sha256 cellar: :any,                 arm64_monterey: "ec8c94a333277ff13aba8916ab3d434dc19de4b55cbf110dc7747a6d62b16366"
+    sha256 cellar: :any,                 arm64_big_sur:  "883c90ed12472d9116910ac3bed524ed400b2c1a7a702fd1e61c281a7689ddca"
+    sha256 cellar: :any,                 monterey:       "cd3594200ba2689bee0aec4aa3dd54036128ea5fe87aed2138867cd6f2eb9471"
+    sha256 cellar: :any,                 big_sur:        "9f7217ce185daeb8e0a596db9aca4fb501eb053c37d043d36ebc7cae51edc806"
+    sha256 cellar: :any,                 catalina:       "7abff1947d861eb50d2f631c5d5ef6930d968d882ac64604111ba0495a86c9d5"
+    sha256 cellar: :any,                 mojave:         "39246316c1b4cefa12a9835f2da96b924a71f48ffadd0a7518c3b6df9f6fbd19"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "68b07cf9cfaf44ccdafbb7096a207f7b57b4ce4d9ba95867c128658f1b45c5a9"
   end
 
+  depends_on "asciidoctor" => :build
+  depends_on "python@3.9" => :build
   depends_on "scons" => :build
+
+  uses_from_macos "ncurses"
 
   def install
     system "scons", "chrpath=False", "python=False", "strip=False", "prefix=#{prefix}/"
@@ -34,36 +41,12 @@ class Gpsd < Formula
     EOS
   end
 
-  plist_options manual: "#{HOMEBREW_PREFIX}/sbin/gpsd -N -F #{HOMEBREW_PREFIX}/var/gpsd.sock /dev/tty.usbserial-XYZ"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_sbin}/gpsd</string>
-          <string>-N</string>
-          <string>-F</string>
-          <string>#{var}/gpsd.sock</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>KeepAlive</key>
-        <true/>
-        <key>WorkingDirectory</key>
-        <string>#{HOMEBREW_PREFIX}</string>
-        <key>StandardOutPath</key>
-        <string>#{var}/log/gpsd.log</string>
-        <key>StandardErrorPath</key>
-        <string>#{var}/log/gpsd.log</string>
-      </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_sbin/"gpsd", "-N", "-F", var/"gpsd.sock"]
+    keep_alive true
+    error_log_path var/"log/gpsd.log"
+    log_path var/"log/gpsd.log"
+    working_dir HOMEBREW_PREFIX
   end
 
   test do

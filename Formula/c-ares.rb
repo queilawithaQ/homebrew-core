@@ -1,10 +1,13 @@
 class CAres < Formula
   desc "Asynchronous DNS library"
-  homepage "https://c-ares.haxx.se/"
-  url "https://c-ares.haxx.se/download/c-ares-1.17.1.tar.gz"
-  sha256 "d73dd0f6de824afd407ce10750ea081af47eba52b8a6cb307d220131ad93fc40"
+  homepage "https://c-ares.org/"
+  url "https://c-ares.org/download/c-ares-1.18.1.tar.gz"
+  mirror "https://github.com/c-ares/c-ares/releases/download/cares-1_17_2/c-ares-1.18.1.tar.gz"
+  mirror "http://fresh-center.net/linux/misc/dns/c-ares-1.18.1.tar.gz"
+  mirror "http://fresh-center.net/linux/misc/dns/legacy/c-ares-1.18.1.tar.gz"
+  sha256 "1a7d52a8a84a9fbffb1be9133c0f6e17217d91ea5a6fa61f6b4729cda78ebbcf"
   license "MIT"
-  head "https://github.com/c-ares/c-ares.git"
+  head "https://github.com/c-ares/c-ares.git", branch: "main"
 
   livecheck do
     url :homepage
@@ -12,21 +15,20 @@ class CAres < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "63627c4d2e4698ba13b82aeb2a10f3aef3a7bcbb7b459c265dbd840e91e5b175"
-    sha256 cellar: :any, big_sur:       "514de64e48f4d2c6e448547a30ba03f613b899f30f97f9026740c59eb3f49aeb"
-    sha256 cellar: :any, catalina:      "3fc1e6a9c560039998b288db7dfb268c87db614841a6fa1048880b8b6bdd6e4c"
-    sha256 cellar: :any, mojave:        "8785faa759b2f10fcaefef1e7398b9ffe79b76b2339b4bc4b552fd9c418b1097"
+    sha256 cellar: :any,                 arm64_monterey: "7b1eacc9efbe8ac32a4a7cdb705fe5b3e637237cdd0ee67ce9a97c36c02ed99d"
+    sha256 cellar: :any,                 arm64_big_sur:  "555cf945221fc8f076919a16e07541a37841bfc63ed2c58e24311f93ac2f2af6"
+    sha256 cellar: :any,                 monterey:       "ab68d14a31625efd1c9289d976a041f4a0b573eeaa623d0d2e2889d36c388ffa"
+    sha256 cellar: :any,                 big_sur:        "d3dd43338a6003320bfc94466887a2336f2a8bb36091326689828dc8a96194e2"
+    sha256 cellar: :any,                 catalina:       "cb7b2f185a1c9e550e0ac6b6e48cca0f521ecf70bee3f04a3e5a878c63d3bb6a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "26c1f594d87832209d59cfcd1d635d9d7ee33c1c11ae31e377c92be1483f08c4"
   end
 
   depends_on "cmake" => :build
-  depends_on "ninja" => :build
 
   def install
-    mkdir "build" do
-      system "cmake", "..", "-GNinja", *std_cmake_args
-      system "ninja"
-      system "ninja", "install"
-    end
+    system "cmake", "-S", ".", "-B", "build", *std_cmake_args
+    system "cmake", "--build", "build"
+    system "cmake", "--install", "build"
   end
 
   test do

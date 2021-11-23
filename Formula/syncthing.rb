@@ -1,8 +1,8 @@
 class Syncthing < Formula
   desc "Open source continuous file synchronization application"
   homepage "https://syncthing.net/"
-  url "https://github.com/syncthing/syncthing/archive/v1.17.0.tar.gz"
-  sha256 "497365c08a11cdc1c80ff55316d3c3842dfaa3aaaf063bb10118ab93706a37b1"
+  url "https://github.com/syncthing/syncthing/archive/v1.18.4.tar.gz"
+  sha256 "ec4947d4119f21b50f444a0eb1d054c24db30cde0ac8a95261c8f3d122da4453"
   license "MPL-2.0"
   head "https://github.com/syncthing/syncthing.git", branch: "main"
 
@@ -12,10 +12,12 @@ class Syncthing < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "4280fbd8ccdf2d477b13abf609414c60867cafce125603eb81bdb48d38edf5ca"
-    sha256 cellar: :any_skip_relocation, big_sur:       "7f70230b7fe8fbf0c93e4b52c2cd87b8f78921a32d1ecee6aea208dff5bfd6c2"
-    sha256 cellar: :any_skip_relocation, catalina:      "f95bb2f33967fc89b4f699ed2002e1bde24f5bce096552b647e9411e200fe163"
-    sha256 cellar: :any_skip_relocation, mojave:        "ecc9bf8fd5a3272f056263d4b2194aff80271708eb8714ed0ead630453d14c95"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "346d2196e29b00cd6359d179fdaef3e5238d1fc0d6cc1115f011140187284e5c"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "ada03366791d1adffd7aa7cc39bf0bd339d261fcbd0fb05c6cdbb1d08853a4f1"
+    sha256 cellar: :any_skip_relocation, monterey:       "82eb35ea1ab8f85d7cebc303fde24dc46dc04601d769bcd8fa5e894c3c60eef6"
+    sha256 cellar: :any_skip_relocation, big_sur:        "3b12aba3f84da38e22b4af29d81f1fb276e0bda32b84d3b63505a23d1308f7ea"
+    sha256 cellar: :any_skip_relocation, catalina:       "e358de640d97698911111de9d0b1ddbb192badb7beadd8851e25fec472394f45"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "39c3963933f138b2f782fec71ade0c56b49be81025dcdb7785ddcd8b5786b75a"
   end
 
   depends_on "go" => :build
@@ -30,38 +32,11 @@ class Syncthing < Formula
     man7.install Dir["man/*.7"]
   end
 
-  plist_options manual: "syncthing"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{opt_bin}/syncthing</string>
-            <string>-no-browser</string>
-            <string>-no-restart</string>
-          </array>
-          <key>KeepAlive</key>
-          <dict>
-            <key>Crashed</key>
-            <true/>
-            <key>SuccessfulExit</key>
-            <false/>
-          </dict>
-          <key>ProcessType</key>
-          <string>Background</string>
-          <key>StandardErrorPath</key>
-          <string>#{var}/log/syncthing.log</string>
-          <key>StandardOutPath</key>
-          <string>#{var}/log/syncthing.log</string>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"syncthing", "-no-browser", "-no-restart"]
+    keep_alive true
+    log_path var/"log/syncthing.log"
+    error_log_path var/"log/syncthing.log"
   end
 
   test do

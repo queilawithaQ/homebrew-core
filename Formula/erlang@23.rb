@@ -2,8 +2,8 @@ class ErlangAT23 < Formula
   desc "Programming language for highly scalable real-time systems"
   homepage "https://www.erlang.org/"
   # Download tarball from GitHub; it is served faster than the official tarball.
-  url "https://github.com/erlang/otp/releases/download/OTP-23.3.4.4/otp_src_23.3.4.4.tar.gz"
-  sha256 "2d5940762890223ab51e73716ac4f72ed0fd0bad5c3766235b9c47224359682b"
+  url "https://github.com/erlang/otp/releases/download/OTP-23.3.4.9/otp_src_23.3.4.9.tar.gz"
+  sha256 "2a2a6538c25736bda659af647ea2aac10eeeabc26c889e051487507045a24581"
   license "Apache-2.0"
 
   livecheck do
@@ -12,16 +12,18 @@ class ErlangAT23 < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "a32e9f709c454e97b48f23bae86df0d5d7e11dc2a94c7ffd71b88e71d5efb86a"
-    sha256 cellar: :any, big_sur:       "7183f760a8f143aff57a86ec6de5fcffb1ee88856e9b5b64ceaf945c297529c7"
-    sha256 cellar: :any, catalina:      "e1b64a1d52fb509e6df85b930296e30e4f1c89be259a2c46b6470cca4adf5c73"
-    sha256 cellar: :any, mojave:        "1f3e9a471f163392e9144b1aa43f05f842b1b8ede72c7d063c1296bd87235e26"
+    sha256 cellar: :any,                 arm64_monterey: "10bb95450ae3ae7c01aeb77ae53494f809216e1ae08ab5bfdc34cfe025b6ab3a"
+    sha256 cellar: :any,                 arm64_big_sur:  "5b51c666f32691f4f7f36677e7150e0c5d7d46e840cea62ada1022ff70c954b2"
+    sha256 cellar: :any,                 monterey:       "670e638486f75ed89d4639ac16ed29f203bc10ba93ffdc8aa43bf51a0e891529"
+    sha256 cellar: :any,                 big_sur:        "0564f586d55df1098bf566fa89171aa6cd4b3dec45738b70b66e2a3dff72985f"
+    sha256 cellar: :any,                 catalina:       "10c1a967f626d8c933a745b4ced2a3464f1102faab2355429a0e07cfbbe0cab9"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "45dd9f6d7982ae3b7a343eb57fd7d6509fd45a32c7f5e6a258018ca58ca98da1"
   end
 
   keg_only :versioned_formula
 
   depends_on "openssl@1.1"
-  depends_on "wxmac" # for GUI apps like observer
+  depends_on "wxwidgets" # for GUI apps like observer
 
   resource "html" do
     url "https://www.erlang.org/download/otp_doc_html_23.3.tar.gz"
@@ -48,7 +50,7 @@ class ErlangAT23 < Formula
       --without-javac
     ]
 
-    on_macos do
+    if OS.mac?
       args << "--enable-darwin-64bit"
       args << "--enable-kernel-poll" if MacOS.version > :el_capitan
       args << "--with-dynamic-trace=dtrace" if MacOS::CLT.installed?

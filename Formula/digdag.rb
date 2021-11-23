@@ -1,8 +1,8 @@
 class Digdag < Formula
   desc "Workload Automation System"
   homepage "https://www.digdag.io/"
-  url "https://dl.digdag.io/digdag-0.10.1.jar"
-  sha256 "cd0e5224444a485c4fb3344515f76d5a92c6c5d6d36c854bde336ed2b094e85e"
+  url "https://dl.digdag.io/digdag-0.10.3.jar"
+  sha256 "200911b6a35a3d8b40e25f028753fb9652aeb19dbd05b8f950dc35ff69547c34"
   license "Apache-2.0"
 
   livecheck do
@@ -11,7 +11,7 @@ class Digdag < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "0cf7a0f2c627e31403aab8371873202cd6a328534bd1a3867b71aad913474bea"
+    sha256 cellar: :any_skip_relocation, all: "ced88f755a68bdddb42517597bc686f066b954c511c47de4180357f65d46d16b"
   end
 
   depends_on arch: :x86_64 # openjdk@8 is not supported on ARM

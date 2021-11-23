@@ -1,15 +1,18 @@
 class Keptn < Formula
   desc "Is the CLI for keptn.sh a message-driven control-plane for application delivery"
   homepage "https://keptn.sh"
-  url "https://github.com/keptn/keptn/archive/0.8.3.tar.gz"
-  sha256 "aadd069ca5a47d5c7291d5d6df84a83c8e2cb7021bc4159bf9860372ebb02f77"
+  url "https://github.com/keptn/keptn/archive/0.9.2.tar.gz"
+  sha256 "0ba9f79f3428baa2453622e19eeff2a325c36b35a5b22f60b4589ef77cc77826"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "96b9060be1fc7ad8522d52f043c382e9f6563ca52fd40984088a30a7514a8137"
-    sha256 cellar: :any_skip_relocation, big_sur:       "9c08935654a5ba37098d6bbe74ae148824cdcc21889f22f171e6b9c4a44a4ffe"
-    sha256 cellar: :any_skip_relocation, catalina:      "59a1ffc854e5420805254a0b2fbc47139d2b8ffb7cae810a86c53982a43d8cef"
-    sha256 cellar: :any_skip_relocation, mojave:        "ae383c334b33874359c6bc054b2e132da3e3e97b0d2d17b935cfed145cfbdc34"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "bb25a124cf886aeb601ea8b44d9d2259f413ea1443dd25709beb8da024226e4b"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "a0face66e81013a059015062aed3855d75c151bd683f3f5b00eec5abd23ae0d6"
+    sha256 cellar: :any_skip_relocation, monterey:       "4bbb3474e80d5bdd86d5b017a5c9421950920d3d2214ca11332ec9a3c99d62d8"
+    sha256 cellar: :any_skip_relocation, big_sur:        "b8d83d543e45bf2a3287abc268d677cf33c79245a735146f12fec42e07278b1b"
+    sha256 cellar: :any_skip_relocation, catalina:       "718d29d52f0e5780d0067f9b5eafad4a08a648b3bf605ab83ff939c547492b5c"
+    sha256 cellar: :any_skip_relocation, mojave:         "920e3054b80aabed5310763a63c1af4a76ad680943771260cf77f4bffe4ab2b9"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "bdba46209177a40c557bf9a4a517da9ec045e91065d34c46545b7d0d12f989e8"
   end
 
   depends_on "go" => :build
@@ -27,27 +30,12 @@ class Keptn < Formula
   end
 
   test do
-    run_output = shell_output("#{bin}/keptn version 2>&1")
-    assert_match "\nKeptn CLI version:", run_output
+    system bin/"keptn", "set", "config", "AutomaticVersionCheck", "false"
+    system bin/"keptn", "set", "config", "kubeContextCheck", "false"
 
-    version_output = shell_output("#{bin}/keptn version 2>&1")
-    assert_match version.to_s, version_output
+    assert_match "Keptn CLI version: #{version}", shell_output(bin/"keptn version 2>&1")
 
-    # As we can't bring up a Kubernetes cluster in this test, we simply
-    # run "keptn status" and check that it 1) errors out, and 2) complains
-    # about a missing keptn auth.
-    require "pty"
-    require "timeout"
-    r, _w, pid = PTY.spawn("#{bin}/keptn status", err: :out)
-    begin
-      Timeout.timeout(5) do
-        assert_match "Warning: could not open KUBECONFIG file", r.gets.chomp
-        Process.wait pid
-        assert_equal 1, $CHILD_STATUS.exitstatus
-      end
-    rescue Timeout::Error
-      puts "process not finished in time, killing it"
-      Process.kill("TERM", pid)
-    end
+    assert_match "This command requires to be authenticated. See \"keptn auth\" for details",
+      shell_output(bin/"keptn status 2>&1", 1)
   end
 end

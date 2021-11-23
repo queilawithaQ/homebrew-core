@@ -2,18 +2,19 @@ class Bartycrouch < Formula
   desc "Incrementally update/translate your Strings files"
   homepage "https://github.com/Flinesoft/BartyCrouch"
   url "https://github.com/Flinesoft/BartyCrouch.git",
-      tag:      "4.6.0",
-      revision: "771a4aeaab1cf262f0af51811379aaeea675e3cc"
+      tag:      "4.8.0",
+      revision: "e2cd0f35fb13b596196091a9ae8de67857e3479a"
   license "MIT"
-  head "https://github.com/Flinesoft/BartyCrouch.git"
+  head "https://github.com/Flinesoft/BartyCrouch.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "5ac9b15cd854432a11e43d2e73bafc0146a06107d62c6b8337a407ebc02614ff"
-    sha256 cellar: :any_skip_relocation, big_sur:       "3573c8b0ae2893f825e5979a9f907be682735e29be39d2a3f69e7d6e0374332c"
-    sha256 cellar: :any_skip_relocation, catalina:      "c51eed14bfc9048dfbe4bdf6a2fd49c35b3a4a5f9f2c4a187c6e5a04269c44ca"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "9be082e513bf752284882fcb6c7bf6187b3b5f0bcbcd786ab51d62ba2a033e14"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "bb287ef35120a2ce095f1fcd1f0c434ac3934bfd3f13edbdc0bd99ed8934765e"
+    sha256 cellar: :any_skip_relocation, monterey:       "79f5493893cfc7372fcd78a139e57af452432420129ee5d4171bd773ec67db5e"
+    sha256 cellar: :any_skip_relocation, big_sur:        "0ca80eae1448147e3fb61233845ec77329a2ac031896f0cc260a24fae589c1b4"
   end
 
-  depends_on xcode: ["12.0", :build]
+  depends_on xcode: ["12.5", :build]
   depends_on :macos
 
   def install

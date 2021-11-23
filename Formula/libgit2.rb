@@ -1,10 +1,10 @@
 class Libgit2 < Formula
   desc "C library of Git core methods that is re-entrant and linkable"
   homepage "https://libgit2.github.com/"
-  url "https://github.com/libgit2/libgit2/archive/v1.1.0.tar.gz"
-  sha256 "41a6d5d740fd608674c7db8685685f45535323e73e784062cf000a633d420d1e"
+  url "https://github.com/libgit2/libgit2/archive/v1.3.0.tar.gz"
+  sha256 "192eeff84596ff09efb6b01835a066f2df7cd7985e0991c79595688e6b36444e"
   license "GPL-2.0-only"
-  head "https://github.com/libgit2/libgit2.git"
+  head "https://github.com/libgit2/libgit2.git", branch: "main"
 
   livecheck do
     url :stable
@@ -12,10 +12,13 @@ class Libgit2 < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "cc3c73fe59d8250e417e5bb0e401095fbb3686576302f0e54c9a97dd0c412ed7"
-    sha256 cellar: :any, big_sur:       "8f441c63c8c7737c0278b0537f095c84f0eacf80ff8231df57b5be92474884c2"
-    sha256 cellar: :any, catalina:      "55559e477a533a5682da7853f03149000cce14371ed7b0ffc5ceaff285b6348b"
-    sha256 cellar: :any, mojave:        "0bb2d00f1e5b6133df5792c06fd726ad15a9364e184d05653bde6b6c1d5095ae"
+    sha256 cellar: :any,                 arm64_monterey: "d648370b7a2b9713e9ca4b151e3204de78b3acc4f5841c8e9152002447402d48"
+    sha256 cellar: :any,                 arm64_big_sur:  "0413adf01a5a5fe0f63933ec7850c5a638cf1e67dd5a371da6b8c63a154c2a2a"
+    sha256 cellar: :any,                 monterey:       "426cbbe5464b73d9255f1ae3cccba1a241245b81203ac28e36b428bbd6bb32b8"
+    sha256 cellar: :any,                 big_sur:        "12bd50433d0bcf5d85b10c609e78c28563c86c9022ffd420cd0a892875b1fa06"
+    sha256 cellar: :any,                 catalina:       "9e9053beefb103cca13bd58bb701c8894c0b11be7235570a9836a18499a4f054"
+    sha256 cellar: :any,                 mojave:         "f954042fedcf3c8b71b0a28395fad9c0af34d769155c9427208d71f5b5cf98b6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "9df3234f89f7c5bbb15dfa10d0df247f3618fbd005e434397d27385b8d7536ca"
   end
 
   depends_on "cmake" => :build

@@ -1,15 +1,17 @@
 class Kubergrunt < Formula
   desc "Collection of commands to fill in the gaps between Terraform, Helm, and Kubectl"
   homepage "https://github.com/gruntwork-io/kubergrunt"
-  url "https://github.com/gruntwork-io/kubergrunt/archive/v0.7.2.tar.gz"
-  sha256 "0e001d8e455b7c6b54d76c6873e269ac80c03cc57d63266f907d1f3d3ed23354"
+  url "https://github.com/gruntwork-io/kubergrunt/archive/v0.7.11.tar.gz"
+  sha256 "801c07ed27461eec52b4261c91e1248e040701ab05fb7149fe1ff91ae3b4b23f"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "dec81c9f14ef44c4cd2b775cc5c2227cc914b4468f5b73fc7ad99a3635beca87"
-    sha256 cellar: :any_skip_relocation, big_sur:       "02f1969ae1a18bc5dd73d4c9be832d367e7ea78f9055aac2384d606b04384b06"
-    sha256 cellar: :any_skip_relocation, catalina:      "7e9b64b7e3bd5518ba9320ba2fd85c4a05872d99df7753e019d15c562a31d6c2"
-    sha256 cellar: :any_skip_relocation, mojave:        "623c9eee2bf0fa95ccb28ad690761bfc6b4ef2061df064b207aa250393a881dd"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "041c7b80659a2e5126a610ce3faaaa0fecc9c6f048c033bb77f599b9296492cc"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "6481b4880a6ddef4f8260829ce399571db9d9891c5b392453f45f1d6c7eee5eb"
+    sha256 cellar: :any_skip_relocation, monterey:       "10197d7973589c0d4d330a6186fcaee7dcbc7d1d493a456b4d332588fd6ed9de"
+    sha256 cellar: :any_skip_relocation, big_sur:        "3eecfe14ce8805e00e9661c2efd850e8b67260df30285d7f8b4ae3e04e129d0d"
+    sha256 cellar: :any_skip_relocation, catalina:       "d39b4ed29352f559142816c597f19f5d6f36d6c93520e976d7993b3048b7b863"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "a6d0f9a112b2ff4f1c06e5987c8fb9c2be0af0051d5802f6cf3732c5f323371b"
   end
 
   depends_on "go" => :build
@@ -20,11 +22,11 @@ class Kubergrunt < Formula
 
   test do
     output = shell_output("#{bin}/kubergrunt eks verify --eks-cluster-arn " \
-                            "arn:aws:eks:us-east-1:123:cluster/brew-test 2>&1", 1)
+                          "arn:aws:eks:us-east-1:123:cluster/brew-test 2>&1", 1)
     assert_match "ERROR: Error finding AWS credentials", output
 
     output = shell_output("#{bin}/kubergrunt tls gen --namespace test " \
-                            "--secret-name test --ca-secret-name test 2>&1", 1)
+                          "--secret-name test --ca-secret-name test 2>&1", 1)
     assert_match "ERROR: --tls-common-name is required", output
   end
 end

@@ -1,10 +1,10 @@
 class Poco < Formula
   desc "C++ class libraries for building network and internet-based applications"
   homepage "https://pocoproject.org/"
-  url "https://pocoproject.org/releases/poco-1.10.1/poco-1.10.1-all.tar.gz"
-  sha256 "7f5931e0bb06bc2880a0f3867053a2fddf6c0d3e5dd96342a665460301fc34ca"
+  url "https://pocoproject.org/releases/poco-1.11.1/poco-1.11.1-all.tar.gz"
+  sha256 "31ccce6020047270003bfb5b0da7e2ad432884c23d3cd509c86f47cf3a5e5d2a"
   license "BSL-1.0"
-  head "https://github.com/pocoproject/poco.git", branch: "develop"
+  head "https://github.com/pocoproject/poco.git", branch: "master"
 
   livecheck do
     url "https://pocoproject.org/releases/"
@@ -12,11 +12,12 @@ class Poco < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "d62b52377c0bfb785ad2e05ef8007a63e8518542891180c564d257fa07500307"
-    sha256 cellar: :any, big_sur:       "a2483cf9eaff5857285e2ec3cc4086f74a7edfb240815e75bca7ba153861f1c5"
-    sha256 cellar: :any, catalina:      "0755dff1346ea80aa6202ce3e8269c608960abd4bf0a4566e56075cc99364b57"
-    sha256 cellar: :any, mojave:        "7abccb2c17823c6dda9dee9e5918fa28ef846d8095252681c83c47bbb674f5c8"
-    sha256 cellar: :any, high_sierra:   "70cea3a570e187c3e70a8dbbe1ad2e43be1c159d0d9118c1bfc1a8cc6441e2a4"
+    sha256 cellar: :any,                 arm64_monterey: "c5803cfda14c21ccc0308d63aee47309308fa8b3a4538769536eb7af15212fdb"
+    sha256 cellar: :any,                 arm64_big_sur:  "48c3e8a3c7bb4839ba4476294912c4c638f7e158c0d665eea66aa854002045f9"
+    sha256 cellar: :any,                 monterey:       "cee35bb37b7d15eff1b7c76c82e423115c53c417528aa54ada947f4de9d05157"
+    sha256 cellar: :any,                 big_sur:        "379a4a4055a10827facf52791873c6040dc349836588cfa18a4d14a938b6e5ae"
+    sha256 cellar: :any,                 catalina:       "9d6965f8ae6b9249dd2d4d9c14b02f8e684d60dde9b1a5e48080f3f34ae29c21"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "15f5fb5a0c2d491148ab5cb029d987fc555a07b47d9799e6aa62bdf5eb0adf3c"
   end
 
   depends_on "cmake" => :build

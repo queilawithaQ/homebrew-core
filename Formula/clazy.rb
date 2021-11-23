@@ -1,11 +1,11 @@
 class Clazy < Formula
   desc "Qt oriented static code analyzer"
   homepage "https://www.kdab.com/"
-  url "https://download.kde.org/stable/clazy/1.9/src/clazy-1.9.tar.xz"
-  sha256 "4c6c2e473e6aa011cc5fab120ebcffec3fc11a9cc677e21ad8c3ea676eb076f8"
+  url "https://download.kde.org/stable/clazy/1.10/src/clazy-1.10.tar.xz"
+  sha256 "4ce6d55ffcddacdb005d847e0c329ade88a01e8e4f7590ffd2a9da367c1ba39d"
   license "LGPL-2.0-or-later"
-  revision 2
-  head "https://invent.kde.org/sdk/clazy.git"
+  revision 1
+  head "https://invent.kde.org/sdk/clazy.git", branch: "master"
 
   livecheck do
     url :head
@@ -13,16 +13,18 @@ class Clazy < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "a8ddb146d2b1a6058a8a86772e24b6f4bcbb76d9ff254557a4bbc4bd152acb0e"
-    sha256 cellar: :any, big_sur:       "c81f75e0c903da26f703002ecc1377a0b393ed7cfe5803c6351fadf6c131318d"
-    sha256 cellar: :any, catalina:      "d0f860fc174f54e0b0022a995f556fe7aa4f2cb3ed016863d4fe970e57112c57"
-    sha256 cellar: :any, mojave:        "7d16a3e2c951be1d7bc818a12efb4e8af98050e846d367fd9e505c10a556c72b"
+    sha256 cellar: :any, arm64_monterey: "c44b906300b19fd0f3fa64dd98c6edf58065a59494d040e7d1121944fd36df2e"
+    sha256 cellar: :any, arm64_big_sur:  "7d15f90dbe42c90a9920c117854b94f17908622df7def7d4d5dda8b5303ef7e5"
+    sha256 cellar: :any, monterey:       "a325c3349a7bbcde4d330a19b030a2d54c57ddfd222e66022825ca04cd9d2123"
+    sha256 cellar: :any, big_sur:        "a873bc99b80959e45cf74c388bdefd9541a985f87e42de9b35a6ad82bec5953f"
+    sha256 cellar: :any, catalina:       "57301f79bae291ae0817b4b6577f49a4ea2136849d36b8c0b949c026995ebb2a"
+    sha256 cellar: :any, mojave:         "6c2cf6029ba58ad5d7fa13098fcd18d9514315bc57e11c090f351f4e93df5350"
   end
 
   depends_on "cmake"   => [:build, :test]
   depends_on "qt"      => :test
   depends_on "coreutils"
-  depends_on "llvm@11"
+  depends_on "llvm"
 
   uses_from_macos "libxml2"
   uses_from_macos "ncurses"
@@ -66,7 +68,7 @@ class Clazy < Formula
       int main() { return 0; }
     EOS
 
-    ENV["CLANGXX"] = Formula["llvm@11"].opt_bin/"clang++"
+    ENV["CLANGXX"] = Formula["llvm"].opt_bin/"clang++"
     system "cmake", "-DCMAKE_CXX_COMPILER=#{bin}/clazy", "."
     assert_match "warning: qgetenv().isEmpty() allocates. Use qEnvironmentVariableIsEmpty() instead",
       shell_output("make VERBOSE=1 2>&1")

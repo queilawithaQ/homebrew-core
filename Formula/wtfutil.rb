@@ -2,15 +2,18 @@ class Wtfutil < Formula
   desc "Personal information dashboard for your terminal"
   homepage "https://wtfutil.com"
   url "https://github.com/wtfutil/wtf.git",
-      tag:      "v0.37.0",
-      revision: "91942b68f203aa95e43dfa637165f0136a9343da"
+      tag:      "v0.40.0",
+      revision: "f20465340a7937aa24b73f25fbf36cdccc415790"
   license "MPL-2.0"
+  head "https://github.com/wtfutil/wtf.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "47c655855b109ebf85cda5c1ca99c0d6684e0cb0b864fb4c39404904c094c18d"
-    sha256 cellar: :any_skip_relocation, big_sur:       "0cdc3d4bcb3c0396e272950f52fc70e656f4e39e9bb0a0ee0cf006e43ed97648"
-    sha256 cellar: :any_skip_relocation, catalina:      "120fec92901e7afaddd226ef8dce48396df513f07af97af56a42bb63734736b6"
-    sha256 cellar: :any_skip_relocation, mojave:        "d0b05f2c733430487369d2e5d4b4fcae88c8eb702ef0c7a3fe4d1acd992b42ec"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "fa269f8f11c823a1bfb9bce0cf2f0d6b14e92f6d37bf4bfae640e681b21ee4d4"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "ac63fe942934b8af64f084dda1386988322f4a46fe31b1895f101799fbf877c9"
+    sha256 cellar: :any_skip_relocation, monterey:       "d2ccd48fdef7ff5e979182bc53798fc995112fa3bbefabfe1c16d0f8f7427fd4"
+    sha256 cellar: :any_skip_relocation, big_sur:        "5d7ef886196dbaba38ba428a8ae8f39152175475701d89470e97e098eeb33dbe"
+    sha256 cellar: :any_skip_relocation, catalina:       "9b0741c101bec126592e676fcdccd6d962a9b46962e01da7cea719d6b09d5aa4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "c0e0764599f54714457a3aa5e72a7b6176f7aa609e5fe6ea7c8b608024ad8820"
   end
 
   depends_on "go" => :build
@@ -19,9 +22,9 @@ class Wtfutil < Formula
     ldflags = %W[
       -s -w
       -X main.version=#{version}
-      -X main.date=#{Time.now.iso8601}
-    ]
-    system "go", "build", "-trimpath", "-ldflags", ldflags.join(" "), "-o", bin/"wtfutil"
+      -X main.date=#{time.iso8601}
+    ].join(" ")
+    system "go", "build", *std_go_args(ldflags: ldflags)
   end
 
   test do

@@ -1,16 +1,16 @@
 class PhpCsFixerAT2 < Formula
   desc "Tool to automatically fix PHP coding standards issues"
   homepage "https://cs.symfony.com/"
-  url "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.19.0/php-cs-fixer.phar"
-  sha256 "dcaf7556479a1cfc7ece11a203c4247d61fabe86e509b0e29539111f6b82018c"
+  url "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.19.3/php-cs-fixer.phar"
+  sha256 "64238c2940e273f6182abe5279fea0df3707ac3d18f30909f0ab4fb6f9018f94"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "5f80ed35e0644fa2eafc81ab81b4320187f3257c0819fd43e70e6f7cc2003b3d"
+    sha256 cellar: :any_skip_relocation, all: "62f0ceae3aec334450704706f22b62d66dc966347a4a7c3324566e530746ffea"
   end
 
   keg_only :versioned_formula
-  uses_from_macos "php", since: :el_capitan
+  depends_on "php"
 
   def install
     bin.install "php-cs-fixer.phar" => "php-cs-fixer"

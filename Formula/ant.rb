@@ -1,14 +1,14 @@
 class Ant < Formula
   desc "Java build tool"
   homepage "https://ant.apache.org/"
-  url "https://www.apache.org/dyn/closer.lua?path=ant/binaries/apache-ant-1.10.10-bin.tar.xz"
-  mirror "https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.10-bin.tar.xz"
-  sha256 "55d9bf9874cc4a9704a6b8748f6dc56ad458565504ce894f17424786436e6b52"
+  url "https://www.apache.org/dyn/closer.lua?path=ant/binaries/apache-ant-1.10.12-bin.tar.xz"
+  mirror "https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.12-bin.tar.xz"
+  sha256 "6115c940367e50755cf806de5816f20a1db1321b1cb734e2c34ab20ef6682b9b"
   license "Apache-2.0"
-  head "https://git-wip-us.apache.org/repos/asf/ant.git"
+  head "https://git-wip-us.apache.org/repos/asf/ant.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, all: "d6404e9d7581ec524c8edf8ef776abcbfc99bec1daff38b6ac195e615e58468c"
+    sha256 cellar: :any_skip_relocation, all: "65361546d11f6cd675bc64aae75cd14dc3e77e7ed466b45e871bd09780df23f1"
   end
 
   depends_on "openjdk"

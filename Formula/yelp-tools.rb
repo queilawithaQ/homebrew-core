@@ -3,15 +3,18 @@ class YelpTools < Formula
 
   desc "Tools that help create and edit Mallard or DocBook documentation"
   homepage "https://github.com/GNOME/yelp-tools"
-  url "https://download.gnome.org/sources/yelp-tools/40/yelp-tools-40.0.tar.xz"
-  sha256 "664bacf2f3dd65ef00a43f79487351ab64a6c4c629c56ac0ceb1723c2eb66aae"
+  url "https://download.gnome.org/sources/yelp-tools/41/yelp-tools-41.0.tar.xz"
+  sha256 "37f1acc02bcbe68a31b86e07c129a839bd3276e656dc89eb7fc0a92746eff272"
   license "GPL-2.0-or-later"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "08a72b2e030951fa5100ac9da0bb00cd5b9da79ab32eec4c6ee755a3790faabd"
-    sha256 cellar: :any, big_sur:       "4cbc2bd14f9fd508715bba8e1d92a624e75bb044a624c1722f56dca10962439d"
-    sha256 cellar: :any, catalina:      "a5ddc4d177f70d6e6f3eefc2562efd1be935bf541bd625c28d934b21d0b95a15"
-    sha256 cellar: :any, mojave:        "016bb96482e49cdbb5431dc0dccc66b7b8a0277b32e4c335fd8fe39cd770d660"
+    sha256 cellar: :any,                 arm64_monterey: "cda13a749f9817f2e856178fda8ac72ad0104fca14a48bdb8abc26085610f051"
+    sha256 cellar: :any,                 arm64_big_sur:  "7023c23ea27f57ff8a89a378643ecdbb643f5350126ce1971bb575d9d773f739"
+    sha256 cellar: :any,                 monterey:       "0085d535d7f8a428012e1d9ed188abeb8859b8f67804d7f970b6afd25a795cb4"
+    sha256 cellar: :any,                 big_sur:        "1102fbc8573c51525f22bfc069c2cad50402012c80699d958130c6ddf153c924"
+    sha256 cellar: :any,                 catalina:       "7ed33af3a9d9c7256c06357b30f9f1ef577ae7409c376e60f8c9e10ff5d0b55d"
+    sha256 cellar: :any,                 mojave:         "533c8b568d6390cf108b222ec3334a048c5b038a59d29b53cf17e55b0191d734"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "cab7be797b38e41c06681e07624a044dc4d75f837649e244062b9795e773b3a3"
   end
 
   depends_on "gettext" => :build
@@ -20,6 +23,7 @@ class YelpTools < Formula
   depends_on "ninja" => :build
   depends_on "pkg-config" => :build
   depends_on "gtk+3"
+  depends_on "itstool"
   depends_on "libxml2"
   depends_on "python@3.9"
 
@@ -31,8 +35,8 @@ class YelpTools < Formula
   end
 
   resource "yelp-xsl" do
-    url "https://download.gnome.org/sources/yelp-xsl/40/yelp-xsl-40.0.tar.xz"
-    sha256 "361ecd4d33fccdb3bb08a687f60e5c3e909d2e9e3b022d844e049820d0cf62b0"
+    url "https://download.gnome.org/sources/yelp-xsl/41/yelp-xsl-41.0.tar.xz"
+    sha256 "c8cd64c093bbd8c5d5e47fd38864e90831b5f9cf7403530870206fa96636a4a5"
   end
 
   def install

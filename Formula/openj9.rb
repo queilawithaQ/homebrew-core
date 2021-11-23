@@ -2,13 +2,13 @@ class Openj9 < Formula
   desc "High performance, scalable, Java virtual machine"
   homepage "https://www.eclipse.org/openj9/"
   url "https://github.com/eclipse/openj9.git",
-    tag:      "openj9-0.26.0",
-    revision: "b4cc246d9d2362346bc567861e6e0e536da3f390"
+      tag:      "openj9-0.29.0",
+      revision: "e1e72c497688c765183573526f7418a6fe891e93"
   license any_of: [
     "EPL-2.0",
     "Apache-2.0",
-    { "GPL-2.0-or-later" => { with: "Classpath-exception-2.0" } },
-    { "GPL-2.0-or-later" => { with: "OpenJDK-assembly-exception-1.0" } },
+    { "GPL-2.0-only" => { with: "Classpath-exception-2.0" } },
+    { "GPL-2.0-only" => { with: "OpenJDK-assembly-exception-1.0" } },
   ]
 
   livecheck do
@@ -17,9 +17,9 @@ class Openj9 < Formula
   end
 
   bottle do
-    sha256 cellar: :any, big_sur:  "43dfe4513a6b632c7ea74218b0ca1cbbcb025e0147b1763ff92f7e8352c4728b"
-    sha256 cellar: :any, catalina: "1511d86253d5a7213dc21893bee36e119e6e7101a9e430613f4cd97750de261d"
-    sha256 cellar: :any, mojave:   "773bdde15165ffb883e627b54b705677629c3e5233cb9d66e203a1ab658e1454"
+    sha256 cellar: :any, monterey: "d50f6c688315c420b720fb259c0b18db3a8200470547560abf7cf8e2b2d0f108"
+    sha256 cellar: :any, big_sur:  "80ab779bca1df11eb74e7f7f64752abefcef9ba0017f484f2adc282f0b262566"
+    sha256 cellar: :any, catalina: "760830ffc2bb2cc2b556b413bf149178920a59cb3db511d8cd24795b3264f11e"
   end
 
   keg_only :shadowed_by_macos
@@ -50,14 +50,14 @@ class Openj9 < Formula
 
   resource "omr" do
     url "https://github.com/eclipse/openj9-omr.git",
-    tag:      "openj9-0.26.0",
-    revision: "162e6f729733666e22726ce5326f5982bb030330"
+        tag:      "openj9-0.29.0",
+        revision: "299b6a2d28cf992edf57ca43b67ed6d6917675bf"
   end
 
   resource "openj9-openjdk-jdk" do
     url "https://github.com/ibmruntimes/openj9-openjdk-jdk16.git",
-    branch:   "v0.26.0-release",
-    revision: "cea22090ecf368eb47141dbbf882dcaa7afc1e15"
+        branch:   "v0.27.1-release",
+        revision: "a269b697f0c4ad5f8d16ff510aa7058c37c1da0b"
   end
 
   def install

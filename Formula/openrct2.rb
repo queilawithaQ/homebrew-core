@@ -2,32 +2,40 @@ class Openrct2 < Formula
   desc "Open source re-implementation of RollerCoaster Tycoon 2"
   homepage "https://openrct2.io/"
   url "https://github.com/OpenRCT2/OpenRCT2.git",
-      tag:      "v0.3.3",
-      revision: "3f65f282d7332c284dcb5daaf4c278b7e9da9b92"
+      tag:      "v0.3.5.1",
+      revision: "61c67afc667bfee8a6c3b180e98e84e87f442550"
   license "GPL-3.0-only"
-  revision 1
   head "https://github.com/OpenRCT2/OpenRCT2.git", branch: "develop"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "d3a351c2d6aa10bf29a52e950e16ba6bb603ec63edad749a7b663f891e875f7b"
-    sha256 cellar: :any, big_sur:       "0acb51b57719189dbb397b8d7db9975cfbfe3718542feb6607fe13426b645fd3"
-    sha256 cellar: :any, catalina:      "77f493be0b0d0dabba21d4854dd635e3ddc16c373a82057c95b3efe997003fa7"
-    sha256 cellar: :any, mojave:        "cef2d857349baf66d0e561eb87e8dc027bba51f58af72cfa88af52320efe12b9"
+    sha256 cellar: :any,                 arm64_monterey: "99b8f59ade1d666eb18777b1a51af0b7ccf36e9a6664a5bda685faa9fd6976da"
+    sha256 cellar: :any,                 arm64_big_sur:  "e37538f06c13b93c156fbca46442e2c60fe4feff69b79e5c6f20c05ede878a74"
+    sha256 cellar: :any,                 monterey:       "933b222bc429f24ed5a8f6a8f0682fdc3218b68a192be612be54493caec55b22"
+    sha256 cellar: :any,                 big_sur:        "2d2b86bab2dc4d14c4813588cc8ea45aa85ba24e17eef7a02961cef809c7bd13"
+    sha256 cellar: :any,                 catalina:       "0b027b8b473e74a0f70c4576d08c0a24377e334dd0ee18e5813135989f52dfc4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "3470fa8440c040938e8e4dbb46f05ab20110a18b4c3b8a8276ffb1f69f3464c6"
   end
 
   depends_on "cmake" => :build
+  depends_on "nlohmann-json" => :build
   depends_on "pkg-config" => :build
   depends_on "duktape"
-  depends_on "freetype" # for sdl2_ttf
+  depends_on "freetype"
   depends_on "icu4c"
   depends_on "libpng"
   depends_on "libzip"
   depends_on macos: :mojave # `error: call to unavailable member function 'value': introduced in macOS 10.14`
-  depends_on "nlohmann-json"
   depends_on "openssl@1.1"
   depends_on "sdl2"
-  depends_on "sdl2_ttf"
   depends_on "speexdsp"
+
+  on_linux do
+    depends_on "curl"
+    depends_on "fontconfig"
+    depends_on "mesa"
+  end
+
+  fails_with gcc: "5" # C++17
 
   resource "title-sequences" do
     url "https://github.com/OpenRCT2/title-sequences/releases/download/v0.1.2c/title-sequences.zip"
@@ -35,8 +43,8 @@ class Openrct2 < Formula
   end
 
   resource "objects" do
-    url "https://github.com/OpenRCT2/objects/archive/v1.0.21.tar.gz"
-    sha256 "31129188916dc9ba2318d851e03393ce55782f121ab7c9d97544abdc7bbc92ab"
+    url "https://github.com/OpenRCT2/objects/archive/v1.2.2.tar.gz"
+    sha256 "f24ed11bc21473c3eee3be3fd0f776e542af408b3b408eb6c35f6115b1bed89d"
   end
 
   def install
@@ -46,6 +54,7 @@ class Openrct2 < Formula
 
     mkdir "build" do
       system "cmake", "..", *std_cmake_args,
+                            "-DCMAKE_OSX_DEPLOYMENT_TARGET=#{MacOS.version}",
                             "-DWITH_TESTS=OFF",
                             "-DDOWNLOAD_TITLE_SEQUENCES=OFF",
                             "-DDOWNLOAD_OBJECTS=OFF",

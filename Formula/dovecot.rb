@@ -1,20 +1,22 @@
 class Dovecot < Formula
   desc "IMAP/POP3 server"
   homepage "https://dovecot.org/"
-  url "https://dovecot.org/releases/2.3/dovecot-2.3.14.tar.gz"
-  sha256 "c8b3d7f3af1e558a3ff0f970309d4013a4d3ce136f8c02a53a3b05f345b9a34a"
+  url "https://dovecot.org/releases/2.3/dovecot-2.3.17.tar.gz"
+  sha256 "224412cd77a23a3ffb857da294da200883d956082cff7257942eff2789bd2df9"
   license all_of: ["BSD-3-Clause", "LGPL-2.1-or-later", "MIT", "Unicode-DFS-2016", :public_domain]
 
   livecheck do
-    url "https://dovecot.org/download"
+    url "https://www.dovecot.org/download/"
     regex(/href=.*?dovecot[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
   bottle do
-    sha256 arm64_big_sur: "b9f839dba9468f7eae88b0dd3fc82b5b874090e36a6acda2bb4213aec9643c0f"
-    sha256 big_sur:       "e2e2f8de6497655aaa4f3500e7daf815039ae7d5f4ab665a24479a93f0268f4f"
-    sha256 catalina:      "5e8f0e607c4ae4db5333adcba429c19c4292ad72512ee05a574ec412df1a066a"
-    sha256 mojave:        "23d56aa20b37f916b2942a2183529b9520072593439bb132c21dd82c91ca4d11"
+    sha256 arm64_monterey: "6a09e1d80034aacab3b64db30ab1f22e69b19b1bf3f02c4dbe575d60c516071f"
+    sha256 arm64_big_sur:  "97ee2d2b1c2214d6fd00211e4deb99a2476eff51a135bc9e97367fed98c2cbae"
+    sha256 monterey:       "9c1c6a718ddc61b95705ce76f4504066a877a5385c2b10fbd97e0ace8b21118f"
+    sha256 big_sur:        "0e2332671e5df12e9dc1cc947d413b0b4555d7bdb80ceaea944e7623cba1767f"
+    sha256 catalina:       "c047e4e19250f80ae8ed466a6e097ba22e727efa01f349335d51f4925bc731cf"
+    sha256 x86_64_linux:   "4bf69f94e1276372205ea581baa2b2e15baa98ca6b852307c938d5e609edb61c"
   end
 
   depends_on "openssl@1.1"
@@ -27,8 +29,22 @@ class Dovecot < Formula
   end
 
   resource "pigeonhole" do
-    url "https://pigeonhole.dovecot.org/releases/2.3/dovecot-2.3-pigeonhole-0.5.14.tar.gz"
-    sha256 "68ca0f78a3caa6b090a469f45c395c44cf16da8fcb3345755b1ca436c9ffb2d2"
+    # Syystem curl errors with:
+    # curl: (35) error:1400442E:SSL routines:CONNECT_CR_SRVR_HELLO:tlsv1 alert protocol version
+    url "https://pigeonhole.dovecot.org/releases/2.3/dovecot-2.3-pigeonhole-0.5.17.tar.gz", using: :homebrew_curl
+    sha256 "031e823966c53121e289b3ecdcfa4bc35ed9d22ecbf5d93a8eb140384e78d648"
+
+    # Fix -flat_namespace being used on Big Sur and later.
+    patch do
+      url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff"
+      sha256 "35acd6aebc19843f1a2b3a63e880baceb0f5278ab1ace661e57a502d9d78c93c"
+    end
+  end
+
+  # Fix -flat_namespace being used on Big Sur and later.
+  patch do
+    url "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff"
+    sha256 "35acd6aebc19843f1a2b3a63e880baceb0f5278ab1ace661e57a502d9d78c93c"
   end
 
   def install
@@ -70,40 +86,11 @@ class Dovecot < Formula
 
   plist_options startup: true
 
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>KeepAlive</key>
-          <false/>
-          <key>RunAtLoad</key>
-          <true/>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{opt_sbin}/dovecot</string>
-            <string>-F</string>
-          </array>
-          <key>StandardErrorPath</key>
-          <string>#{var}/log/dovecot/dovecot.log</string>
-          <key>StandardOutPath</key>
-          <string>#{var}/log/dovecot/dovecot.log</string>
-          <key>SoftResourceLimits</key>
-          <dict>
-          <key>NumberOfFiles</key>
-          <integer>1000</integer>
-          </dict>
-          <key>HardResourceLimits</key>
-          <dict>
-          <key>NumberOfFiles</key>
-          <integer>1024</integer>
-          </dict>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_sbin/"dovecot", "-F"]
+    environment_variables PATH: std_service_path_env
+    error_log_path var/"log/dovecot/dovecot.log"
+    log_path var/"log/dovecot/dovecot.log"
   end
 
   test do

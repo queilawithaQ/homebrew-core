@@ -1,21 +1,27 @@
 class Kdoctools < Formula
   desc "Create documentation from DocBook"
   homepage "https://api.kde.org/frameworks/kdoctools/html/index.html"
-  url "https://download.kde.org/stable/frameworks/5.83/kdoctools-5.83.0.tar.xz"
-  sha256 "d3a4ea0d5c0348fff228aa5ba14a7d3eb00296c0f00b9ac9d4b74e56a89e395b"
+  url "https://download.kde.org/stable/frameworks/5.88/kdoctools-5.88.0.tar.xz"
+  sha256 "14b00acc8129395cb7e523a7cb55ec6ddb479166c96693b7b13eefe285ec9030"
   license all_of: [
     "BSD-3-Clause",
     "GPL-2.0-or-later",
     "LGPL-2.1-or-later",
     any_of: ["LGPL-2.1-only", "LGPL-3.0-only"],
   ]
-  head "https://invent.kde.org/frameworks/kdoctools.git"
+  head "https://invent.kde.org/frameworks/kdoctools.git", branch: "master"
+
+  # We check the tags from the `head` repository because the latest stable
+  # version doesn't seem to be easily available elsewhere.
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "aaec47ae8121fd2e68585d330f0a6bd2ee1ea6caa83279065f8d5ea15aabfef6"
-    sha256 cellar: :any, big_sur:       "e03564786cb521df5cd7aa5d024c8951493dd49c25061d39ed0f256a9d6d6ee8"
-    sha256 cellar: :any, catalina:      "33ddc698c24e960c617ee312a169c4398852ed56c37c86509ba99975dda6f95b"
-    sha256 cellar: :any, mojave:        "31fed6390bd7ef02254157e85dc02136a7eef7c68f37e8fd41d7400eb0ba13d4"
+    sha256 cellar: :any, arm64_big_sur: "54c61a6d3b93a46afe90ad30cb83f1ff168e2e4beddd89615c75c61058995b89"
+    sha256 cellar: :any, big_sur:       "c5d4b159c576f074cd4896e0e03808f5d28f37b7a61e7214171c89b1b3dff2ad"
+    sha256 cellar: :any, catalina:      "c0cf3a6b1e5b33394a6873c7e83a7ddae5c386614e2df94166c9f70f03b0757f"
   end
 
   depends_on "cmake" => [:build, :test]
@@ -49,10 +55,9 @@ class Kdoctools < Formula
     args << "-DBUILD_TESTING=OFF"
     args << "-DBUILD_QCH=ON"
 
-    mkdir "build" do
-      system "cmake", "..", *args
-      system "make", "install"
-    end
+    system "cmake", "-S", ".", "-B", "build", *args
+    system "cmake", "--build", "build"
+    system "cmake", "--install", "build"
 
     pkgshare.install ["cmake", "autotests", "tests"]
   end

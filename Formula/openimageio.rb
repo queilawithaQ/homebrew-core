@@ -1,10 +1,10 @@
 class Openimageio < Formula
   desc "Library for reading, processing and writing images"
   homepage "https://openimageio.org/"
-  url "https://github.com/OpenImageIO/oiio/archive/Release-2.2.15.1.tar.gz"
-  sha256 "f222c6b51a40aabbc80ddf4055535be9af1ffa907452fa6d1ffa7674854aab17"
+  url "https://github.com/OpenImageIO/oiio/archive/v2.3.9.1.tar.gz"
+  sha256 "59d3bc8dabc8ac99e2d94461b9f87554049a187f0e48e65b2775e37bb9175870"
   license "BSD-3-Clause"
-  head "https://github.com/OpenImageIO/oiio.git"
+  head "https://github.com/OpenImageIO/oiio.git", branch: "master"
 
   livecheck do
     url :stable
@@ -13,10 +13,11 @@ class Openimageio < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "234df6f7b3eda72c108f81838a5541e7e3a69f04328e502c62a64ac2a93f621d"
-    sha256 cellar: :any, big_sur:       "a0807afc887f880005465c91d0ed6c37801ff316dda04c81a1c1432243b75588"
-    sha256 cellar: :any, catalina:      "62b267f53517973e8c018057eba39c751553fa1839362c8b95aede135b669bd2"
-    sha256 cellar: :any, mojave:        "cdd0daa342392f8de170d30443731a31d40c9c338a8758d80130e3c9c951eb11"
+    sha256 cellar: :any,                 arm64_big_sur: "e7a6785e5033dd03bcaea161461c1ddc2c924be7bdc87eeefd4f3663b562850b"
+    sha256 cellar: :any,                 monterey:      "081a46743a87cdb38043f03ff5b778211f83f9103176410a99214f20495aab83"
+    sha256 cellar: :any,                 big_sur:       "be5d194fae37392924010b6e5afa6679d41964793444889f79de2be4dd510e02"
+    sha256 cellar: :any,                 catalina:      "51057af945d413ef22522150d18ba9c3dede9f20d9920c86e1dbdc5e6f3ac6b6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "3175d437afc73ca5df30e2fe3ab06e56b55d3bc7c8ea081ebc32d430563ac573"
   end
 
   depends_on "cmake" => :build
@@ -52,11 +53,12 @@ class Openimageio < Formula
       -DUSE_QT=OFF
     ]
 
-    # CMake picks up the system's python dylib, even if we have a brewed one.
+    # CMake picks up the system's python shared library, even if we have a brewed one.
     py3ver = Language::Python.major_minor_version Formula["python@3.9"].opt_bin/"python3"
-    py3prefix = Formula["python@3.9"].opt_frameworks/"Python.framework/Versions/#{py3ver}"
-    on_linux do
-      py3prefix = Formula["python@3.9"].opt_prefix
+    py3prefix = if OS.mac?
+      Formula["python@3.9"].opt_frameworks/"Python.framework/Versions/#{py3ver}"
+    else
+      Formula["python@3.9"].opt_prefix
     end
 
     ENV["PYTHONPATH"] = lib/"python#{py3ver}/site-packages"

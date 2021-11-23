@@ -1,15 +1,18 @@
 class Gleam < Formula
   desc "✨ A statically typed language for the Erlang VM"
   homepage "https://gleam.run"
-  url "https://github.com/gleam-lang/gleam/archive/v0.16.0.tar.gz"
-  sha256 "9259e46f356e5d5a419c2fe21be9c359bcf2023260716760c738a011881bff7c"
+  url "https://github.com/gleam-lang/gleam/archive/v0.17.0.tar.gz"
+  sha256 "9530e616d42b4158ffcc5dd1befdc87ab2ea2af784fce6c57aec8c42a71a4ce2"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "49259d27c5d75651157c5ec31a3a4c3b571664123f6df421263aba2684ef350e"
-    sha256 cellar: :any_skip_relocation, big_sur:       "3c36f3e3b129cdc7dfbc3ffb5ea8a01fd036028d2c41710125aec194e25343ea"
-    sha256 cellar: :any_skip_relocation, catalina:      "7f51992236957bbc6da1c73ba1779b6831f8aac27a389c84e4289ad2836ef230"
-    sha256 cellar: :any_skip_relocation, mojave:        "9f9b3467b162621d987e641ccb8ab76ec5cb969eaa2b44277c5a565d4ddfa7b2"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "9bcd68363e64c7946796e349a9f3fc84d6746d0278850c826ac1c13e3a212d24"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "5c3c84d492dbf86c9041469cabfb8c698660ded0a2da658678d9583ea21667b7"
+    sha256 cellar: :any_skip_relocation, monterey:       "4c5fcc18e6714172d522b76aa637f46797a809c6831eed67b9b9da25ee1c35fe"
+    sha256 cellar: :any_skip_relocation, big_sur:        "1fbe03b66b76929c8cb919508f59e7fd9cfae2cd10ec177a775d60c8ef5f8b94"
+    sha256 cellar: :any_skip_relocation, catalina:       "c33692e53fbf7eca2cac472d3ca6e7a2555edbc14048a95e123160840853f314"
+    sha256 cellar: :any_skip_relocation, mojave:         "f1de3efb23c8eee281157668801ef6e1974d410a90c7708b16d3667d96f5632f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "005e249588fb532d3711b4a478f0c7ec176951ca143e1687cc8d0e465f294948"
   end
 
   depends_on "rust" => :build
@@ -21,7 +24,7 @@ class Gleam < Formula
   end
 
   def install
-    system "cargo", "install", *std_cargo_args
+    system "cargo", "install", *std_cargo_args(path: "compiler-cli")
   end
 
   test do

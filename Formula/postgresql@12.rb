@@ -1,8 +1,8 @@
 class PostgresqlAT12 < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://ftp.postgresql.org/pub/source/v12.7/postgresql-12.7.tar.bz2"
-  sha256 "8490741f47c88edc8b6624af009ce19fda4dc9b31c4469ce2551d84075d5d995"
+  url "https://ftp.postgresql.org/pub/source/v12.9/postgresql-12.9.tar.bz2"
+  sha256 "89fda2de33ed04a98548e43f3ee5f15b882be17505d631fe0dd1a540a2b56dce"
   license "PostgreSQL"
 
   livecheck do
@@ -11,10 +11,12 @@ class PostgresqlAT12 < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "e8595744675d3d3ab1a7143198d50942eb74fb31d9eb91361dcbbd7450dc25b4"
-    sha256 big_sur:       "5a08c1b49dcc32f0e4b85b984f5e164eac9c16d98dd95b973b5b4eac57282c1b"
-    sha256 catalina:      "42fe02daa080f0a905fa4434c7af1fe2254fb0e1a3566ffcdcaff1930092d28a"
-    sha256 mojave:        "92693a4b81886203bf1ff8066a19e8b8a604a011db8765643e617e20d7c98e4b"
+    sha256 arm64_monterey: "a3dfb2c0815f887099ef14c6c3871b694f95a4ec360fbbd78a9a2160d0e66619"
+    sha256 arm64_big_sur:  "2e53b251c89fe36e1fa1ac53a96ebcb5cd8fbaa8369dd561dce5683a3f397c27"
+    sha256 monterey:       "07d1ee0a953a27d2f8be226d55d470540a5953437dddb51d6eaf4769c45b0fc1"
+    sha256 big_sur:        "830b8abe85ad444f4ac16ee9d9e5d4cf8e6bf4f024db824dc01f1eaef8990e8d"
+    sha256 catalina:       "80480b6889243c91cf00f42972b7acda2dda838efb5ffa2d77319d90600b8f37"
+    sha256 x86_64_linux:   "62c0912a48e50c73f1abc648df688dc8d1ae243228b1cdf5ae71982f3db0cee4"
   end
 
   keg_only :versioned_formula
@@ -32,7 +34,6 @@ class PostgresqlAT12 < Formula
   depends_on "openssl@1.1"
   depends_on "readline"
 
-  uses_from_macos "krb5"
   uses_from_macos "libxml2"
   uses_from_macos "libxslt"
   uses_from_macos "openldap"
@@ -56,7 +57,6 @@ class PostgresqlAT12 < Formula
       --sysconfdir=#{etc}
       --docdir=#{doc}
       --enable-thread-safety
-      --with-bonjour
       --with-gssapi
       --with-icu
       --with-ldap
@@ -65,9 +65,14 @@ class PostgresqlAT12 < Formula
       --with-openssl
       --with-pam
       --with-perl
-      --with-tcl
       --with-uuid=e2fs
     ]
+    if OS.mac?
+      args += %w[
+        --with-bonjour
+        --with-tcl
+      ]
+    end
 
     # PostgreSQL by default uses xcodebuild internally to determine this,
     # which does not work on CLT-only installs.
@@ -87,6 +92,12 @@ class PostgresqlAT12 < Formula
                                     "pkgincludedir=#{include}/postgresql",
                                     "includedir_server=#{include}/postgresql/server",
                                     "includedir_internal=#{include}/postgresql/internal"
+
+    if OS.linux?
+      inreplace lib/"postgresql/pgxs/src/Makefile.global",
+                "LD = #{HOMEBREW_PREFIX}/Homebrew/Library/Homebrew/shims/linux/super/ld",
+                "LD = #{HOMEBREW_PREFIX}/bin/ld"
+    end
   end
 
   def post_install
@@ -172,35 +183,12 @@ class PostgresqlAT12 < Formula
     caveats
   end
 
-  plist_options manual: "pg_ctl -D #{HOMEBREW_PREFIX}/var/postgresql@12 start"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-        <key>KeepAlive</key>
-        <true/>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_bin}/postgres</string>
-          <string>-D</string>
-          <string>#{postgresql_datadir}</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>WorkingDirectory</key>
-        <string>#{HOMEBREW_PREFIX}</string>
-        <key>StandardOutPath</key>
-        <string>#{postgresql_log_path}</string>
-        <key>StandardErrorPath</key>
-        <string>#{postgresql_log_path}</string>
-      </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"postgres", "-D", var/"postgresql@12"]
+    keep_alive true
+    log_path var/"log/postgresql@12.log"
+    error_log_path var/"log/postgresql@12.log"
+    working_dir HOMEBREW_PREFIX
   end
 
   test do

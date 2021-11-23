@@ -1,9 +1,9 @@
 class Tor < Formula
   desc "Anonymizing overlay network for TCP"
   homepage "https://www.torproject.org/"
-  url "https://www.torproject.org/dist/tor-0.4.6.5.tar.gz"
-  mirror "https://www.torservers.net/mirrors/torproject.org/dist/tor-0.4.6.5.tar.gz"
-  sha256 "7b6d354e0d9791eace4b51e92211909308297b7aa257993937163d7ee0694cf9"
+  url "https://www.torproject.org/dist/tor-0.4.6.8.tar.gz"
+  mirror "https://www.torservers.net/mirrors/torproject.org/dist/tor-0.4.6.8.tar.gz"
+  sha256 "15ce1a37b4cc175b07761e00acdcfa2c08f0d23d6c3ab9c97c464bd38cc5476a"
   # Complete list of licenses:
   # https://gitweb.torproject.org/tor.git/plain/LICENSE
   license all_of: [
@@ -19,10 +19,12 @@ class Tor < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "4db26a9c3099a00fba4331aa8b9156a4d37f730aeec186c9da08b3c2d156ac73"
-    sha256 big_sur:       "f8315f2d203e00e5740d79b82337eeb722d9133d30e1f0d5bc80cecbf708815a"
-    sha256 catalina:      "4b2a464f8c95cfd217104167839cac944bd266ea49a8d383290896dfa7f16897"
-    sha256 mojave:        "baf44c80d9f9c6895645b4a04209fa558d98d87e8b4fd22683f81ff06e19a5fc"
+    sha256 arm64_monterey: "c3762e94997d6b6f2ecb16aacc3764737b766e29f919803d3e53922d8742bbcb"
+    sha256 arm64_big_sur:  "efc314a687bb144fd4a655c7c9555d7688071749c2ceacb758c103cc30125b49"
+    sha256 monterey:       "90e8e0f7e240541020b1d425ba7ea312ca7f5c7721813396fcb151c57777d1d0"
+    sha256 big_sur:        "d075f702a798d00bed7bdfeead10ec0e6ef2be5953f7e62382840cd0eefab7d5"
+    sha256 catalina:       "d797c5390176cac9edbc7df042fa3421dc93dca3f291fa2340d37c97292c6d00"
+    sha256 x86_64_linux:   "34220f2e859a6d3d22f47a59fb4134d28ffe3c0b50b5d0badb8d217e70bbd167"
   end
 
   depends_on "pkg-config" => :build
@@ -46,33 +48,12 @@ class Tor < Formula
     system "make", "install"
   end
 
-  plist_options manual: "tor"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>RunAtLoad</key>
-          <true/>
-          <key>KeepAlive</key>
-          <true/>
-          <key>ProgramArguments</key>
-          <array>
-              <string>#{opt_bin}/tor</string>
-          </array>
-          <key>WorkingDirectory</key>
-          <string>#{HOMEBREW_PREFIX}</string>
-          <key>StandardErrorPath</key>
-          <string>#{var}/log/tor.log</string>
-          <key>StandardOutPath</key>
-          <string>#{var}/log/tor.log</string>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run opt_bin/"tor"
+    keep_alive true
+    working_dir HOMEBREW_PREFIX
+    log_path var/"log/tor.log"
+    error_log_path var/"log/tor.log"
   end
 
   test do

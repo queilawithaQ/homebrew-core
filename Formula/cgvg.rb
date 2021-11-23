@@ -5,6 +5,11 @@ class Cgvg < Formula
   sha256 "d879f541abcc988841a8d86f0c0781ded6e70498a63c9befdd52baf4649a12f3"
   license "GPL-2.0-or-later"
 
+  livecheck do
+    url :homepage
+    regex(/href=.*?cgvg[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
+
   bottle do
     rebuild 1
     sha256 cellar: :any_skip_relocation, arm64_big_sur: "db2e726fa0cc8e08dc89c030ea6aa2295b07a0559d7ec25d9ee159e5a917385e"
@@ -15,6 +20,7 @@ class Cgvg < Formula
     sha256 cellar: :any_skip_relocation, sierra:        "12b8a6abb31e2e8d7ba044663b33990884ec24d1b0c0776901480cbecd47113f"
     sha256 cellar: :any_skip_relocation, el_capitan:    "a8232322755cb4c369193dca37fecb968ff689c6463611680e12f216f46507c4"
     sha256 cellar: :any_skip_relocation, yosemite:      "de0c8b890aa68670097790093fdceccfe1d69598c18ea5385069efc2f73a3c5d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "db2e726fa0cc8e08dc89c030ea6aa2295b07a0559d7ec25d9ee159e5a917385e"
   end
 
   def install

@@ -1,19 +1,22 @@
 class ElasticsearchAT6 < Formula
   desc "Distributed search & analytics engine"
   homepage "https://www.elastic.co/products/elasticsearch"
-  url "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-6.8.13.tar.gz"
-  sha256 "e3a41d1a58898c18e9f80d45b1bf9f413779bdda9621027a6fe87f3a0f59ec90"
+  url "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-6.8.20.tar.gz"
+  sha256 "3f436ef2e07697e56e6a14cc9abbf0661190d60923691dadb7de5c84476a7b8b"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:  "5a169338be55587bc70f8d297a5ade7ab075540935af491d1eee1ec9e64cc200"
-    sha256 cellar: :any_skip_relocation, catalina: "21760b4a0752ec2f70597637ebeb255d3b218605f5117764451c382ecabffeec"
-    sha256 cellar: :any_skip_relocation, mojave:   "c5b912c15f7add574bcf572818b4b1ac40f7b27ddbcad3eff0303a15e9acb174"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "1a59702e05554f76d89c4f3d29559f96b908e9fb93cfaa7e8a4d8abcff6435ed"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "1a59702e05554f76d89c4f3d29559f96b908e9fb93cfaa7e8a4d8abcff6435ed"
+    sha256 cellar: :any_skip_relocation, monterey:       "bbd66108c17e3232e286afe600af9351f69dbbbad03c76852f6d279717b58002"
+    sha256 cellar: :any_skip_relocation, big_sur:        "bbd66108c17e3232e286afe600af9351f69dbbbad03c76852f6d279717b58002"
+    sha256 cellar: :any_skip_relocation, catalina:       "bbd66108c17e3232e286afe600af9351f69dbbbad03c76852f6d279717b58002"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "06d6fa29d877bcfc3f5a5fe5694c4028ed7322442cc75c88a1df7932036aa8b2"
   end
 
   keg_only :versioned_formula
 
-  depends_on "openjdk@8"
+  depends_on "openjdk"
 
   def cluster_name
     "elasticsearch_#{ENV["USER"]}"
@@ -41,6 +44,11 @@ class ElasticsearchAT6 < Formula
       s.sub!(%r{#\s*path\.logs: /path/to.+$}, "path.logs: #{var}/log/elasticsearch/")
     end
 
+    inreplace "#{libexec}/config/jvm.options" do |s|
+      s.gsub! "logs/gc.log", "#{var}/log/elasticsearch/gc.log"
+      s.gsub! "10-:-XX:UseAVX=2", "# 10-:-XX:UseAVX=2" if Hardware::CPU.arm?
+    end
+
     # Move config files into etc
     (etc/"elasticsearch").install Dir[libexec/"config/*"]
     (libexec/"config").rmtree
@@ -49,7 +57,7 @@ class ElasticsearchAT6 < Formula
                 libexec/"bin/elasticsearch-keystore",
                 libexec/"bin/elasticsearch-plugin",
                 libexec/"bin/elasticsearch-translog"
-    bin.env_script_all_files(libexec/"bin", Language::Java.java_home_env("1.8"))
+    bin.env_script_all_files(libexec/"bin", Language::Java.overridable_java_home_env)
   end
 
   def post_install

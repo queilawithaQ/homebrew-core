@@ -1,19 +1,27 @@
 class Oha < Formula
   desc "HTTP load generator, inspired by rakyll/hey with tui animation"
   homepage "https://github.com/hatoo/oha/"
-  url "https://github.com/hatoo/oha/archive/v0.4.5.tar.gz"
-  sha256 "13ade6a14efefb266907575512ca88b6ea1a37ab8d4060d638f26c3bcee17d5f"
+  url "https://github.com/hatoo/oha/archive/v0.4.7.tar.gz"
+  sha256 "92cb24c6c6730f774f043c6b62197d7364a6f75c964621bf8b14961c81de0c1a"
   license "MIT"
-  head "https://github.com/hatoo/oha.git"
+  head "https://github.com/hatoo/oha.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "361edb589ffb66a5bee902058a9235aa027fee879e09c9c40930d2d031406cb1"
-    sha256 cellar: :any_skip_relocation, big_sur:       "617eb0c53703a471e8d542367560a2aa37c54baf4051301b9a0a133030918978"
-    sha256 cellar: :any_skip_relocation, catalina:      "4566468439bb76337d1f022548c09aaaf37806860583144892255a6466104bdf"
-    sha256 cellar: :any_skip_relocation, mojave:        "4ec5b61c8842d892b4712185922e09824eab582ff6e2f6a1ae44fec01f721160"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "ce139d78d0067b14acbb609a84333f84adbc17331baa52c9f36a907180885446"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "a3693c393cbdf6530012618ccc76baa0c097e070a8027a1325053f8acf981eae"
+    sha256 cellar: :any_skip_relocation, monterey:       "6dcff917bd53406a5fdb6e72b9063227c9c87d4310bb0431f5ea9c55bfeb622f"
+    sha256 cellar: :any_skip_relocation, big_sur:        "c0fc8e64d2377bdfef80fce6108a88a99fca74eb7351f35340990482fabbbb73"
+    sha256 cellar: :any_skip_relocation, catalina:       "11647d250ab6850ba72e7d7d98e066ac05c71779f2392e6c28d093e55abb5288"
+    sha256 cellar: :any_skip_relocation, mojave:         "94358e4baccec0ba2b96dc17e1bdab41498379a4e7942fc31d02387f275b9ec2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "a720e4afa810982b69431c4ebe370555e073b277aaa1f889399aeb36bf272255"
   end
 
   depends_on "rust" => :build
+
+  on_linux do
+    depends_on "pkg-config" => :build
+    depends_on "openssl@1.1" # Uses Secure Transport on macOS
+  end
 
   def install
     system "cargo", "install", *std_cargo_args

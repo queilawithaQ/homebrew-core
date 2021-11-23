@@ -1,16 +1,18 @@
 class Grafana < Formula
   desc "Gorgeous metric visualizations and dashboards for timeseries databases"
   homepage "https://grafana.com"
-  url "https://github.com/grafana/grafana/archive/v8.0.3.tar.gz"
-  sha256 "6758ac2dda7ff62996c23d697c8c421ccf4d51bade9d2c4738af622cbe266d23"
+  url "https://github.com/grafana/grafana/archive/v8.2.5.tar.gz"
+  sha256 "d83e07256a6e55e44e1b63fa0dd505927687336ea6dc89fe7bccfa14d5ba1a97"
   license "AGPL-3.0-only"
-  head "https://github.com/grafana/grafana.git"
+  head "https://github.com/grafana/grafana.git", branch: "main"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "feb8ca6c54a08d3aec98c8e528659fd2972c115ae4f7a7a06c994c272d86d548"
-    sha256 cellar: :any_skip_relocation, big_sur:       "eb4a1e345784b4d8cef6783f54a97b31931a2db0bdaa11e0d680adb0cc502abd"
-    sha256 cellar: :any_skip_relocation, catalina:      "1a9a19c6867393e2b69baf63242ed02a973bab9e5300d330ef159308c75b51d0"
-    sha256 cellar: :any_skip_relocation, mojave:        "43c8c61cf9ff5ee5a7ca6f558bb6770629fe2015a202bd89e6cb5cf4bf13c67f"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "a82b7d31b1426ce2c88552567a1b4be7e7c9e09c50f76e245c6e118d2ec3940a"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "657fef1c20bb4b3f2d9e8e16ae985d3ab902899159772bdcdf7a05d989464374"
+    sha256 cellar: :any_skip_relocation, monterey:       "c74796464be95a639f24dff3ac120399e1da3cd7493ed1efacfe3ecdef75a402"
+    sha256 cellar: :any_skip_relocation, big_sur:        "23f9a074b54ccc9d6456a672bf03b2ac2092eeb8160ec32bba5c826280a75360"
+    sha256 cellar: :any_skip_relocation, catalina:       "c22296bc6fb7bf0c21035374a210169d007c5810101ff821974af008f55f0c4c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "216e754d1d3598e0225d34af819d952be15140506f44689668c5a3726071b656"
   end
 
   depends_on "go" => :build
@@ -25,17 +27,18 @@ class Grafana < Formula
   end
 
   def install
+    system "make", "gen-go"
     system "go", "run", "build.go", "build"
 
     system "yarn", "install", "--ignore-engines", "--network-concurrency", "1"
 
-    system "node_modules/webpack/bin/webpack.js", "--config", "scripts/webpack/webpack.prod.js"
+    system "node", "--max_old_space_size=4096", "node_modules/webpack/bin/webpack.js",
+           "--config", "scripts/webpack/webpack.prod.js"
 
-    on_macos do
+    if OS.mac?
       bin.install Dir["bin/darwin-*/grafana-cli"]
       bin.install Dir["bin/darwin-*/grafana-server"]
-    end
-    on_linux do
+    else
       bin.install "bin/linux-amd64/grafana-cli"
       bin.install "bin/linux-amd64/grafana-server"
     end
@@ -51,49 +54,18 @@ class Grafana < Formula
     (var/"lib/grafana/plugins").mkpath
   end
 
-  plist_options manual: "grafana-server --config=#{HOMEBREW_PREFIX}/etc/grafana/grafana.ini --homepath #{HOMEBREW_PREFIX}/share/grafana --packaging=brew cfg:default.paths.logs=#{HOMEBREW_PREFIX}/var/log/grafana cfg:default.paths.data=#{HOMEBREW_PREFIX}/var/lib/grafana cfg:default.paths.plugins=#{HOMEBREW_PREFIX}/var/lib/grafana/plugins"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>KeepAlive</key>
-          <dict>
-            <key>SuccessfulExit</key>
-            <false/>
-          </dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{opt_bin}/grafana-server</string>
-            <string>--config</string>
-            <string>#{etc}/grafana/grafana.ini</string>
-            <string>--homepath</string>
-            <string>#{opt_pkgshare}</string>
-            <string>--packaging=brew</string>
-            <string>cfg:default.paths.logs=#{var}/log/grafana</string>
-            <string>cfg:default.paths.data=#{var}/lib/grafana</string>
-            <string>cfg:default.paths.plugins=#{var}/lib/grafana/plugins</string>
-          </array>
-          <key>RunAtLoad</key>
-          <true/>
-          <key>WorkingDirectory</key>
-          <string>#{var}/lib/grafana</string>
-          <key>StandardErrorPath</key>
-          <string>#{var}/log/grafana/grafana-stderr.log</string>
-          <key>StandardOutPath</key>
-          <string>#{var}/log/grafana/grafana-stdout.log</string>
-          <key>SoftResourceLimits</key>
-          <dict>
-            <key>NumberOfFiles</key>
-            <integer>10240</integer>
-          </dict>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"grafana-server",
+         "--config", etc/"grafana/grafana.ini",
+         "--homepath", opt_pkgshare,
+         "--packaging=brew",
+         "cfg:default.paths.logs=#{var}/log/grafana",
+         "cfg:default.paths.data=#{var}/lib/grafana",
+         "cfg:default.paths.plugins=#{var}/lib/grafana/plugins"]
+    keep_alive true
+    error_log_path var/"log/grafana-stderr.log"
+    log_path var/"log/grafana-stdout.log"
+    working_dir var/"lib/grafana"
   end
 
   test do

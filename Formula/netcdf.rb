@@ -1,12 +1,10 @@
 class Netcdf < Formula
   desc "Libraries and data formats for array-oriented scientific data"
   homepage "https://www.unidata.ucar.edu/software/netcdf"
-  url "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.8.0.tar.gz"
-  mirror "https://www.gfd-dennou.org/arch/netcdf/unidata-mirror/netcdf-c-4.8.0.tar.gz"
-  sha256 "679635119a58165c79bb9736f7603e2c19792dd848f19195bf6881492246d6d5"
+  url "https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.8.1.tar.gz"
+  sha256 "bc018cc30d5da402622bf76462480664c6668b55eb16ba205a0dfb8647161dd0"
   license "BSD-3-Clause"
-  revision 1
-  head "https://github.com/Unidata/netcdf-c.git"
+  head "https://github.com/Unidata/netcdf-c.git", branch: "main"
 
   livecheck do
     url "https://www.unidata.ucar.edu/downloads/netcdf/"
@@ -14,10 +12,11 @@ class Netcdf < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "870938057a2b09e0fa3aaaa39b74ad720e0ced7c001ecaaaf4eb99dea7d8f1f4"
-    sha256 big_sur:       "5d17807efcdad51a3bba144e55b003db3c04468e7b6f940501bb92fcae8258dd"
-    sha256 catalina:      "f913fd0f1c6b935c4bb072fded3439cf1d9f22af3acf68f209264be69b9bed09"
-    sha256 mojave:        "7d0569b3e8c8d3bf5573874965407e3209bbd6e43f6ddf36fb51f935544c8274"
+    sha256 cellar: :any,                 arm64_big_sur: "ceef5e39659e5ff4588c56106bda44a5a323146667494d2ffc3774157e59fcaa"
+    sha256 cellar: :any,                 big_sur:       "2eb8a909218b74d6912cab5fa71da9e5be96e63c4429ddbd3ad6e4db137f12f8"
+    sha256 cellar: :any,                 catalina:      "2a6b950057dd40e4dee39245943c92ea7bc5d8141b1f70a8946d240a348cbf9e"
+    sha256 cellar: :any,                 mojave:        "c5e18d95f19286dc7d7dd3e44f1c040a64cb1741fd50978bc3a1a6048ac70c66"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "13c5137aecff35c67461d420ff046cdaa49f27a2458e338a5c405448251ec7d0"
   end
 
   depends_on "cmake" => :build
@@ -102,9 +101,11 @@ class Netcdf < Formula
       lib/"pkgconfig/netcdf.pc", lib/"pkgconfig/netcdf-fortran.pc",
       lib/"cmake/netCDF/netCDFConfig.cmake",
       lib/"libnetcdf.settings", lib/"libnetcdf-cxx.settings"
-    ], HOMEBREW_LIBRARY/"Homebrew/shims/mac/super/clang", "/usr/bin/clang"
+    ], Superenv.shims_path/ENV.cc, ENV.cc
 
-    on_macos do
+    if OS.linux?
+      inreplace bin/"ncxx4-config", Superenv.shims_path/ENV.cxx, ENV.cxx
+    else
       # SIP causes system Python not to play nicely with @rpath
       libnetcdf = (lib/"libnetcdf.dylib").readlink
       macho = MachO.open("#{lib}/libnetcdf-cxx4.dylib")

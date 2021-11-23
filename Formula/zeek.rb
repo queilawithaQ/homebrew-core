@@ -2,16 +2,25 @@ class Zeek < Formula
   desc "Network security monitor"
   homepage "https://www.zeek.org"
   url "https://github.com/zeek/zeek.git",
-      tag:      "v4.0.2",
-      revision: "b372622610a4d9fb96e94d8108f282a7f6865f86"
+      tag:      "v4.1.1",
+      revision: "70e95dde8817f7d891cf63592b49b88fad21beb9"
   license "BSD-3-Clause"
-  head "https://github.com/zeek/zeek.git"
+  revision 1
+  head "https://github.com/zeek/zeek.git", branch: "master"
+
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
-    sha256 arm64_big_sur: "ba5ee9e2acf7dc41da3addadbdf3c2fdb201d012b2d45cb6d414cdf5bb78c962"
-    sha256 big_sur:       "3caa4e22a0983ce76fef62b2e0d2665691fd71a724192031eb0fc6c8c8c88555"
-    sha256 catalina:      "648345b2bb189c2609e8610e8f0a0eaea034cfdf88d078d228cb3d1934ac1c64"
-    sha256 mojave:        "2be006af7ccb9f98dfaf05915a93443e4f7f1f73baa0a26d85d29c70188bf131"
+    sha256 arm64_monterey: "d02836b583b2b3934e2d8223d07a2717eea4c6938a9733770a6e22e92750b0c3"
+    sha256 arm64_big_sur:  "1f2b6ade33c459c14955fb497c2be5219f54d61cb39ef011d2478cddfb06789d"
+    sha256 monterey:       "e0b68111d16b627983b5a285adae19f7a8fae4d67c1ce9e773b0036fb1ca4aa7"
+    sha256 big_sur:        "28b6d8e00ad14ff0b6536be06bc0a09ed3bae6c91740cca2cee47ab8171aa88d"
+    sha256 catalina:       "45b8d2ac3710d29895d1b7c10a73da2f71bc4415d0aa0e8f960e3f55e5a76736"
+    sha256 mojave:         "ec2c18a5f3a49bb4f0fc1e9c1d9ab7a0c301bfba78369c20a8677a8e79a4f684"
+    sha256 x86_64_linux:   "951f61c803173ca8ddd3b178430ee92640226db8ecbf3aee2e6414ff62d2e019"
   end
 
   depends_on "bison" => :build
@@ -22,20 +31,24 @@ class Zeek < Formula
   depends_on "libmaxminddb"
   depends_on macos: :mojave
   depends_on "openssl@1.1"
-  depends_on "python@3.9"
+  depends_on "python@3.10"
 
   uses_from_macos "flex"
   uses_from_macos "libpcap"
   uses_from_macos "zlib"
 
+  on_linux do
+    depends_on "gcc" # For C++17
+  end
+
+  fails_with gcc: "5"
+
   def install
     # Remove SDK paths from zeek-config. This breaks usage with other SDKs.
     # https://github.com/corelight/zeek-community-id/issues/15
-    # Remove the `:` in each `inreplace` when this lands in a release:
-    # https://github.com/zeek/zeek/commit/ca725c1f9b96c8eb33885a29d24eefddf28e16ab
     inreplace "zeek-config.in" do |s|
-      s.gsub! ":@ZEEK_CONFIG_PCAP_INCLUDE_DIR@", ""
-      s.gsub! ":@ZEEK_CONFIG_ZLIB_INCLUDE_DIR@", ""
+      s.gsub! "@ZEEK_CONFIG_PCAP_INCLUDE_DIR@", ""
+      s.gsub! "@ZEEK_CONFIG_ZLIB_INCLUDE_DIR@", ""
     end
 
     mkdir "build" do

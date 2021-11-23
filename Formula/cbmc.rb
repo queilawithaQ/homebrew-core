@@ -2,31 +2,38 @@ class Cbmc < Formula
   desc "C Bounded Model Checker"
   homepage "https://www.cprover.org/cbmc/"
   url "https://github.com/diffblue/cbmc.git",
-      tag:      "cbmc-5.32.1",
-      revision: "4dc2dd5b106c19c11bba9a06de7288946a8b6dfa"
+      tag:      "cbmc-5.44.0",
+      revision: "e27dba61975a3afc10c8ae133f2227d96f891def"
   license "BSD-4-Clause"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:  "101bec975d907ce7675e1844121c814838c46d7a0c72cb053994b45a1f7ec673"
-    sha256 cellar: :any_skip_relocation, catalina: "13a57c4eae4d02ff2ae0d4347eb2d51b66201f4142ce5f248c25eb32916dac8b"
-    sha256 cellar: :any_skip_relocation, mojave:   "c1233e8290b552af6e29f7eb379cc1d485f117e1358611beb358e57e36abcaa6"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "e65a5ebf867b22bed10a3469077ff276e332ae8e15b28a8ff7ec3463c8f3977c"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "c0023077c3883f89b150e60b05cfecd19b85fc049c0999f88ddaf3268a1877c4"
+    sha256 cellar: :any_skip_relocation, monterey:       "0e7ef1c8963f255194eb20cbf669dac490f36388ce7102a5cda2b4456c9b9929"
+    sha256 cellar: :any_skip_relocation, big_sur:        "c1ed27da688ad2053c172c67108637b776d5e15dee47a98e5347779a4150dbed"
+    sha256 cellar: :any_skip_relocation, catalina:       "db823299fad84c3f4ea3da97126965bc14bf9e8747f267823d6034dd91330f79"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "1b92fd86cc2b8cb7e6f23d56e3c2728f9766a108f4e88c4342c12422fa43e81d"
   end
 
   depends_on "cmake" => :build
   depends_on "maven" => :build
   depends_on "openjdk" => :build
 
+  uses_from_macos "bison" => :build
+  uses_from_macos "flex" => :build
+
+  on_linux do
+    depends_on "gcc"
+  end
+
+  fails_with gcc: "5"
+
   def install
-    args = std_cmake_args + %w[
-      -DCMAKE_C_COMPILER=/usr/bin/clang
-    ]
+    system "cmake", "-S", ".", "-B", "build", *std_cmake_args
+    system "cmake", "--build", "build"
+    system "cmake", "--install", "build"
 
-    mkdir "build" do
-      system "cmake", "..", *args
-      system "cmake", "--build", "."
-      system "make", "install"
-    end
-
+    # lib contains only `jar` files
     libexec.install lib
   end
 

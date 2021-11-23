@@ -1,23 +1,25 @@
 class Swiftformat < Formula
   desc "Formatting tool for reformatting Swift code"
   homepage "https://github.com/nicklockwood/SwiftFormat"
-  url "https://github.com/nicklockwood/SwiftFormat/archive/0.48.5.tar.gz"
-  sha256 "8c02c1c61c6a6ad37182d72f2f9f6bf193f4f3aea84540795f0901f472dff8d7"
+  url "https://github.com/nicklockwood/SwiftFormat/archive/0.48.18.tar.gz"
+  sha256 "bf1da27748d31ce691678bee21352cecfda74a591de55494036d7b20bba844dc"
   license "MIT"
-  head "https://github.com/nicklockwood/SwiftFormat.git"
+  head "https://github.com/nicklockwood/SwiftFormat.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "7619ac8360774b9854b838912b43b8d7be9dfd39a2cf4bdd24afbc2007cd6bd8"
-    sha256 cellar: :any_skip_relocation, big_sur:       "c50e89c6fd21e817cdf5f1b1d0a51c25553e0d5bcb396fe18e6404f4ad31c2b8"
-    sha256 cellar: :any_skip_relocation, catalina:      "41d5ecd73bba3c90c8770d33dc86fb0a07f9fb23034d1b07517e7dd9431e8280"
-    sha256 cellar: :any_skip_relocation, mojave:        "369cb9a0eca80fc8fd0ae5a1dcf6dad9aea366d3325e196276b05b9abb392357"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "adbb11cdda0596a1f40e920f826a2e1ffe6aeb1643c43ddb108f25f30755be39"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "74691b21c40d34459c5825306828039bdbdfdd02c80d1cea5c449c3f59760ab1"
+    sha256 cellar: :any_skip_relocation, monterey:       "14e4b90f29b55b06c92f90b6e81e8dd55c54ff258ee8b0bab2bb479ce0cc8daf"
+    sha256 cellar: :any_skip_relocation, big_sur:        "73f0497b504f87159bc2d133371014e0372799d89f62bc78068b3b5427ae614f"
+    sha256 cellar: :any_skip_relocation, catalina:       "11543d157b589acdf9de93133a68fa32aa00372b574a64c40292aead20f6f6cb"
   end
 
   depends_on xcode: ["10.1", :build]
+  depends_on :macos
 
   def install
-    xcodebuild "-project",
-        "SwiftFormat.xcodeproj",
+    xcodebuild "-arch", Hardware::CPU.arch,
+        "-project", "SwiftFormat.xcodeproj",
         "-scheme", "SwiftFormat (Command Line Tool)",
         "-configuration", "Release",
         "CODE_SIGN_IDENTITY=",

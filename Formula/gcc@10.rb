@@ -12,9 +12,10 @@ class GccAT10 < Formula
   end
 
   bottle do
-    sha256 big_sur:  "a2d5df73c659132ff4e393696a30076def85936855461701956aac62bf1a4c4f"
-    sha256 catalina: "42679d2d37117fd2c0243b61f1ee36d470fd293737f5f58a7b25ac816f733793"
-    sha256 mojave:   "83af850b34188c1706d690153de1653f5289db2f6be04e1a1349d15ace86e1d9"
+    sha256 big_sur:      "a2d5df73c659132ff4e393696a30076def85936855461701956aac62bf1a4c4f"
+    sha256 catalina:     "42679d2d37117fd2c0243b61f1ee36d470fd293737f5f58a7b25ac816f733793"
+    sha256 mojave:       "83af850b34188c1706d690153de1653f5289db2f6be04e1a1349d15ace86e1d9"
+    sha256 x86_64_linux: "d7dc879970a5e5049b9570300fa3ab0fc13efb9f04c418fe9d6975ca1eaf63a5"
   end
 
   # The bottles are built on systems with the CLT installed, and do not work
@@ -72,7 +73,7 @@ class GccAT10 < Formula
       --with-bugurl=#{tap.issues_url}
     ]
 
-    on_macos do
+    if OS.mac?
       args << "--build=x86_64-apple-darwin#{OS.kernel_version.major}"
       args << "--with-system-zlib"
 
@@ -89,9 +90,7 @@ class GccAT10 < Formula
       # Ensure correct install names when linking against libgcc_s;
       # see discussion in https://github.com/Homebrew/legacy-homebrew/pull/34303
       inreplace "libgcc/config/t-slibgcc-darwin", "@shlib_slibdir@", "#{HOMEBREW_PREFIX}/lib/gcc/#{version_suffix}"
-    end
-
-    on_linux do
+    else
       # Fix cc1: error while loading shared libraries: libisl.so.15
       args << "--with-boot-ldflags=-static-libstdc++ -static-libgcc #{ENV["LDFLAGS"]}"
 
@@ -106,15 +105,13 @@ class GccAT10 < Formula
     mkdir "build" do
       system "../configure", *args
 
-      on_macos do
+      if OS.mac?
         # Use -headerpad_max_install_names in the build,
         # otherwise updated load commands won't fit in the Mach-O header.
         # This is needed because `gcc` avoids the superenv shim.
         system "make", "BOOT_LDFLAGS=-Wl,-headerpad_max_install_names"
         system "make", "install"
-      end
-
-      on_linux do
+      else
         system "make"
         system "make", "install-strip"
       end
@@ -136,7 +133,7 @@ class GccAT10 < Formula
   end
 
   def post_install
-    on_linux do
+    if OS.linux?
       gcc = bin/"gcc-#{version_suffix}"
       libgcc = Pathname.new(Utils.safe_popen_read(gcc, "-print-libgcc-file-name")).parent
       raise "command failed: #{gcc} -print-libgcc-file-name" if $CHILD_STATUS.exitstatus.nonzero?

@@ -3,18 +3,22 @@ class Mypy < Formula
 
   desc "Experimental optional static type checker for Python"
   homepage "http://www.mypy-lang.org/"
-  url "https://files.pythonhosted.org/packages/8c/43/46e7fdb284abc6887417f2137a477f9296313cf7503485b55abfcfe86651/mypy-0.902.tar.gz"
-  sha256 "9236c21194fde5df1b4d8ebc2ef2c1f2a5dc7f18bcbea54274937cae2e20a01c"
+  url "https://files.pythonhosted.org/packages/33/46/b5d01f8844c84772e950bfc6adcaaa94cd22fedeb7c01776fd6effb3c2f6/mypy-0.910.tar.gz"
+  sha256 "704098302473cb31a218f1775a873b376b30b4c18229421e9e9dc8916fd16150"
   license "MIT"
+  revision 1
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "c08365f466c9d27053ffe3551dd9511fe551e6f83cb380715794b15e87ef59a8"
-    sha256 cellar: :any_skip_relocation, big_sur:       "c4d7bf6b83329484ba963903f474f2cf2b020800edff593e8de4ebf1df56c7ae"
-    sha256 cellar: :any_skip_relocation, catalina:      "9ff4fa4cd983eaf963f2eac420bdc73912bd77bd4d0b2a471b0dcb0cf72942e5"
-    sha256 cellar: :any_skip_relocation, mojave:        "50b7730ac35e1a23a145ef8dd65fea31a18943d40a2e18653284214a165faacf"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "597e36e60cabe3d242cd0dfb52885d4ecfd36d64836f8a83439a134c6b2d5326"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "55c4564fe7228ecf64f9421507440f38522732420afe3b68d4a78ff4ce2d3083"
+    sha256 cellar: :any_skip_relocation, monterey:       "864f02a7a280feff1d8d867ba512687838c1fa683cbd3a1409880e96e14114be"
+    sha256 cellar: :any_skip_relocation, big_sur:        "50e86679593a40696a3bf8c6af6e55c60a5315f6eb1aeb7dcf0e43d8d88b08da"
+    sha256 cellar: :any_skip_relocation, catalina:       "cc49f99a9f48eca2a09e0f79b107f34b03afbde863eaaf8abea5938f0978c0b5"
+    sha256 cellar: :any_skip_relocation, mojave:         "bd13c0f849d19e6ad9d5d2a019473fffc2cc610f1beab6dfb5c6a368735d0330"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "7c28f7a6624c09213e25d82ad6f5a06543f21f4f81638814c1f8b360d0605dc9"
   end
 
-  depends_on "python@3.9"
+  depends_on "python@3.10"
 
   resource "mypy-extensions" do
     url "https://files.pythonhosted.org/packages/63/60/0582ce2eaced55f65a4406fc97beba256de4b7a95a0034c6576458c6519f/mypy_extensions-0.4.3.tar.gz"

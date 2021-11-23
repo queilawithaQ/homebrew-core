@@ -1,9 +1,9 @@
 class Libgnt < Formula
   desc "NCurses toolkit for creating text-mode graphical user interfaces"
   homepage "https://keep.imfreedom.org/libgnt/libgnt"
-  url "https://downloads.sourceforge.net/project/pidgin/libgnt/2.14.1/libgnt-2.14.1.tar.xz"
-  sha256 "5ec3e68e18f956e9998d79088b299fa3bca689bcc95c86001bc5da17c1eb4bd8"
-  license "GPL-2.0"
+  url "https://downloads.sourceforge.net/project/pidgin/libgnt/2.14.3/libgnt-2.14.3.tar.xz"
+  sha256 "57f5457f72999d0bb1a139a37f2746ec1b5a02c094f2710a339d8bcea4236123"
+  license "GPL-2.0-or-later"
 
   livecheck do
     url "https://sourceforge.net/projects/pidgin/files/libgnt/"
@@ -12,10 +12,13 @@ class Libgnt < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "fb95e81366fa30eeba4c475a6ceb3a3b10e627f479dd5bc32b1d4ed55785a98a"
-    sha256 cellar: :any, big_sur:       "8af4cf0b8e2727ad0db525084fa644d80df9d1c3fbbada9700a988a5c651dc39"
-    sha256 cellar: :any, catalina:      "69c11afb2957571a907a82545da6ea8bed0f9d35193c9cc15d0e2063f82f976b"
-    sha256 cellar: :any, mojave:        "d805104397225f4c57b8f5c5310f3c77f5eea4f5870332b15c84717c465fb384"
+    sha256 cellar: :any, arm64_monterey: "5b9638fd113cb8a914c26d16d50865c313c5ce57d57e7afa5e857f6ef576d9c7"
+    sha256 cellar: :any, arm64_big_sur:  "a4c4c927df6b0fb2dd4bc6dbf742085eb171c146a448f218448f53e1a21d5015"
+    sha256 cellar: :any, monterey:       "dcc301110a688e48df0946e77ad07b7112c6bd88fc459b6ae9c6d752b0883c87"
+    sha256 cellar: :any, big_sur:        "97d22f2f66bfc361cc88dd7ef38a912c11db9bf77346f20645bec433a3444f38"
+    sha256 cellar: :any, catalina:       "ac0543b64dfccaed26f40fd585b9546dede02550afa4063fb76b8f970a2379d8"
+    sha256 cellar: :any, mojave:         "b558ad3400f33a9559ace90c2d53e7e578ca674cbae105b2ec620ab277da21cf"
+    sha256               x86_64_linux:   "ebff16ba92fadae787c491dae1094706039b2c73a44a1fcacbc2371b031ee647"
   end
 
   depends_on "gtk-doc" => :build
@@ -24,11 +27,22 @@ class Libgnt < Formula
   depends_on "pkg-config" => :build
   depends_on "glib"
 
+  uses_from_macos "libxml2"
+  uses_from_macos "ncurses"
+
   def install
-    ENV["XML_CATALOG_FILES"] = "#{etc}/xml/catalog"
+    ENV["XML_CATALOG_FILES"] = etc/"xml/catalog"
+
+    # Work around for ERROR: Problem encountered: ncurses could not be found!
+    # Issue is build only checks for ncursesw headers under system prefix /usr
+    # Upstream issue: https://issues.imfreedom.org/issue/LIBGNT-15
+    if OS.linux?
+      inreplace "meson.build", "ncurses_sys_prefix = '/usr'",
+                               "ncurses_sys_prefix = '#{Formula["ncurses"].opt_prefix}'"
+    end
 
     mkdir "build" do
-      system "meson", *std_meson_args, ".."
+      system "meson", *std_meson_args, "-Dpython2=false", ".."
       system "ninja", "-v"
       system "ninja", "install", "-v"
     end

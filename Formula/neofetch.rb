@@ -4,15 +4,16 @@ class Neofetch < Formula
   url "https://github.com/dylanaraps/neofetch/archive/7.1.0.tar.gz"
   sha256 "58a95e6b714e41efc804eca389a223309169b2def35e57fa934482a6b47c27e7"
   license "MIT"
-  head "https://github.com/dylanaraps/neofetch.git"
+  head "https://github.com/dylanaraps/neofetch.git", branch: "master"
 
   bottle do
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, all: "3e914c528b75e3057342e16b096aec7ea835347cba55c045d9d8f6ec288c7ab6"
+    rebuild 2
+    sha256 cellar: :any_skip_relocation, all: "78eb3e99dfde7f5fb1c3b192804a6d345f428c9effa6ea6ba54d7e5b7254387f"
   end
 
-  depends_on "imagemagick"
-  depends_on "screenresolution"
+  on_macos do
+    depends_on "screenresolution"
+  end
 
   def install
     inreplace "neofetch", "/usr/local", HOMEBREW_PREFIX

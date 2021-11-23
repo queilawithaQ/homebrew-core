@@ -1,17 +1,17 @@
 class Gmt < Formula
   desc "Tools for manipulating and plotting geographic and Cartesian data"
   homepage "https://www.generic-mapping-tools.org/"
-  url "https://github.com/GenericMappingTools/gmt/releases/download/6.2.0/gmt-6.2.0-src.tar.xz"
-  mirror "https://mirrors.ustc.edu.cn/gmt/gmt-6.2.0-src.tar.xz"
-  sha256 "a01f0a14d48bbc0b14855670f366df3cb8238f0ccdfa26fe744968b4f1c14d54"
+  url "https://github.com/GenericMappingTools/gmt/releases/download/6.3.0/gmt-6.3.0-src.tar.xz"
+  mirror "https://mirrors.ustc.edu.cn/gmt/gmt-6.3.0-src.tar.xz"
+  sha256 "69e29b62ee802a3a64260d6a1e023f1350e3bf4070221aa1307bf8a9e56c1ee5"
   license "LGPL-3.0-or-later"
   head "https://github.com/GenericMappingTools/gmt.git"
 
   bottle do
-    sha256 arm64_big_sur: "ccefbc7f828c5f6391e07f4fcb17cbabc3fce344fac2a102ab4912d41ac92c20"
-    sha256 big_sur:       "b95628775b58b5c4a9616c3684135606a9ef271a9668e09c930f2158cc22f608"
-    sha256 catalina:      "db0d5dcb4fe6015395a2d954f0988d7a0c60dc49c1eb56edc6d6f63171760130"
-    sha256 mojave:        "40b26c2ac3bfd17ec965c55e54df147f40e88ff837e0c365f2e4028b4a176559"
+    sha256 arm64_big_sur: "f467448270dc69e45f76f4fc25e8fd23da063fe16a4581efa3d6121e3ffcc61f"
+    sha256 big_sur:       "4692661434f2235987fc480e9ca4d178cb6aa52e37ee58458d28bd4a01924bb9"
+    sha256 catalina:      "9c81ecfbf684a2c9f5b13b320bd673005ad0d9a1c9230a5d8f9c65055837b90e"
+    sha256 x86_64_linux:  "fcbc260240111daf3489dd94704c457d70fbe421e5a19a1b686a747a1384a26c"
   end
 
   depends_on "cmake" => :build
@@ -27,9 +27,9 @@ class Gmt < Formula
   end
 
   resource "dcw" do
-    url "https://github.com/GenericMappingTools/dcw-gmt/releases/download/2.0.0/dcw-gmt-2.0.0.tar.gz"
-    mirror "https://mirrors.ustc.edu.cn/gmt/dcw-gmt-2.0.0.tar.gz"
-    sha256 "d71d209c837a805fed0773c03fadbb26e8c90eb6b68e496ac4a1298c3246cc7a"
+    url "https://github.com/GenericMappingTools/dcw-gmt/releases/download/2.0.1/dcw-gmt-2.0.1.tar.gz"
+    mirror "https://mirrors.ustc.edu.cn/gmt/dcw-gmt-2.0.1.tar.gz"
+    sha256 "5c90b2968f4095cf5ea44a354dc9d8f9dd1b8fe5514e0338ff85b48e03547a25"
   end
 
   def install
@@ -59,7 +59,7 @@ class Gmt < Formula
       system "cmake", "..", *args
       system "make", "install"
     end
-    inreplace bin/"gmt-config", "#{HOMEBREW_LIBRARY}/Homebrew/shims/mac/super/clang", "/usr/bin/clang"
+    inreplace bin/"gmt-config", Superenv.shims_path/ENV.cc, DevelopmentTools.locate(ENV.cc)
   end
 
   def caveats
