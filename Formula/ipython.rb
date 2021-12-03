@@ -3,18 +3,18 @@ class Ipython < Formula
 
   desc "Interactive computing in Python"
   homepage "https://ipython.org/"
-  url "https://files.pythonhosted.org/packages/36/dc/3ffa7cd738bc12c2be6b759d8d68a19120deea1cb6e764751cf4dc419a2f/ipython-7.29.0.tar.gz"
-  sha256 "4f69d7423a5a1972f6347ff233e38bbf4df6a150ef20fbb00c635442ac3060aa"
+  url "https://files.pythonhosted.org/packages/19/8f/8dfb6d79f39a225d2f65422392f725e904b14c4d33b5531c9a3a258c359f/ipython-7.30.1.tar.gz"
+  sha256 "cb6aef731bf708a7727ab6cde8df87f0281b1427d41e65d62d4b68934fa54e97"
   license "BSD-3-Clause"
   head "https://github.com/ipython/ipython.git"
 
   bottle do
-    sha256 cellar: :any,                 arm64_monterey: "014458b351b8742b5c5b0d858bd1ba4901dbe2fd5bec679a61c4bec5e617c128"
-    sha256 cellar: :any,                 arm64_big_sur:  "06046ff5fb4fff0a6dcdd3196c66705508437005294d882c299585b7850226ae"
-    sha256 cellar: :any,                 monterey:       "dd76222eca8eb7c315ab802e8ff7380c82606d2e3a8395cefb56434b6a9e2451"
-    sha256 cellar: :any,                 big_sur:        "602f07740beda879f42866035b6df353e039d5c3462421b92b8075b74ae10dad"
-    sha256 cellar: :any,                 catalina:       "7396f64a1ebf50a668205a5d85aa9930707e8b37fa266338252cb82038fcf5d1"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "e4cca11ee2e3b2b437873b5e80e16bf2ce9cd2db06a424bfd44bb9ddab36af8e"
+    sha256 cellar: :any,                 arm64_monterey: "2e6363458e5543a8dda910566e77296987bbfdb2878cbaf33ef8ab6020cb33b3"
+    sha256 cellar: :any,                 arm64_big_sur:  "9096b5061aa211d059017038f9dd223845cbc0695caccded0ca10ad7b468b11b"
+    sha256 cellar: :any,                 monterey:       "34624efddebb47a064eeffd6de44e7f1be13c205b93dcc6bd26aa064d536d7fd"
+    sha256 cellar: :any,                 big_sur:        "a6e5a32def2178fa48f9126965e6d4630a59d1b932ab00e3e68170e1d91fb9b0"
+    sha256 cellar: :any,                 catalina:       "ad323306514d664326a25fa6e872500cd3f19ef73ac38468c47372e983e6b30d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "238a03f68a0839f412de9b5bc4d6e0c698c3160212f59e6a436edbbeea616037"
   end
 
   depends_on "python@3.10"
@@ -48,23 +48,18 @@ class Ipython < Formula
   end
 
   resource "ipykernel" do
-    url "https://files.pythonhosted.org/packages/e6/37/73f6d7f09c13eab777248747c7c128843c9b66c6aea20ae04aa404f421e2/ipykernel-6.4.2.tar.gz"
-    sha256 "0140f78bfd60e47e387b6433b4bed0f228986420dc4d5fac0e251c9711e23e29"
-  end
-
-  resource "ipython_genutils" do
-    url "https://files.pythonhosted.org/packages/e8/69/fbeffffc05236398ebfcfb512b6d2511c622871dca1746361006da310399/ipython_genutils-0.2.0.tar.gz"
-    sha256 "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"
+    url "https://files.pythonhosted.org/packages/60/30/cf3867ce0dee0a7230ec5eb85232136c3875688816ad355a7b65f4f4e8ef/ipykernel-6.6.0.tar.gz"
+    sha256 "3a227788216b43982d9ac28195949467627b0d16e6b8af9741d95dcaa8c41a89"
   end
 
   resource "jedi" do
-    url "https://files.pythonhosted.org/packages/ac/11/5c542bf206efbae974294a61febc61e09d74cb5d90d8488793909db92537/jedi-0.18.0.tar.gz"
-    sha256 "92550a404bad8afed881a137ec9a461fed49eca661414be45059329614ed0707"
+    url "https://files.pythonhosted.org/packages/c2/25/273288df952e07e3190446efbbb30b0e4871a0d63b4246475f3019d4f55e/jedi-0.18.1.tar.gz"
+    sha256 "74137626a64a99c8eb6ae5832d99b3bdd7d29a3850fe2aa80a4126b2a7d949ab"
   end
 
   resource "jupyter-client" do
-    url "https://files.pythonhosted.org/packages/be/4f/7d2e1764ba352cf764d5e08fa4a1576c3e11e5c233e832b7f03af2e39482/jupyter_client-7.0.6.tar.gz"
-    sha256 "8b6e06000eb9399775e0a55c52df6c1be4766666209c22f90c2691ded0e338dc"
+    url "https://files.pythonhosted.org/packages/47/e3/192086e7b150f1fd549115190c3525a115e86b9227d6853f7ddcb07d7dc1/jupyter_client-7.1.0.tar.gz"
+    sha256 "a5f995a73cffb314ed262713ae6dfce53c6b8216cea9f332071b8ff44a6e1654"
   end
 
   resource "jupyter-core" do
@@ -78,13 +73,13 @@ class Ipython < Formula
   end
 
   resource "nest-asyncio" do
-    url "https://files.pythonhosted.org/packages/ad/82/2fdf6a92eed4ddf5e9d9a735d019af1ef3a56f084d9549972b2527a43a48/nest_asyncio-1.5.1.tar.gz"
-    sha256 "afc5a1c515210a23c461932765691ad39e8eba6551c055ac8d5546e69250d0aa"
+    url "https://files.pythonhosted.org/packages/60/51/b74def9b027b864d1d9b22dfffec4ddd83f9c15f757a5a4a412566f27670/nest_asyncio-1.5.4.tar.gz"
+    sha256 "f969f6013a16fadb4adcf09d11a68a4f617c6049d7af7ac2c676110169a63abd"
   end
 
   resource "parso" do
-    url "https://files.pythonhosted.org/packages/5e/61/d119e2683138a934550e47fc8ec023eb7f11b194883e9085dca3af5d4951/parso-0.8.2.tar.gz"
-    sha256 "12b83492c6239ce32ff5eed6d3639d6a536170723c6f3f1506869f1ace413398"
+    url "https://files.pythonhosted.org/packages/a2/0e/41f0cca4b85a6ea74d66d2226a7cda8e41206a624f5b330b958ef48e2e52/parso-0.8.3.tar.gz"
+    sha256 "8c07be290bb59f03588915921e29e8a50002acaf2cdc5fa0e0114f91709fafa0"
   end
 
   resource "pexpect" do
@@ -98,8 +93,8 @@ class Ipython < Formula
   end
 
   resource "prompt-toolkit" do
-    url "https://files.pythonhosted.org/packages/b7/bb/2629a132aab8eb43f9fefa89bd91481fbe2aeca8b32e58bc114a62d4e826/prompt_toolkit-3.0.21.tar.gz"
-    sha256 "27f13ff4e4850fe8f860b77414c7880f67c6158076a7b099062cc8570f1562e5"
+    url "https://files.pythonhosted.org/packages/c0/50/3050bb288d0c981f073b4e83ae67e92fd286a55e81b29c9df288a2afb12f/prompt_toolkit-3.0.23.tar.gz"
+    sha256 "7053aba00895473cb357819358ef33f11aa97e4ac83d38efb123e5649ceeecaf"
   end
 
   resource "ptyprocess" do
